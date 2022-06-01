@@ -1,9 +1,9 @@
 import unittest
-
+from test_util import ConverterTestSuite
 from forestdatamodel.model import ReferenceTree, ForestStand, TreeStratum
 from forestdatamodel.conversion.internal2mela import species_mapper, mela_stand
-from forestdatamodel.enums.internal import OwnerCategory, TreeSpecies
-from forestdatamodel.enums.mela import MelaOwnerCategory, MelaTreeSpecies
+from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, TreeSpecies
+from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaTreeSpecies
 
 
 class Internal2MelaTest(unittest.TestCase):
@@ -43,4 +43,18 @@ class Internal2MelaTest(unittest.TestCase):
         fixture2.owner_category = OwnerCategory.UNKNOWN
         result = mela_stand(fixture2)
         self.assertEqual(MelaOwnerCategory.PRIVATE, result.owner_category)
+
+    def test_land_use_category(self):
+        assertions = [
+            ([LandUseCategory.FOREST], MelaLandUseCategory.FOREST_LAND),
+            ([LandUseCategory.ROAD], MelaLandUseCategory.ROADS_OR_ELECTRIC_LINES),
+            ([LandUseCategory.REAL_ESTATE], MelaLandUseCategory.BUILT_UP_LAND),
+            ([LandUseCategory.OTHER_LAND], MelaLandUseCategory.ROADS_OR_ELECTRIC_LINES),
+            ([LandUseCategory.WATER_BODY], MelaLandUseCategory.LAKES_AND_RIVERS),
+
+        ]
+        fn = lambda x: mela_stand(ForestStand(land_use_category=x)).land_use_category
+        ConverterTestSuite.run_with_test_assertions(self, assertions, fn)
+
+
 
