@@ -1,5 +1,5 @@
-from forestdatamodel.enums.forest_centre import ForestCentreLandUseCategory, ForestCentreSpecies, ForestCentreLandUseCategory
-from forestdatamodel.enums.internal import TreeSpecies, LandUseCategory
+from forestdatamodel.enums.forest_centre import ForestCentreLandUseCategory, ForestCentreOwnerCategory, ForestCentreSpecies, ForestCentreLandUseCategory
+from forestdatamodel.enums.internal import OwnerCategory, TreeSpecies, LandUseCategory
 
 species_map = {
     ForestCentreSpecies.PINE: TreeSpecies.PINE,
@@ -34,6 +34,7 @@ species_map = {
     ForestCentreSpecies.UNKNOWN_DECIDUOUS: TreeSpecies.UNKNOWN_DECIDUOUS,
 }
 
+
 land_use_map = {
     ForestCentreLandUseCategory.FOREST: LandUseCategory.FOREST,
     ForestCentreLandUseCategory.SCRUB_LAND: LandUseCategory.SCRUB_LAND,
@@ -45,11 +46,26 @@ land_use_map = {
     ForestCentreLandUseCategory.WATER_BODY: LandUseCategory.WATER_BODY
 }
 
+
+owner_map = {
+    ForestCentreOwnerCategory.PRIVATE: OwnerCategory.PRIVATE,
+    ForestCentreOwnerCategory.FOREST_INDUSTRY: OwnerCategory.FOREST_INDUSTRY,
+    ForestCentreOwnerCategory.STATE: OwnerCategory.OTHER_STATE_AGENCY,
+    ForestCentreOwnerCategory.JULKISYHTEISO: OwnerCategory.OTHER_COMMUNITY
+}
+
+
 def convert_land_use_category(lu_code: str) -> LandUseCategory:
     fc_category = ForestCentreLandUseCategory(lu_code)
     return land_use_map.get(fc_category)
+
 
 def convert_species(species_code: str) -> TreeSpecies:
     """Converts FC species code to internal TreeSpecies code"""
     fc_species = ForestCentreSpecies(species_code)
     return species_map.get(fc_species)
+
+
+def convert_owner(owner_code: str) -> OwnerCategory:
+    fc_owner = ForestCentreOwnerCategory(owner_code)
+    return owner_map.get(fc_owner)

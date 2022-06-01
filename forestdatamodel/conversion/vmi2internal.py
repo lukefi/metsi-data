@@ -1,5 +1,5 @@
-from forestdatamodel.enums.vmi import VmiLandUseCategory, VmiSpecies
-from forestdatamodel.enums.internal import LandUseCategory, TreeSpecies
+from forestdatamodel.enums.vmi import VmiLandUseCategory, VmiOwnerCategory, VmiSpecies
+from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, TreeSpecies
 
 species_map = {
     VmiSpecies.PINE: TreeSpecies.PINE,
@@ -35,6 +35,22 @@ species_map = {
     VmiSpecies.UNKNOWN: TreeSpecies.UNKNOWN,
 }
 
+
+owner_map = {
+    VmiOwnerCategory.UNKNOWN: OwnerCategory.UNKNOWN,
+    VmiOwnerCategory.PRIVATE: OwnerCategory.PRIVATE,
+    VmiOwnerCategory.FOREST_INDUSTRY_ENTERPRISE: OwnerCategory.FOREST_INDUSTRY,
+    VmiOwnerCategory.OTHER_ENTERPRISE: OwnerCategory.OTHER_ENTERPRISE,
+    VmiOwnerCategory.METSAHALLITUS: OwnerCategory.METSAHALLITUS,
+    VmiOwnerCategory.OTHER_STATE_AGENCY: OwnerCategory.OTHER_STATE_AGENCY,
+    VmiOwnerCategory.FOREST_COOP: OwnerCategory.FOREST_COOP,
+    VmiOwnerCategory.MUNICIPALITY: OwnerCategory.MUNICIPALITY,
+    VmiOwnerCategory.CONGREGATION: OwnerCategory.CONGREGATION,
+    VmiOwnerCategory.OTHER_COMMUNITY: OwnerCategory.OTHER_COMMUNITY,
+    VmiOwnerCategory.UNDIVIDED: OwnerCategory.UNDIVIDED
+}
+
+
 land_use_map = {
     VmiLandUseCategory.FOREST: LandUseCategory.FOREST,
     VmiLandUseCategory.SCRUB_LAND: LandUseCategory.SCRUB_LAND,
@@ -48,13 +64,20 @@ land_use_map = {
     VmiLandUseCategory.SEA: LandUseCategory.SEA
 }
 
+
 def convert_land_use_category(lu_code: str) -> LandUseCategory:
     value = lu_code.upper() #in case it is "a" instead of "A"
     vmi_category = VmiLandUseCategory(value)
     return land_use_map.get(vmi_category)
+
 
 def convert_species(species_code: str) -> TreeSpecies:
     """Converts VMI species code to internal TreeSpecies code"""
     value = species_code.strip()
     vmi_species = VmiSpecies(value)
     return species_map.get(vmi_species)
+
+
+def convert_owner(owner_code: str) -> OwnerCategory:
+    vmi_owner = VmiOwnerCategory(owner_code)
+    return owner_map.get(vmi_owner)

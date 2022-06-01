@@ -33,6 +33,14 @@ class ForestCentreSpecies(Enum):
     UNKNOWN_CONIFEROUS = '29'
     UNKNOWN_DECIDUOUS = '30'
 
+
+class ForestCentreOwnerCategory(Enum):
+    PRIVATE = "1"
+    FOREST_INDUSTRY = "2"
+    STATE = "3"
+    JULKISYHTEISO = "4"
+
+
 class ForestCentreLandUseCategory(Enum):
     FOREST = '1'
     SCRUB_LAND = '2'
