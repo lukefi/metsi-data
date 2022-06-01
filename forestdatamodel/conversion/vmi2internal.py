@@ -1,5 +1,5 @@
-from forestdatamodel.enums.vmi import VmiSpecies
-from forestdatamodel.enums.internal import TreeSpecies
+from forestdatamodel.enums.vmi import VmiLandUseCategory, VmiSpecies
+from forestdatamodel.enums.internal import LandUseCategory, TreeSpecies
 
 species_map = {
     VmiSpecies.PINE: TreeSpecies.PINE,
@@ -34,6 +34,24 @@ species_map = {
     VmiSpecies.HAZEL: TreeSpecies.HAZEL,
     VmiSpecies.UNKNOWN: TreeSpecies.UNKNOWN,
 }
+
+land_use_map = {
+    VmiLandUseCategory.FOREST: LandUseCategory.FOREST,
+    VmiLandUseCategory.SCRUB_LAND: LandUseCategory.SCRUB_LAND,
+    VmiLandUseCategory.WASTE_LAND: LandUseCategory.WASTE_LAND,
+    VmiLandUseCategory.OTHER_FOREST: LandUseCategory.OTHER_FOREST,
+    VmiLandUseCategory.AGRICULTURAL: LandUseCategory.AGRICULTURAL,
+    VmiLandUseCategory.BUILT_LAND: LandUseCategory.BUILT_LAND,
+    VmiLandUseCategory.ROAD: LandUseCategory.ROAD,
+    VmiLandUseCategory.ENERGY_TRANSMISSION_LINE: LandUseCategory.ENERGY_TRANSMISSION_LINE,
+    VmiLandUseCategory.FRESHWATER: LandUseCategory.FRESHWATER,
+    VmiLandUseCategory.SEA: LandUseCategory.SEA
+}
+
+def convert_land_use_category(lu_code: str) -> LandUseCategory:
+    value = lu_code.upper() #in case it is "a" instead of "A"
+    vmi_category = VmiLandUseCategory(value)
+    return land_use_map.get(vmi_category)
 
 def convert_species(species_code: str) -> TreeSpecies:
     """Converts VMI species code to internal TreeSpecies code"""

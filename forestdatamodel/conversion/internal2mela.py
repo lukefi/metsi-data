@@ -1,6 +1,6 @@
 from copy import copy
-from forestdatamodel.enums.mela import MelaTreeSpecies
-from forestdatamodel.enums.internal import TreeSpecies
+from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaSoilAndPeatlandCategory, MelaTreeSpecies
+from forestdatamodel.enums.internal import LandUseCategory, TreeSpecies
 from forestdatamodel.conversion.util import apply_mappers
 
 # TODO: can we find a way to resolve the circular import introduced by trying to use these classes just for typing?
@@ -48,6 +48,28 @@ species_map = {
     TreeSpecies.POPLAR: MelaTreeSpecies.OTHER_DECIDUOUS,
     TreeSpecies.HAZEL: MelaTreeSpecies.OTHER_DECIDUOUS
 }
+
+land_use_map = {
+    LandUseCategory.FOREST: MelaLandUseCategory.FOREST_LAND,
+    LandUseCategory.SCRUB_LAND: MelaLandUseCategory.SCRUB_LAND,
+    LandUseCategory.WASTE_LAND: MelaLandUseCategory.WASTE_LAND,
+    LandUseCategory.OTHER_FOREST: MelaLandUseCategory.OTHER,
+    LandUseCategory.AGRICULTURAL: MelaLandUseCategory.AGRICULTURAL_LAND,
+    LandUseCategory.BUILT_LAND: MelaLandUseCategory.BUILT_UP_LAND,
+    LandUseCategory.ROAD: MelaLandUseCategory.ROADS_OR_ELECTRIC_LINES,
+    LandUseCategory.ENERGY_TRANSMISSION_LINE: MelaLandUseCategory.ROADS_OR_ELECTRIC_LINES,
+    LandUseCategory.FRESHWATER: MelaLandUseCategory.LAKES_AND_RIVERS,
+    LandUseCategory.SEA: MelaLandUseCategory.SEA,
+    LandUseCategory.REAL_ESTATE: MelaLandUseCategory.BUILT_UP_LAND,
+    LandUseCategory.OTHER_LAND: MelaLandUseCategory.ROADS_OR_ELECTRIC_LINES,
+    LandUseCategory.WATER_BODY: MelaLandUseCategory.LAKES_AND_RIVERS
+}
+
+def land_use_mapper(target):
+    """in-place mapping from internal LandUseCategory to MelaLandUseCategory"""
+    target.land_use_category = land_use_map.get(target.land_use_category)
+    return target
+
 
 
 def species_mapper(target):

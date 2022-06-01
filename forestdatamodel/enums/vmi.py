@@ -38,3 +38,16 @@ class VmiSpecies(Enum):
     def _missing_(cls, name):
         if name == "0":
             return cls.UNKNOWN
+
+class VmiLandUseCategory(Enum):
+    FOREST = '1'
+    SCRUB_LAND = '2'
+    WASTE_LAND = '3'
+    OTHER_FOREST = '4'
+    AGRICULTURAL = '5'
+    BUILT_LAND = '6'
+    ROAD = '7'
+    ENERGY_TRANSMISSION_LINE = '8'
+    FRESHWATER = 'A'
+    SEA = 'B'
+

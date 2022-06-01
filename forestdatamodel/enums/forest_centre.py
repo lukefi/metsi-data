@@ -33,3 +33,12 @@ class ForestCentreSpecies(Enum):
     UNKNOWN_CONIFEROUS = '29'
     UNKNOWN_DECIDUOUS = '30'
 
+class ForestCentreLandUseCategory(Enum):
+    FOREST = '1'
+    SCRUB_LAND = '2'
+    WASTE_LAND = '3'
+    OTHER_FOREST = '4'
+    AGRICULTURAL = '6'
+    REAL_ESTATE = '5'
+    OTHER_LAND = '7'
+    WATER_BODY = '8'

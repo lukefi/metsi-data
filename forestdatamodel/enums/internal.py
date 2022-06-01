@@ -42,3 +42,18 @@ class TreeSpecies(IntEnum):
     POPLAR = 36
     HAZEL = 37
     UNKNOWN = 38
+
+class LandUseCategory(IntEnum):
+    FOREST = 1
+    SCRUB_LAND = 2
+    WASTE_LAND = 3
+    OTHER_FOREST = 4
+    AGRICULTURAL = 5
+    BUILT_LAND = 6
+    ROAD = 7
+    ENERGY_TRANSMISSION_LINE = 8
+    FRESHWATER = 9
+    SEA = 10
+    REAL_ESTATE = 11
+    OTHER_LAND = 12
+    WATER_BODY = 13
