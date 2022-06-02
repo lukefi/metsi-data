@@ -72,3 +72,12 @@ class LandUseCategory(IntEnum):
     REAL_ESTATE = 11
     OTHER_LAND = 12
     WATER_BODY = 13
+
+
+class SoilPeatlandCategory(Enum):
+    MINERAL_SOIL = 1 # kangas
+    SPRUCE_MIRE = 2 # korpi
+    PINE_MIRE = 3 # räme
+    BARREN_TREELESS_MIRE = 4 # neva
+    RICH_TREELESS_MIRE = 5 # letto
+    UNSPECIFIED_TREELESS_MIRE = 6 # VMI "avosuo"

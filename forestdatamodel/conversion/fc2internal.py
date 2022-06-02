@@ -1,7 +1,7 @@
-from forestdatamodel.enums.forest_centre import ForestCentreLandUseCategory, ForestCentreOwnerCategory, ForestCentreSpecies, ForestCentreLandUseCategory
-from forestdatamodel.enums.internal import OwnerCategory, TreeSpecies, LandUseCategory
+from forestdatamodel.enums.forest_centre import ForestCentreOwnerCategory, ForestCentreSoilPeatlandCategory, ForestCentreSpecies, ForestCentreLandUseCategory
+from forestdatamodel.enums.internal import OwnerCategory, SoilPeatlandCategory, TreeSpecies, LandUseCategory
 
-species_map = {
+__species_map = {
     ForestCentreSpecies.PINE: TreeSpecies.PINE,
     ForestCentreSpecies.SPRUCE: TreeSpecies.SPRUCE,
     ForestCentreSpecies.SILVER_BIRCH: TreeSpecies.SILVER_BIRCH,
@@ -34,8 +34,7 @@ species_map = {
     ForestCentreSpecies.UNKNOWN_DECIDUOUS: TreeSpecies.UNKNOWN_DECIDUOUS,
 }
 
-
-land_use_map = {
+__land_use_map = {
     ForestCentreLandUseCategory.FOREST: LandUseCategory.FOREST,
     ForestCentreLandUseCategory.SCRUB_LAND: LandUseCategory.SCRUB_LAND,
     ForestCentreLandUseCategory.WASTE_LAND: LandUseCategory.WASTE_LAND,
@@ -46,8 +45,7 @@ land_use_map = {
     ForestCentreLandUseCategory.WATER_BODY: LandUseCategory.WATER_BODY
 }
 
-
-owner_map = {
+__owner_map = {
     ForestCentreOwnerCategory.PRIVATE: OwnerCategory.PRIVATE,
     ForestCentreOwnerCategory.FOREST_INDUSTRY: OwnerCategory.FOREST_INDUSTRY,
     ForestCentreOwnerCategory.STATE: OwnerCategory.OTHER_STATE_AGENCY,
@@ -55,17 +53,31 @@ owner_map = {
 }
 
 
+__soil_peatland_map = {
+    ForestCentreSoilPeatlandCategory.MINERAL_SOIL: SoilPeatlandCategory.MINERAL_SOIL,
+    ForestCentreSoilPeatlandCategory.SPRUCE_MIRE: SoilPeatlandCategory.SPRUCE_MIRE,
+    ForestCentreSoilPeatlandCategory.PINE_MIRE: SoilPeatlandCategory.PINE_MIRE,
+    ForestCentreSoilPeatlandCategory.BARREN_TREELESS_MIRE: SoilPeatlandCategory.BARREN_TREELESS_MIRE,
+    ForestCentreSoilPeatlandCategory.RICH_TREELESS_MIRE: SoilPeatlandCategory.RICH_TREELESS_MIRE
+}
+
+
+def convert_soil_peatland_category(sp_code: str) -> SoilPeatlandCategory:
+    value = ForestCentreSoilPeatlandCategory(sp_code)
+    return __soil_peatland_map.get(value)
+
+
 def convert_land_use_category(lu_code: str) -> LandUseCategory:
     fc_category = ForestCentreLandUseCategory(lu_code)
-    return land_use_map.get(fc_category)
+    return __land_use_map.get(fc_category)
 
 
 def convert_species(species_code: str) -> TreeSpecies:
     """Converts FC species code to internal TreeSpecies code"""
     fc_species = ForestCentreSpecies(species_code)
-    return species_map.get(fc_species)
+    return __species_map.get(fc_species)
 
 
 def convert_owner(owner_code: str) -> OwnerCategory:
     fc_owner = ForestCentreOwnerCategory(owner_code)
-    return owner_map.get(fc_owner)
+    return __owner_map.get(fc_owner)

@@ -50,3 +50,10 @@ class ForestCentreLandUseCategory(Enum):
     REAL_ESTATE = '5'
     OTHER_LAND = '7'
     WATER_BODY = '8'
+
+class ForestCentreSoilPeatlandCategory(Enum):
+    MINERAL_SOIL = '1'
+    SPRUCE_MIRE = '2'
+    PINE_MIRE = '3'
+    BARREN_TREELESS_MIRE = '4'
+    RICH_TREELESS_MIRE = '5'
