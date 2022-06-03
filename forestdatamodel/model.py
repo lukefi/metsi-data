@@ -400,7 +400,7 @@ class ForestStand:
 
     degree_days: Optional[float] = None  # RSD record 9
     owner_category: Optional[Enum] = None  # RSD record 10, 0-4
-    land_use_category: Optional[int] = None  # RSD record 11, 1-9
+    land_use_category: Optional[Enum] = None  # RSD record 11, 1-9
     soil_peatland_category: Optional[int] = None  # RSD record 12, 1-5
     site_type_category: Optional[int] = None  # RSD record 13, 1-8
     tax_class_reduction: Optional[int] = None  # RSD record 14, 0-4
@@ -613,8 +613,8 @@ class ForestStand:
             melaed.stand_id,
             melaed.geo_location[2],
             melaed.degree_days,
-            melaed.owner_category,
-            melaed.land_use_category,
+            melaed.owner_category.value,
+            melaed.land_use_category.value,
             melaed.soil_peatland_category,
             melaed.site_type_category,
             melaed.tax_class_reduction,
