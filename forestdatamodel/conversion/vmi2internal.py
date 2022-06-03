@@ -66,8 +66,9 @@ land_use_map = {
 
 
 def convert_land_use_category(lu_code: str) -> LandUseCategory:
-    value = lu_code.upper() #in case it is "a" instead of "A"
-    vmi_category = VmiLandUseCategory(value)
+    """sanitization of lu_code is the responsibility of the caller, 
+    meaning that this conversion will fail e.g. if the parameter is a lower-case letter."""
+    vmi_category = VmiLandUseCategory(lu_code)
     return land_use_map.get(vmi_category)
 
 
