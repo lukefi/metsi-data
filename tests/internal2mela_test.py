@@ -1,9 +1,9 @@
 import unittest
 from parameterized import parameterized
 from forestdatamodel.model import ReferenceTree, ForestStand, TreeStratum
-from forestdatamodel.conversion.internal2mela import species_mapper, mela_stand
-from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, TreeSpecies
-from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaTreeSpecies
+from forestdatamodel.conversion.internal2mela import soil_peatland_mapper, species_mapper, mela_stand
+from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
+from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaSoilAndPeatlandCategory, MelaTreeSpecies
 
 
 class Internal2MelaTest(unittest.TestCase):
@@ -55,3 +55,19 @@ class Internal2MelaTest(unittest.TestCase):
         fixture = ForestStand(land_use_category=lu_category)
         result = mela_stand(fixture)
         self.assertEqual(result.land_use_category, expected)
+
+
+    @parameterized.expand([
+        (SoilPeatlandCategory.BARREN_TREELESS_MIRE, SiteType.BARREN_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE), 
+        (SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE, SiteType.VERY_RICH_SITE, MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE),
+        (SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE, SiteType.DRY_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE),
+        (SoilPeatlandCategory.MINERAL_SOIL, SiteType.TUNTURIKOIVIKKO, MelaSoilAndPeatlandCategory.MINERAL_SOIL),
+        (SoilPeatlandCategory.BARREN_TREELESS_MIRE, SiteType.SUB_DRY_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE),
+    ])
+    def test_soil_peatland_category(self, sp_code, st_code, expected):
+        fixture = ForestStand(
+            soil_peatland_category=sp_code,
+            site_type_category=st_code
+            )
+        result = mela_stand(fixture)
+        self.assertEqual(result.soil_peatland_category, expected)
