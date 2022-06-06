@@ -79,9 +79,7 @@ class SoilPeatlandCategory(IntEnum):
     MINERAL_SOIL = 1 # kangas
     SPRUCE_MIRE = 2 # korpi
     PINE_MIRE = 3 # räme
-    BARREN_TREELESS_MIRE = 4 # neva
-    RICH_TREELESS_MIRE = 5 # letto
-    UNSPECIFIED_TREELESS_MIRE = 6 # VMI "avosuo"
+    TREELESS_MIRE = 4 # avosuo. Conversion to MELA's Neva or Letto is made with siteType
 
 
 class SiteType(IntEnum):

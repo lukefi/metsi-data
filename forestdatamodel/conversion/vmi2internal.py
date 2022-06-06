@@ -70,7 +70,7 @@ __soil_peatland_map = {
     VmiSoilPeatlandCategory.MINERAL_SOIL: SoilPeatlandCategory.MINERAL_SOIL,
     VmiSoilPeatlandCategory.SPRUCE_MIRE: SoilPeatlandCategory.SPRUCE_MIRE,
     VmiSoilPeatlandCategory.PINE_MIRE: SoilPeatlandCategory.PINE_MIRE,
-    VmiSoilPeatlandCategory.TREELESS_MIRE: SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE,
+    VmiSoilPeatlandCategory.TREELESS_MIRE: SoilPeatlandCategory.TREELESS_MIRE,
 }
 
 

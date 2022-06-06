@@ -58,11 +58,13 @@ class Internal2MelaTest(unittest.TestCase):
 
 
     @parameterized.expand([
-        (SoilPeatlandCategory.BARREN_TREELESS_MIRE, SiteType.BARREN_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE), 
-        (SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE, SiteType.VERY_RICH_SITE, MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE),
-        (SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE, SiteType.DRY_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE),
+        (SoilPeatlandCategory.TREELESS_MIRE, SiteType.BARREN_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE), 
+        (SoilPeatlandCategory.TREELESS_MIRE, SiteType.VERY_RICH_SITE, MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE),
+        (SoilPeatlandCategory.TREELESS_MIRE, SiteType.DAMP_SITE, MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE),
+        (SoilPeatlandCategory.TREELESS_MIRE, SiteType.SUB_DRY_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE),
+        (SoilPeatlandCategory.TREELESS_MIRE, None, None),
         (SoilPeatlandCategory.MINERAL_SOIL, SiteType.TUNTURIKOIVIKKO, MelaSoilAndPeatlandCategory.MINERAL_SOIL),
-        (SoilPeatlandCategory.BARREN_TREELESS_MIRE, SiteType.SUB_DRY_SITE, MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE),
+
     ])
     def test_soil_peatland_category(self, sp_code, st_code, expected):
         fixture = ForestStand(

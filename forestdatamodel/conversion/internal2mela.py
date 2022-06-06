@@ -49,22 +49,6 @@ species_map = {
     TreeSpecies.HAZEL: MelaTreeSpecies.OTHER_DECIDUOUS
 }
 
-
-owner_map = {
-    OwnerCategory.UNKNOWN: MelaOwnerCategory.PRIVATE,
-    OwnerCategory.PRIVATE: MelaOwnerCategory.PRIVATE,
-    OwnerCategory.FOREST_INDUSTRY: MelaOwnerCategory.ENTERPRISE,
-    OwnerCategory.OTHER_ENTERPRISE: MelaOwnerCategory.ENTERPRISE,
-    OwnerCategory.METSAHALLITUS: MelaOwnerCategory.STATE,
-    OwnerCategory.OTHER_STATE_AGENCY: MelaOwnerCategory.STATE,
-    OwnerCategory.FOREST_COOP: MelaOwnerCategory.COMMUNITY,
-    OwnerCategory.MUNICIPALITY: MelaOwnerCategory.MUNICIPALITY,
-    OwnerCategory.CONGREGATION: MelaOwnerCategory.COMMUNITY,
-    OwnerCategory.OTHER_COMMUNITY: MelaOwnerCategory.COMMUNITY,
-    OwnerCategory.UNDIVIDED: MelaOwnerCategory.COMMUNITY
-}
-
-
 land_use_map = {
     LandUseCategory.FOREST: MelaLandUseCategory.FOREST_LAND,
     LandUseCategory.SCRUB_LAND: MelaLandUseCategory.SCRUB_LAND,
@@ -81,6 +65,19 @@ land_use_map = {
     LandUseCategory.WATER_BODY: MelaLandUseCategory.LAKES_AND_RIVERS
 }
 
+owner_map = {
+    OwnerCategory.UNKNOWN: MelaOwnerCategory.PRIVATE,
+    OwnerCategory.PRIVATE: MelaOwnerCategory.PRIVATE,
+    OwnerCategory.FOREST_INDUSTRY: MelaOwnerCategory.ENTERPRISE,
+    OwnerCategory.OTHER_ENTERPRISE: MelaOwnerCategory.ENTERPRISE,
+    OwnerCategory.METSAHALLITUS: MelaOwnerCategory.STATE,
+    OwnerCategory.OTHER_STATE_AGENCY: MelaOwnerCategory.STATE,
+    OwnerCategory.FOREST_COOP: MelaOwnerCategory.COMMUNITY,
+    OwnerCategory.MUNICIPALITY: MelaOwnerCategory.MUNICIPALITY,
+    OwnerCategory.CONGREGATION: MelaOwnerCategory.COMMUNITY,
+    OwnerCategory.OTHER_COMMUNITY: MelaOwnerCategory.COMMUNITY,
+    OwnerCategory.UNDIVIDED: MelaOwnerCategory.COMMUNITY
+}
 
 __site_type_map = {
     SiteType.VERY_RICH_SITE: MelaSiteTypeCategory.VERY_RICH_SITE,
@@ -96,13 +93,13 @@ __site_type_map = {
 }
 
 
+#this doesn't have a mapping for TREELESS_MIRE, as its mapping to MELA values is determined by the SiteType category.
 __soil_peatland_map = {
     SoilPeatlandCategory.MINERAL_SOIL: MelaSoilAndPeatlandCategory.MINERAL_SOIL,
     SoilPeatlandCategory.SPRUCE_MIRE: MelaSoilAndPeatlandCategory.PEATLAND_SPRUCE_MIRE,
     SoilPeatlandCategory.PINE_MIRE: MelaSoilAndPeatlandCategory.PEATLAND_PINE_MIRE,
-    SoilPeatlandCategory.BARREN_TREELESS_MIRE: MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE,
-    SoilPeatlandCategory.RICH_TREELESS_MIRE: MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE,
 }
+
 
 __mela_rich_mire_types = [
     MelaSiteTypeCategory.VERY_RICH_SITE,
@@ -110,40 +107,31 @@ __mela_rich_mire_types = [
     MelaSiteTypeCategory.DAMP_SITE
 ]
 
-
-def owner_mapper(target):
-    """in-place mapping from internal land owner category to mela owner category"""
-    target.owner_category = owner_map.get(target.owner_category)
-    return target
-
-
 def site_type_mapper(target):
     target.site_type_category = __site_type_map.get(target.site_type_category)
     return target
 
 
 def soil_peatland_mapper(target):
-    """determining the soil or peatland type requires knowing the site type (fertility type).
-    Make sure to set it first, because if it's not set for the target object, this method will raise an exception.
+    """If the internal SoilPeatlandCategory is TREELESS_MIRE, determining the soil or peatland type for MELA requires knowing the site type (fertility type).
+    Make sure to set it first, because otherwise this method is unable to determine soil_peatland_category and sets it to None.
     """
 
-    #UNSPECIFIED_TREELESS_MIRE (only exists for VMI data) can be either rich (letto) or barren (neva).
-    #Thus, the MELA soil/peatland type can be deduced with the information about the site type:
-    if target.soil_peatland_category == SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE:
+    if target.soil_peatland_category == SoilPeatlandCategory.TREELESS_MIRE:
         if target.site_type_category is None:
-            raise TypeError
-        #note that the comparision needs to be done against mela site type because it is converted to it above.
+            target.soil_peatland_category = None
+            return target
+
         if target.site_type_category in __mela_rich_mire_types:
             target.soil_peatland_category = MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE
         else:
             target.soil_peatland_category = MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE
 
-    #if we're _not_ dealing with a VMI UNSPECIFIED_TREELESS_MIRE, the conversion is unambiguous and map 1:1 with corresponding MELA categories without the knowledge of the site type.
     else:
         target.soil_peatland_category = __soil_peatland_map.get(target.soil_peatland_category)
-
+    
     return target
-
+    
 
 def land_use_mapper(target):
     """in-place mapping from internal LandUseCategory to MelaLandUseCategory"""

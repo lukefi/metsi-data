@@ -57,8 +57,8 @@ __soil_peatland_map = {
     ForestCentreSoilPeatlandCategory.MINERAL_SOIL: SoilPeatlandCategory.MINERAL_SOIL,
     ForestCentreSoilPeatlandCategory.SPRUCE_MIRE: SoilPeatlandCategory.SPRUCE_MIRE,
     ForestCentreSoilPeatlandCategory.PINE_MIRE: SoilPeatlandCategory.PINE_MIRE,
-    ForestCentreSoilPeatlandCategory.BARREN_TREELESS_MIRE: SoilPeatlandCategory.BARREN_TREELESS_MIRE,
-    ForestCentreSoilPeatlandCategory.RICH_TREELESS_MIRE: SoilPeatlandCategory.RICH_TREELESS_MIRE
+    ForestCentreSoilPeatlandCategory.BARREN_TREELESS_MIRE: SoilPeatlandCategory.TREELESS_MIRE,
+    ForestCentreSoilPeatlandCategory.RICH_TREELESS_MIRE: SoilPeatlandCategory.TREELESS_MIRE
 }
 
 

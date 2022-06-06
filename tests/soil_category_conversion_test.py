@@ -9,7 +9,7 @@ class TestConversion(unittest.TestCase):
             ('1', SoilPeatlandCategory.MINERAL_SOIL),
             ('2', SoilPeatlandCategory.SPRUCE_MIRE),
             ('3', SoilPeatlandCategory.PINE_MIRE),
-            ('4', SoilPeatlandCategory.UNSPECIFIED_TREELESS_MIRE),
+            ('4', SoilPeatlandCategory.TREELESS_MIRE),
         ]
     )
     def test_convert_VMI_soil_category_to_internal(self, sp_code, expected):
@@ -22,8 +22,8 @@ class TestConversion(unittest.TestCase):
             ('1', SoilPeatlandCategory.MINERAL_SOIL),
             ('2', SoilPeatlandCategory.SPRUCE_MIRE),
             ('3', SoilPeatlandCategory.PINE_MIRE),
-            ('4', SoilPeatlandCategory.BARREN_TREELESS_MIRE),
-            ('5', SoilPeatlandCategory.RICH_TREELESS_MIRE),
+            ('4', SoilPeatlandCategory.TREELESS_MIRE),
+            ('5', SoilPeatlandCategory.TREELESS_MIRE),
         ]
     )
     def test_convert_FFC_soil_category_to_internal(self, sp_code, expected):
