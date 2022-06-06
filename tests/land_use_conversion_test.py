@@ -7,7 +7,6 @@ class TestConversion(test_util.ConverterTestSuite):
         assertions = [
             (["1"], LandUseCategory.FOREST),
             (["A"], LandUseCategory.FRESHWATER),
-            (["a"], LandUseCategory.FRESHWATER),
         ]
 
         self.run_with_test_assertions(
@@ -15,6 +14,9 @@ class TestConversion(test_util.ConverterTestSuite):
 
         #convertsion should raise exception for an unexpected value "foo"
         self.assertRaises(ValueError, vmi2internal.convert_land_use_category, *["foo"])
+        
+        #conversion should fail if a true code is passed in lowercase (responsibility of caller to pass in uppercase)
+        self.assertRaises(ValueError, vmi2internal.convert_land_use_category, *["a"])
 
 
     def test_convert_FC_lu_category_to_internal(self):
