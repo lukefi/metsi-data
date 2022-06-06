@@ -57,3 +57,13 @@ class ForestCentreSoilPeatlandCategory(Enum):
     PINE_MIRE = '3'
     BARREN_TREELESS_MIRE = '4'
     RICH_TREELESS_MIRE = '5'
+
+class ForestCentreSiteType(Enum):
+    LEHTO = '1'
+    LEHTOMAINEN_KANGAS = '2'
+    TUOREKANGAS = '3'
+    KUIVAHKOKANGAS = '4'
+    KUIVAKANGAS = '5'
+    KARUKKOKANGAS = '6'
+    KALLIOMAA_TAI_HIETIKKO = '7'
+    LAKIMETSA_TAI_TUNTURI = '8'

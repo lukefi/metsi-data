@@ -1,4 +1,5 @@
-from enum import IntEnum, Enum
+from enum import IntEnum
+
 
 class TreeSpecies(IntEnum):
     """This list is formed by combining VMI and Forest centre species 
@@ -44,20 +45,6 @@ class TreeSpecies(IntEnum):
     UNKNOWN = 38
 
 
-class OwnerCategory(Enum):
-    UNKNOWN = 0
-    PRIVATE = 1
-    FOREST_INDUSTRY = 2
-    OTHER_ENTERPRISE = 3
-    METSAHALLITUS = 4
-    OTHER_STATE_AGENCY = 5
-    FOREST_COOP = 6
-    MUNICIPALITY = 7
-    CONGREGATION = 8
-    OTHER_COMMUNITY = 9
-    UNDIVIDED = 10
-
-
 class LandUseCategory(IntEnum):
     FOREST = 1
     SCRUB_LAND = 2
@@ -74,10 +61,37 @@ class LandUseCategory(IntEnum):
     WATER_BODY = 13
 
 
-class SoilPeatlandCategory(Enum):
+class OwnerCategory(IntEnum):
+    UNKNOWN = 0
+    PRIVATE = 1
+    FOREST_INDUSTRY = 2
+    OTHER_ENTERPRISE = 3
+    METSAHALLITUS = 4
+    OTHER_STATE_AGENCY = 5
+    FOREST_COOP = 6
+    MUNICIPALITY = 7
+    CONGREGATION = 8
+    OTHER_COMMUNITY = 9
+    UNDIVIDED = 10
+
+
+class SoilPeatlandCategory(IntEnum):
     MINERAL_SOIL = 1 # kangas
     SPRUCE_MIRE = 2 # korpi
     PINE_MIRE = 3 # räme
     BARREN_TREELESS_MIRE = 4 # neva
     RICH_TREELESS_MIRE = 5 # letto
     UNSPECIFIED_TREELESS_MIRE = 6 # VMI "avosuo"
+
+
+class SiteType(IntEnum):
+    VERY_RICH_SITE = 1
+    RICH_SITE = 2
+    DAMP_SITE = 3
+    SUB_DRY_SITE = 4
+    DRY_SITE = 5
+    BARREN_SITE = 6
+    ROCKY_OR_SANDY_AREA = 7
+    OPEN_MOUNTAINS = 8
+    TUNTURIKOIVIKKO = 9
+    LAKIMETSA_TAI_TUNTURIHAVUMETSA = 10

@@ -1,5 +1,5 @@
-from forestdatamodel.enums.forest_centre import ForestCentreOwnerCategory, ForestCentreSoilPeatlandCategory, ForestCentreSpecies, ForestCentreLandUseCategory
-from forestdatamodel.enums.internal import OwnerCategory, SoilPeatlandCategory, TreeSpecies, LandUseCategory
+from forestdatamodel.enums.forest_centre import ForestCentreSiteType, ForestCentreOwnerCategory, ForestCentreSoilPeatlandCategory, ForestCentreSpecies, ForestCentreLandUseCategory
+from forestdatamodel.enums.internal import SiteType, OwnerCategory, SoilPeatlandCategory, TreeSpecies, LandUseCategory
 
 __species_map = {
     ForestCentreSpecies.PINE: TreeSpecies.PINE,
@@ -60,6 +60,23 @@ __soil_peatland_map = {
     ForestCentreSoilPeatlandCategory.BARREN_TREELESS_MIRE: SoilPeatlandCategory.BARREN_TREELESS_MIRE,
     ForestCentreSoilPeatlandCategory.RICH_TREELESS_MIRE: SoilPeatlandCategory.RICH_TREELESS_MIRE
 }
+
+
+__site_type_map = {
+    ForestCentreSiteType.LEHTO: SiteType.VERY_RICH_SITE,
+    ForestCentreSiteType.LEHTOMAINEN_KANGAS: SiteType.RICH_SITE,
+    ForestCentreSiteType.TUOREKANGAS: SiteType.DAMP_SITE,
+    ForestCentreSiteType.KUIVAHKOKANGAS: SiteType.SUB_DRY_SITE,
+    ForestCentreSiteType.KUIVAKANGAS: SiteType.DRY_SITE,
+    ForestCentreSiteType.KARUKKOKANGAS: SiteType.BARREN_SITE,
+    ForestCentreSiteType.KALLIOMAA_TAI_HIETIKKO: SiteType.ROCKY_OR_SANDY_AREA,
+    ForestCentreSiteType.LAKIMETSA_TAI_TUNTURI: SiteType.OPEN_MOUNTAINS
+}
+
+
+def convert_site_type_category(code: str) -> SiteType:
+    value = ForestCentreSiteType(code)
+    return __site_type_map.get(value)
 
 
 def convert_soil_peatland_category(sp_code: str) -> SoilPeatlandCategory:
