@@ -49,6 +49,7 @@ species_map = {
     TreeSpecies.HAZEL: MelaTreeSpecies.OTHER_DECIDUOUS
 }
 
+
 land_use_map = {
     LandUseCategory.FOREST: MelaLandUseCategory.FOREST_LAND,
     LandUseCategory.SCRUB_LAND: MelaLandUseCategory.SCRUB_LAND,
@@ -65,6 +66,7 @@ land_use_map = {
     LandUseCategory.WATER_BODY: MelaLandUseCategory.LAKES_AND_RIVERS
 }
 
+
 owner_map = {
     OwnerCategory.UNKNOWN: MelaOwnerCategory.PRIVATE,
     OwnerCategory.PRIVATE: MelaOwnerCategory.PRIVATE,
@@ -78,6 +80,7 @@ owner_map = {
     OwnerCategory.OTHER_COMMUNITY: MelaOwnerCategory.COMMUNITY,
     OwnerCategory.UNDIVIDED: MelaOwnerCategory.COMMUNITY
 }
+
 
 __site_type_map = {
     SiteType.VERY_RICH_SITE: MelaSiteTypeCategory.VERY_RICH_SITE,
@@ -107,6 +110,7 @@ __mela_rich_mire_types = [
     MelaSiteTypeCategory.DAMP_SITE
 ]
 
+
 def site_type_mapper(target):
     target.site_type_category = __site_type_map.get(target.site_type_category)
     return target
@@ -120,13 +124,11 @@ def soil_peatland_mapper(target):
     if target.soil_peatland_category == SoilPeatlandCategory.TREELESS_MIRE:
         if target.site_type_category is None:
             target.soil_peatland_category = None
-            return target
 
-        if target.site_type_category in __mela_rich_mire_types:
+        elif target.site_type_category in __mela_rich_mire_types:
             target.soil_peatland_category = MelaSoilAndPeatlandCategory.PEATLAND_RICH_TREELESS_MIRE
         else:
             target.soil_peatland_category = MelaSoilAndPeatlandCategory.PEATLAND_BARREN_TREELESS_MIRE
-
     else:
         target.soil_peatland_category = __soil_peatland_map.get(target.soil_peatland_category)
     
