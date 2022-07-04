@@ -67,3 +67,12 @@ class ForestCentreSiteType(Enum):
     KARUKKOKANGAS = '6'
     KALLIOMAA_TAI_HIETIKKO = '7'
     LAKIMETSA_TAI_TUNTURI = '8'
+
+class ForestCentreDrainageCategory(Enum):
+    OJITTAMATON_KANGAS = "1"
+    SOISTUNUT_KANGAS = "2"
+    OJITTETTU_KANGAS = "3"
+    LUONNONTILAINEN_SUO = "6"
+    OJIKKO = "7"
+    MUUTTUMA = "8"
+    TURVEKANGAS = "9"

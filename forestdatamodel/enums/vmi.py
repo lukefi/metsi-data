@@ -91,4 +91,13 @@ class VmiSiteType(Enum):
     TUNTURIKOIVIKKO = 'T'
     AVOTUNTURI = 'A'
 
+class VmiDrainageCategory(Enum):
+    OJITTAMATON_KANGAS_TAI_SUO = '0'
+    OJITETTU_KANGAS = '1'
+    OJIKKO = '2'
+    MUUTTUMA = '3'
+    TURVEKANGAS = '4'
+
+
+
 
