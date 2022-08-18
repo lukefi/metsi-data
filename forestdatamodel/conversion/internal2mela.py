@@ -16,6 +16,7 @@ species_map = {
     TreeSpecies.DOWNY_BIRCH: MelaTreeSpecies.DOWNY_BIRCH,
     TreeSpecies.ASPEN: MelaTreeSpecies.ASPEN,
     TreeSpecies.GREY_ALDER: MelaTreeSpecies.ALDER,
+    TreeSpecies.COMMON_ALDER: MelaTreeSpecies.ALDER,
     TreeSpecies.OTHER_CONIFEROUS: MelaTreeSpecies.OTHER_CONIFEROUS,
     TreeSpecies.OTHER_DECIDUOUS: MelaTreeSpecies.OTHER_DECIDUOUS,
     TreeSpecies.DOUGLAS_FIR: MelaTreeSpecies.OTHER_CONIFEROUS,
