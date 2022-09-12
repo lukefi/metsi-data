@@ -3,9 +3,7 @@ import pickle
 from typing import Any, List, Tuple, Callable
 from forestdatamodel.model import ForestStand, ReferenceTree
 import jsonpickle
-from forestryfunctions.preprocessing.pre_util import is_living_tree, stand_is_proper_forestland, stand_is_empty_auxiliary_stand
 from forestdatamodel.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
-from forestdatamodel.formats.util import multifilter, neg
 
 
 def vmi_file_reader(file: str) -> List[str]:
@@ -44,9 +42,13 @@ def cleaned_output(stands: List[ForestStand]) -> List[ForestStand]:
         3) filtering out non-forestland stands and empty auxiliary stands
         4) recreating indices for stands"""
     for stand in stands:
-        stand.reference_trees = multifilter(stand.reference_trees, is_living_tree)
+        stand.reference_trees = [t for t in stand.reference_trees if t.is_living()]
         stand.reference_trees = recreate_tree_indices(stand.reference_trees)
-    stands = multifilter(stands, stand_is_proper_forestland, neg(stand_is_empty_auxiliary_stand))
+    stands = [s for s in stands if (
+        s.is_forest_land()
+        and not s.is_other_excluded_forest()
+        and (not s.is_auxiliary() or s.has_trees() or s.has_strata())
+    )]
     stands = recreate_stand_indices(stands)
     return stands
 
