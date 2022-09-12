@@ -7,7 +7,6 @@ from forestdatamodel.formats import util, vmi_util, smk_util
 from abc import ABC, abstractmethod
 from forestdatamodel.formats.vmi_const import VMI12StandIndices, VMI12TreeIndices, VMI12StratumIndices, \
     VMI13StandIndices, VMI13TreeIndices, VMI13StratumIndices
-from forestdatamodel.formats.age_supplementing import supplement_age_for_reference_trees
 
 
 class ForestBuilder(ABC):
@@ -244,7 +243,6 @@ class VMI12Builder(VMIBuilder):
                         tree_number = len(stand.reference_trees) + 1
                         sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
                         stand.reference_trees.append(sapling)
-                supplement_age_for_reference_trees(stand.reference_trees, stand.tree_strata)
 
         return list(result.values())
 
@@ -345,7 +343,6 @@ class VMI13Builder(VMIBuilder):
                         tree_number = len(stand.reference_trees) + 1
                         sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
                         stand.reference_trees.append(sapling)
-                supplement_age_for_reference_trees(stand.reference_trees, stand.tree_strata)
         return list(result.values())
 
 class XMLBuilder(ForestBuilder):

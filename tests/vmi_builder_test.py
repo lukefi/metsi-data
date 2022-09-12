@@ -193,10 +193,10 @@ class TestForestBuilder(unittest.TestCase):
         #tree id source value 1
         self.assertEqual(1, tree.tree_number)
 
-        # breast_height_age is '' -> 46.0 (by age supplementing)
-        self.assertEqual(46.0, tree.breast_height_age)
-        # age_increase is '', total_age is '', breast_height_age is '' -> 46.0 (by age supplementing)
-        self.assertEqual(52.0, tree.biological_age)
+        # breast_height_age is '' -> 0.0
+        self.assertEqual(0.0, tree.breast_height_age)
+        # age_increase is '', total_age is '', breast_height_age is '' -> 0.0
+        self.assertEqual(0.0, tree.biological_age)
         # living_branches_height is '' -> 0.0
         self.assertEqual(0.0, tree.lowest_living_branch_height)
         # latvuskerros is '2' -> 1
@@ -380,8 +380,8 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(TreeSpecies.PINE, tree.species)
         # '250' -> 25.0
         self.assertEqual(25.0, tree.breast_height_diameter)
-        # sourcevalue '.', diameter '25', species '1'
-        self.assertEqual(21.82, tree.height)
+        # missing value normalized to None
+        self.assertEqual(None, tree.height)
         # diameter 25, area factors 1.0
         self.assertEqual(39.298, tree.stems_per_ha)
 
@@ -395,10 +395,10 @@ class TestForestBuilder(unittest.TestCase):
         #tree id source value 10
         self.assertEqual(10, tree.tree_number)
 
-        # breast_height_age is '.' -> 50.0 (by age supplementing)
-        self.assertEqual(50, tree.breast_height_age)
-        # age_increase is '.', total_age is '.', breast_height_age is '.' -> 50.0 (by age supplementing)
-        self.assertEqual(59.0, tree.biological_age)
+        # breast_height_age is '.' -> 0.0
+        self.assertEqual(0.0, tree.breast_height_age)
+        # age_increase is '.', total_age is '.', breast_height_age is '.' -> 0.0
+        self.assertEqual(0.0, tree.biological_age)
         # living_branches_height is '.' -> 0.0
         self.assertEqual(0.0, tree.lowest_living_branch_height)
         # latvuskerros is '2' -> 1
