@@ -4,7 +4,6 @@ from datetime import datetime as dt
 from forestdatamodel.enums.internal import TreeSpecies
 from forestdatamodel.formats.util import get_or_default, parse_float, parse_int
 from forestdatamodel.formats.vmi_const import vmi12_county_areas, vmi13_county_areas, VMI12StandIndices, VMI13StandIndices
-from forestryfunctions.preprocessing.naslund import naslund_height
 from shapely.geometry import Point
 from geopandas import GeoSeries
 
@@ -578,7 +577,7 @@ def transform_tree_diameter(source: str) -> float:
     return get_or_default(parse_float(source), 0.0) / 10.0
 
 
-def determine_tree_height(height_sourcevalue: str, diameter: float, species: TreeSpecies, conversion_factor: float = 10.0) -> Optional[float]:
+def determine_tree_height(height_sourcevalue: str, conversion_factor: float = 10.0) -> Optional[float]:
     """
     return tree height in meters as transformed from VMI dm values or computed with the Näslund height model
     if VMI value is not available.
@@ -588,11 +587,8 @@ def determine_tree_height(height_sourcevalue: str, diameter: float, species: Tre
     :param species:
     :return:
     """
-    primary = get_or_default(
-        parse_float(vmi_codevalue(height_sourcevalue)),
-        0.0)
-    alternative = naslund_height(diameter, species)
-    return (primary / conversion_factor) if primary > 0 else alternative
+    h = get_or_default(parse_float((vmi_codevalue(height_sourcevalue))), 0.0)
+    return h/conversion_factor if h>0 else None
 
 
 def determine_stems_per_ha(diameter: float, is_vmi12) -> float:

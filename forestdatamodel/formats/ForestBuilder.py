@@ -197,13 +197,8 @@ class VMI12Builder(VMIBuilder):
 
     def convert_tree_entry(self, indices: VMI12TreeIndices, data_row: typing.Sequence):
         result = super().convert_tree_entry(indices, data_row)
-        result.height = vmi_util.determine_tree_height(
-            data_row[indices.height],
-            result.breast_height_diameter,
-            result.species,
-            conversion_factor=100.0)
+        result.height = vmi_util.determine_tree_height(data_row[indices.height], conversion_factor=100.0)
         return result
-
 
     def find_row_type(self, row: str):
         """Return VMI12 data type of the row"""
@@ -307,11 +302,7 @@ class VMI13Builder(VMIBuilder):
 
     def convert_tree_entry(self, indices: VMI13TreeIndices, data_row: typing):
         result = super().convert_tree_entry(indices, data_row)
-        result.height = vmi_util.determine_tree_height(
-            data_row[indices.height],
-            result.breast_height_diameter,
-            result.species,
-            conversion_factor=10.0)
+        result.height = vmi_util.determine_tree_height(data_row[indices.height], conversion_factor=10.0)
         return result
 
     def build(self) -> typing.List[ForestStand]:

@@ -453,11 +453,8 @@ class TestConversion(test_util.ConverterTestSuite):
 
     def test_determine_tree_height(self):
         assertions = [
-            (['111', 20.0, TreeSpecies.SPRUCE, 10.0], 11.1),
-            (['111', 20.0, TreeSpecies.SPRUCE, 100.0], 1.11),
-            ([' ', 20.0, TreeSpecies.SPRUCE, 10.0], 17.1),  # see TestDomainUtil/test_naslund_height for further cases
-            (['.', 20.0, TreeSpecies.SPRUCE, 10.0], 17.1),  # see TestDomainUtil/test_naslund_height for further cases
-            (['.', 0.0, TreeSpecies.OAK, 10.0], None)
+            (['111', 10.0], 11.1),
+            (['111', 100.0], 1.11),
         ]
         self.run_with_test_assertions(assertions, vmi_util.determine_tree_height)
 
