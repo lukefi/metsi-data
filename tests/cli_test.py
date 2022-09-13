@@ -2,7 +2,6 @@ import unittest
 import hashlib
 import pathlib
 import click
-import pytest
 from forestdatamodel.cli import conv_inputfmt, conv_outputfmt, main
 from click.testing import CliRunner
 
@@ -31,6 +30,5 @@ class TestCli(unittest.TestCase):
             with runner.isolated_filesystem():
                 res = runner.invoke(main, ("convert", input, "-i", fmt, "out.csv"))
                 self.assertEqual(res.exit_code, 0)
-                assert res.exit_code == 0
                 with open("out.csv", "rb") as f:
                     self.assertEqual(hash, hashlib.sha256(f.read()).hexdigest())
