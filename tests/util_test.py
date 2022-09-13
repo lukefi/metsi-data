@@ -1,5 +1,5 @@
 from tests import test_util
-from forestdatamodel.formats.util import multifilter, parse_int, parse_float, get_or_default
+from forestdatamodel.formats.util import parse_int, parse_float, get_or_default
 
 
 class TestOptionUtil(test_util.ConverterTestSuite):
@@ -30,13 +30,3 @@ class TestOptionUtil(test_util.ConverterTestSuite):
             ([None, None], None)
         ]
         self.run_with_test_assertions(assertions, get_or_default)
-
-    def test_multifilter(self):
-        def filter1(x: int) -> bool:
-            return x > 10
-
-        def filter2(x: int) -> bool:
-            return x < 50
-
-        result = multifilter([5, 10, 20, 40, 50, 55], filter1, filter2)
-        self.assertEqual([20, 40], result)

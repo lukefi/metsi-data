@@ -1,4 +1,4 @@
-from typing import Optional, Any, List, Callable
+from typing import Optional, Any
 
 
 def parse_int(source: str) -> Optional[int]:
@@ -17,16 +17,3 @@ def parse_float(source: str) -> Optional[float]:
 
 def get_or_default(maybe: Optional[Any], default: Any = None) -> Any:
     return default if maybe is None else maybe
-
-
-def multifilter(data: List, *predicates: Callable) -> List:
-    """Filter given data list using given predicate functions i.e. the returned list contains elements for which
-    each predicate function returns True."""
-    return list(filter(
-        lambda item: all(p(item) for p in predicates),
-        data
-    ))
-
-
-def neg(predicate: Callable) -> Callable:
-    return lambda x: not predicate(x)
