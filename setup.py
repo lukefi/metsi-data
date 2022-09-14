@@ -9,8 +9,7 @@ setup(
     install_requires=[
         "scipy==1.7.*",
         "geopandas==0.10.*",
-        "jsonpickle==2.2.0",
-        "forestryfunctions@git+https://github.com/menu-hanke/forestry-function-library@0.1.2#egg=forestryfunctions"
+        "jsonpickle==2.2.0"
     ],
     entry_points={"console_scripts": ["fdm=forestdatamodel.cli:main"]}
 )
