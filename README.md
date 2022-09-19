@@ -66,7 +66,7 @@ Options:
 
 For example the following will convert vmi12 source data to pickle format:
 
-`python -m forestdatamodel.cli -i vmi12 -o pickle data/VMI_12_formaatti.dat vmi12_fdm.pickle`
+`python -m forestdatamodel.cli convert -i vmi12 -o pickle data/VMI_12_formaatti.dat vmi12_fdm.pickle`
 
 
 ### Troubleshooting
