@@ -474,11 +474,11 @@ class ForestCentreBuilder(XMLBuilder):
 
     def build(self) -> typing.List[ForestStand]:
         stands = []
-        estands = self.root.findall(self.xpath_stand, smk_util.ns)
+        estands = self.root.findall(self.xpath_stand, smk_util.NS)
         for estand in estands:
             stand = self.convert_stand_entry(estand)
             strata = []
-            estrata = estand.findall(self.xpath_strata, smk_util.ns)
+            estrata = estand.findall(self.xpath_strata, smk_util.NS)
             for estratum in estrata:
                 stratum = self.convert_stratum_entry(estratum)
                 stratum.identifier = "{}-{}-stratum".format(stand.identifier, stratum.identifier)

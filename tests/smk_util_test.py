@@ -104,7 +104,7 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
             </ts:TreeStandDataDate>
         """
         reference_stand = generate_test_data(tree_stand_element=test_element)
-        estratum = reference_stand.find('ts:TreeStandData/ts:TreeStandDataDate/tst:TreeStrata/tst:TreeStratum', smk_util.ns)
+        estratum = reference_stand.find('ts:TreeStandData/ts:TreeStandDataDate/tst:TreeStrata/tst:TreeStratum', smk_util.NS)
         sns = smk_util.parse_stratum_data(estratum)
         self.assertEqual(assertion, sns)
 
@@ -216,7 +216,7 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
             sns = SimpleNamespace(geometry_type=None, egeometry=None, coord_xpath=None)
             sns.geometry_type = config[0]
             sns.coord_xpath = config[1]
-            sns.egeometry = reference_stand.find(config[2], smk_util.ns)
+            sns.egeometry = reference_stand.find(config[2], smk_util.NS)
             assertions.append( ([sns], config[3]) )
         self.run_with_test_assertions(assertions, smk_util.parse_centroid)
 
@@ -285,7 +285,7 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
             </op:Operation>
         """
         reference_stand = generate_test_data(operations_element=operations_element)
-        eoperations = reference_stand.findall('./op:Operations/op:Operation', smk_util.ns)
+        eoperations = reference_stand.findall('./op:Operations/op:Operation', smk_util.NS)
         fixture = {
             10314067: (3, 2017),
             57490034: (4, 1992)
@@ -314,7 +314,7 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
             </op:Operation>
         """
         reference_stand = generate_test_data(operations_element=operations_element)
-        eoperations = reference_stand.findall('./op:Operations/op:Operation', smk_util.ns)
+        eoperations = reference_stand.findall('./op:Operations/op:Operation', smk_util.NS)
         fixture = {
             443: (410, 2015),
             444: (520, 2020)
