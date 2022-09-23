@@ -22,6 +22,8 @@ ns = {
         "tst": "http://standardit.tapio.fi/schemas/forestData/treeStratum",
         "ts": "http://standardit.tapio.fi/schemas/forestData/treeStand",
         "st": "http://standardit.tapio.fi/schemas/forestData/Stand",
+        "ci": "http://standardit.tapio.fi/schemas/forestData/contactInformation",
+        "re": "http://standardit.tapio.fi/schemas/forestData/realEstate",
         "default": "http://standardit.tapio.fi/schemas/forestData"
     }
 
