@@ -369,8 +369,8 @@ class XMLBuilder(ForestBuilder):
 
 class ForestCentreBuilder(XMLBuilder):
 
-    xpath_stand = 'st:Stand'
     xpath_strata = './ts:TreeStandData/ts:TreeStandDataDate[@type="{}"]/tst:TreeStrata/tst:TreeStratum'
+    xpath_stand = "st:Stands/st:Stand"
 
 
     def __init__(self, builder_flags: dict, data: str):
@@ -474,7 +474,7 @@ class ForestCentreBuilder(XMLBuilder):
 
     def build(self) -> typing.List[ForestStand]:
         stands = []
-        estands = self.root[0].findall(self.xpath_stand, smk_util.ns)
+        estands = self.root.findall(self.xpath_stand, smk_util.ns)
         for estand in estands:
             stand = self.convert_stand_entry(estand)
             strata = []
