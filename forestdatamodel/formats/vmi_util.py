@@ -13,8 +13,8 @@ def determine_area_factors(small_tree_sourcevalue: str, big_tree_sourcevalue: st
     default_rsd_value = 1.0
     small = get_or_default(parse_float(small_tree_sourcevalue), 0.0)
     big = get_or_default(parse_float(big_tree_sourcevalue), 0.0)
-    small = default_rsd_value if small == 0.0 else 10.0 / small
-    big = default_rsd_value if big == 0.0 else 10.0 / big
+    small = default_rsd_value if small == 0.0 else small / 10.0
+    big = default_rsd_value if big == 0.0 else big / 10.0
     return small, big
 
 
