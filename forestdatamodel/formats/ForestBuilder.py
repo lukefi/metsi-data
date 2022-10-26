@@ -136,7 +136,7 @@ class VMIBuilder(ForestBuilder):
         result.tree_number = 0
         result.stand_origin_relative_position = (0.0, 0.0, 0.0)
         result.lowest_living_branch_height = 0.0
-        result.management_category = 1.0
+        result.management_category = 1
         return result
 
     @abstractmethod

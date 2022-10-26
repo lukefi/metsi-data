@@ -122,11 +122,11 @@ class TreeStratum:
         result.breast_height_age = self.breast_height_age
         result.biological_age = self.biological_age
         result.saw_log_volume_reduction_factor = -1.0
-        result.pruning_year = 0.0
-        result.age_when_10cm_diameter_at_breast_height = 0.0
+        result.pruning_year = 0
+        result.age_when_10cm_diameter_at_breast_height = 0
         result.origin = self.origin
         result.stand_origin_relative_position = (0.0, 0.0, 0.0)
-        result.management_category = 1.0
+        result.management_category = 1
         result.sapling = True
         return result
 
@@ -281,11 +281,11 @@ class ForestStand:
     degree_days: Optional[float] = None  # RSD record 9
     owner_category: Optional[int] = None  # RSD record 10, 0-4
     land_use_category: Optional[int] = None  # RSD record 11, 1-9
-    soil_peatland_category: Optional[int] = None  # RSD record 12, 1-5
+    soil_peatland_category: Optional[float] = None  # RSD record 12, 1-5
     site_type_category: Optional[int] = None  # RSD record 13, 1-8
     tax_class_reduction: Optional[int] = None  # RSD record 14, 0-4
     tax_class: Optional[int] = None  # RSD record 15, 1-7
-    drainage_category: Optional[int] = None  # RSD record 16, 0-5
+    drainage_category: Optional[float] = None  # RSD record 16, 0-5
     drainage_feasibility: Optional[bool] = None  # RSD record 17, (0 yes, 1 no)
     # RSD record 18 is unspecified and defaults to '0'
     drainage_year: Optional[int] = None  # RSD record 19
