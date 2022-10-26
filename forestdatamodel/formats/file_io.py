@@ -1,7 +1,9 @@
+import csv
+from enum import Enum
 from itertools import chain
 import pickle
 from typing import Any, List, Tuple, Callable
-from forestdatamodel.model import ForestStand, ReferenceTree
+from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
 import jsonpickle
 from forestdatamodel.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
 
@@ -60,7 +62,7 @@ def rsd_float(source: str or int or float or None) -> str:
         return f'{0:.6f}'
 
 
-def csv_value(source: str or int or float or None) -> str:
+def rsd_csv_value(source: str or int or float or None) -> str:
     if type(source) is str:
         return source
     elif type(source) in (int, float):
@@ -116,18 +118,76 @@ def rsd_forest_stand_rows(stand: ForestStand) -> List[str]:
     return result
 
 
-def csv_forest_stand_rows(stand: ForestStand, delimeter: str) -> List[str]:
+def rsd_csv_forest_stand_rows(stand: ForestStand, delimeter: str) -> List[str]:
+    """converts the :stand: and its reference trees to csv rows, first converting their values to RSD format"""
     result = []
-    result.append(delimeter.join(map(lambda x: csv_value(x), stand.as_csv_row())))
+    result.append(delimeter.join(map(lambda x: rsd_csv_value(x), stand.as_rsd_csv_row())))
+    result.extend(
+        map(
+            lambda tree: delimeter.join(
+                map(
+                    lambda x: rsd_csv_value(x),
+                    tree.as_rsd_csv_row())),
+            stand.reference_trees)
+    )
+    return result
+
+
+def csv_value(source: Any) -> str:
+    if source is None:
+        return "None"
+    else:
+        return str(source)
+
+def stand_to_csv_rows(stand: ForestStand, delimeter: str) -> List[str]:
+    """converts the :stand:, its reference trees and tree strata to csv rows."""
+    result = []
+    result.append(delimeter.join(map(lambda x: csv_value(x), stand.as_internal_csv_row())))
     result.extend(
         map(
             lambda tree: delimeter.join(
                 map(
                     lambda x: csv_value(x),
-                    tree.as_csv_row())),
+                    tree.as_internal_csv_row())),
             stand.reference_trees)
     )
+    result.extend(
+        map(
+            lambda stratum: delimeter.join(
+                map(
+                    lambda x: csv_value(x),
+                    stratum.as_internal_csv_row())),
+            stand.tree_strata)
+    )
     return result
+
+
+def csv_rows(stands: List[ForestStand], delimeter: str) -> List[str]:
+    result = []
+    for stand in stands:
+        result.extend(stand_to_csv_rows(stand, delimeter))
+    return result
+
+
+def csv_to_stands(file_path: str, delimeter: str) -> List[ForestStand]:
+    stands = []
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file, delimiter=delimeter)
+        for row in reader:
+            if row[0] == "stand":
+                stands.append(ForestStand.from_csv_row(row))
+            elif row[0] == "tree":
+                stands[-1].reference_trees.append(ReferenceTree.from_csv_row(row))
+            elif row[0] == "stratum":
+                stands[-1].tree_strata.append(TreeStratum.from_csv_row(row))
+
+        # once all stands are recreated, add the stand reference to trees and strata 
+        for stand in stands:
+            for tree in stand.reference_trees:
+                tree.stand = stand
+            for stratum in stand.tree_strata:
+                stratum.stand = stand
+    return stands
 
 
 def outputtable_rows(stands: List[ForestStand], formatter: Callable[[List[ForestStand]], List[str]]) -> List[str]:
@@ -137,8 +197,8 @@ def outputtable_rows(stands: List[ForestStand], formatter: Callable[[List[Forest
     return result
 
 
-def csv_rows(stands: List[ForestStand], delimeter: str) -> List[str]:
-    return outputtable_rows(stands, lambda stand: csv_forest_stand_rows(stand, delimeter))
+def rsd_csv_rows(stands: List[ForestStand], delimeter: str) -> List[str]:
+    return outputtable_rows(stands, lambda stand: rsd_csv_forest_stand_rows(stand, delimeter))
 
 
 def rsd_rows(stands: List[ForestStand]) -> List[str]:
@@ -148,7 +208,7 @@ def rsd_rows(stands: List[ForestStand]) -> List[str]:
 
 def write_forest_csv(stands: List[ForestStand], filename: str):
     with open(filename, 'w', newline='\n') as file:
-        file.writelines('\n'.join(csv_rows(stands, ';')))
+        file.writelines('\n'.join(rsd_csv_rows(stands, ';')))
 
 
 def write_forest_rsd(stands: List[ForestStand], filename: str):

@@ -48,9 +48,53 @@ class FileIoTest(ConverterTestSuite):
         result = fio.rsd_rows(vmi13_stands)
         self.assertEqual(5, len(result))
 
-    def test_csv_rows(self):
-        result = fio.csv_rows(vmi13_stands, ";")
+    def test_rsd_csv_rows(self):
+        result = fio.rsd_csv_rows(vmi13_stands, ";")
         self.assertEqual(5, len(result))
+
+    def test_csv_rows(self):
+        delimiter = ";"
+        result = fio.csv_rows(vmi13_stands, delimiter)
+        self.assertEqual(6, len(result))
+        
+        #make sure that each type of a row has the same number of columns, since csv-->stand conversion relies on it
+        stand_row_lengths = [len(row.split(delimiter)) for row in result if row[0:5] == "stand"]
+        tree_row_lengths = [len(row.split(delimiter)) for row in result if row[0:4] == "tree"]
+        stratum_rows_lengths = [len(row.split(delimiter)) for row in result if row[0:7] == "stratum"]
+
+        self.assertTrue(all(length==stand_row_lengths[0] for length in stand_row_lengths))
+        self.assertTrue(all(length==tree_row_lengths[0] for length in tree_row_lengths))
+        self.assertTrue(all(length==stratum_rows_lengths[0] for length in stratum_rows_lengths))
+
+    def test_csv_to_stands(self):
+        """tests that the roundtrip conversion stands-->csv-->stands maintains the stand structure"""
+        delimiter = ";"
+        result = fio.csv_rows(vmi13_stands, delimiter)
+        path = "tests/resources/vmi13_stands.csv"
+        with open(path, "w") as file: 
+            file.write("\n".join(result))
+
+        stands_from_csv = fio.csv_to_stands(path, delimiter)
+        self.assertEqual(2, len(stands_from_csv))
+
+        # Test that the stands from csv and the original stands are equal.
+        # It performs a sort of "deep diff" for the stands, relying on the fact that only reference_trees and tree_strata are nested objects in the stand.
+        # Objects are cast to dicts to avoid using the overridden __eq__ methods of the respective classes.
+        for i in range(len(vmi13_stands)):
+            for t in range(len(vmi13_stands[i].reference_trees)):
+                trees_expected = vmi13_stands[i].reference_trees[t].__dict__
+                trees_actual = stands_from_csv[i].reference_trees[t].__dict__
+                self.assertTrue(trees_expected == trees_actual)
+            
+            for s in range(len(vmi13_stands[i].tree_strata)):
+                strata_expected = vmi13_stands[i].tree_strata[s].__dict__
+                strata_actual = stands_from_csv[i].tree_strata[s].__dict__
+                self.assertTrue(strata_expected == strata_actual)
+
+            stands_expected = vmi13_stands[i].__dict__
+            stands_actual = stands_from_csv[i].__dict__
+            self.assertTrue(stands_expected == stands_actual)
+
 
     def test_write_forest_rsd(self):
         fio.write_forest_rsd(vmi13_stands, TEST_FILE)
