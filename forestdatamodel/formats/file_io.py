@@ -1,5 +1,4 @@
 import csv
-from enum import Enum
 from itertools import chain
 import pickle
 from typing import Any, List, Tuple, Callable

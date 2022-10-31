@@ -1,6 +1,4 @@
-import sys
-from typing import Optional, Any, Tuple
-from enum import Enum
+from typing import Optional, Any
 
 
 def parse_int(source: str) -> Optional[int]:
