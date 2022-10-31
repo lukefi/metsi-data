@@ -352,10 +352,6 @@ class ReferenceTree:
             None,
         ]
 
-    def as_rsd_csv_row(self) -> list[str]:
-        result = ["tree", self.identifier]
-        result.extend(self.as_rsd_row())
-        return result
 
 @dataclass
 class ForestStand:
@@ -469,16 +465,10 @@ class ForestStand:
     def has_strata(self):
         return len(self.tree_strata) > 0
 
-    def as_rsd_csv_row(self) -> list[str]:
-        result = ["stand", self.identifier]
-        result.extend(self.as_rsd_row())
-        return result
-
     def as_internal_csv_row(self) -> list[str]:
         result = ["stand", self.identifier]
         result.extend(self.as_internal_row())
         return result
-
 
     def as_internal_row(self):
         forestry_centre_id = (

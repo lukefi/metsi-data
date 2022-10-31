@@ -62,15 +62,6 @@ def rsd_float(source: str or int or float or None) -> str:
         return f'{0:.6f}'
 
 
-def rsd_csv_value(source: str or int or float or None) -> str:
-    if type(source) is str:
-        return source
-    elif type(source) in (int, float):
-        return str(source)
-    else:
-        return '0.0'
-
-
 def msb_metadata(stand: ForestStand) -> Tuple[List[str], List[str], List[str]]:
     """
     Generate a triple with:
@@ -115,21 +106,6 @@ def rsd_forest_stand_rows(stand: ForestStand) -> List[str]:
     )))
     for tree in stand.reference_trees:
         result.append(" ".join(map(rsd_float, tree.as_rsd_row())))
-    return result
-
-
-def rsd_csv_forest_stand_rows(stand: ForestStand, delimeter: str) -> List[str]:
-    """converts the :stand: and its reference trees to csv rows, first converting their values to RSD format"""
-    result = []
-    result.append(delimeter.join(map(lambda x: rsd_csv_value(x), stand.as_rsd_csv_row())))
-    result.extend(
-        map(
-            lambda tree: delimeter.join(
-                map(
-                    lambda x: rsd_csv_value(x),
-                    tree.as_rsd_csv_row())),
-            stand.reference_trees)
-    )
     return result
 
 
@@ -195,10 +171,6 @@ def outputtable_rows(stands: List[ForestStand], formatter: Callable[[List[Forest
     for stand in cleaned_output(stands):
         result.extend(formatter(stand))
     return result
-
-
-def rsd_csv_rows(stands: List[ForestStand], delimeter: str) -> List[str]:
-    return outputtable_rows(stands, lambda stand: rsd_csv_forest_stand_rows(stand, delimeter))
 
 
 def rsd_rows(stands: List[ForestStand]) -> List[str]:

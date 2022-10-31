@@ -48,10 +48,6 @@ class FileIoTest(ConverterTestSuite):
         result = fio.rsd_rows(vmi13_stands)
         self.assertEqual(5, len(result))
 
-    def test_rsd_csv_rows(self):
-        result = fio.rsd_csv_rows(vmi13_stands, ";")
-        self.assertEqual(5, len(result))
-
     def test_csv_rows(self):
         delimiter = ";"
         result = fio.csv_rows(vmi13_stands, delimiter)
