@@ -48,9 +48,9 @@ class FileIoTest(ConverterTestSuite):
         result = fio.rsd_rows(vmi13_stands)
         self.assertEqual(5, len(result))
 
-    def test_csv_rows(self):
+    def test_stands_to_csv(self):
         delimiter = ";"
-        result = fio.csv_rows(vmi13_stands, delimiter)
+        result = fio.stands_to_csv(vmi13_stands, delimiter)
         self.assertEqual(6, len(result))
         
         #make sure that each type of a row has the same number of columns, since csv-->stand conversion relies on it
@@ -65,7 +65,7 @@ class FileIoTest(ConverterTestSuite):
     def test_csv_to_stands(self):
         """tests that the roundtrip conversion stands-->csv-->stands maintains the stand structure"""
         delimiter = ";"
-        result = fio.csv_rows(vmi13_stands, delimiter)
+        result = fio.stands_to_csv(vmi13_stands, delimiter)
         path = "tests/resources/vmi13_stands.csv"
         with open(path, "w") as file: 
             file.write("\n".join(result))
@@ -101,7 +101,7 @@ class FileIoTest(ConverterTestSuite):
     def test_write_forest_csv(self):
         fio.write_forest_csv(vmi13_stands, TEST_FILE)
         result = open(TEST_FILE, 'r', newline='\n').readlines()
-        self.assertEqual(5, len(result))
+        self.assertEqual(6, len(result))
         os.remove(TEST_FILE)
 
     def test_generate_json_file(self):

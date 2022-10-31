@@ -138,7 +138,7 @@ def stand_to_csv_rows(stand: ForestStand, delimeter: str) -> List[str]:
     return result
 
 
-def csv_rows(stands: List[ForestStand], delimeter: str) -> List[str]:
+def stands_to_csv(stands: List[ForestStand], delimeter: str) -> List[str]:
     result = []
     for stand in stands:
         result.extend(stand_to_csv_rows(stand, delimeter))
@@ -180,7 +180,7 @@ def rsd_rows(stands: List[ForestStand]) -> List[str]:
 
 def write_forest_csv(stands: List[ForestStand], filename: str):
     with open(filename, 'w', newline='\n') as file:
-        file.writelines('\n'.join(rsd_csv_rows(stands, ';')))
+        file.writelines('\n'.join(stands_to_csv(stands, ';')))
 
 
 def write_forest_rsd(stands: List[ForestStand], filename: str):
