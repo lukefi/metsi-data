@@ -5,6 +5,31 @@ from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
 
 class TestForestDataModel(unittest.TestCase):
 
+    def test_stratum_to_sapling_reference_tree(self):
+        assertion = ReferenceTree(
+            stems_per_ha = 1200,
+            species = internal.TreeSpecies(1),
+            breast_height_diameter = 1.0,
+            height = 2.0,
+            breast_height_age = 10.0,
+            biological_age = 12.0,
+            saw_log_volume_reduction_factor = -1.0,
+            pruning_year = 0,
+            age_when_10cm_diameter_at_breast_height = 0,
+            origin = 1,
+            stand_origin_relative_position = (0.0, 0.0, 0.0),
+            management_category = 1,
+            sapling = True)
+        fixture = TreeStratum(
+            sapling_stems_per_ha = 1200,
+            species = internal.TreeSpecies.PINE,
+            mean_diameter = 1.0,
+            mean_height = 2.0,
+            breast_height_age = 10.0,
+            biological_age = 12.0,
+            origin = 1)
+        self.assertEqual(fixture.to_sapling_reference_tree(), assertion)
+
     def test_has_sapling_stems_per_ha(self):
         fixture = TreeStratum()
         assertions = [

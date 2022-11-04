@@ -118,7 +118,7 @@ class TreeStratum:
         result = ReferenceTree()
         result.stems_per_ha = self.sapling_stems_per_ha
         result.species = self.species
-        result.breast_height_diameter = 0.0
+        result.breast_height_diameter = self.mean_diameter
         result.height = self.mean_height
         result.breast_height_age = self.breast_height_age
         result.biological_age = self.biological_age
