@@ -274,7 +274,7 @@ class ReferenceTree:
 
     def as_internal_csv_row(self) -> list[str]:
         return [
-            "tree", 
+            "tree",
             self.identifier,
             self.species,
             self.origin,

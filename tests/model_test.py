@@ -1,6 +1,7 @@
 import unittest
 
 from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
+from forestdatamodel.enums import internal
 
 
 class TestForestDataModel(unittest.TestCase):
@@ -30,7 +31,7 @@ class TestForestDataModel(unittest.TestCase):
             origin = 1)
         self.assertEqual(fixture.to_sapling_reference_tree(), assertion)
 
-    def test_has_sapling_stems_per_ha(self):
+    def test_stratum_has_sapling_stems_per_ha(self):
         fixture = TreeStratum()
         assertions = [
             (10.0, True),
@@ -42,7 +43,7 @@ class TestForestDataModel(unittest.TestCase):
             fixture.sapling_stems_per_ha = i[0]
             self.assertEqual(i[1], fixture.has_sapling_stems_per_ha())
 
-    def test_has_height(self):
+    def test_stratum_has_height(self):
         fixture = TreeStratum()
         assertions = [
             (10.0, True),
