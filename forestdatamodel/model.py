@@ -1,11 +1,21 @@
 import dataclasses
 from enum import Enum
-import sys
 from typing import Optional
 from dataclasses import dataclass
 from forestdatamodel.conversion.internal2mela import mela_stand, mela_tree
 from forestdatamodel.enums.internal import TreeSpecies
 from forestdatamodel.formats.util import convert_str_to_type
+
+# NOTE:
+# * the deepcopy methods here are roughly equivalent to
+#       def __deepcopy__(self, memo):
+#           return cls(**self.__dict__)
+#   but __new__ + update() is ~25% faster (tested on Python 3.10).
+#   dict.copy() vs dict(other) vs dict.update(other) are all equally fast.
+# * none of the ForestStand / ReferenceTree / TreeStratum have their __init__
+#   methods run when copied. don't add a (non-trivial) __init__ method to any class here.
+# * if you add any containers on any class here, you need to add a manual copy
+#   in the __deepcopy__ method. see ForestStand.__deepcopy__ for an example.
 
 @dataclass
 class TreeStratum:
@@ -41,6 +51,11 @@ class TreeStratum:
 
     def __eq__(self, other: "TreeStratum"):
         return self.identifier == other.identifier
+
+    def __deepcopy__(self, memo: dict) -> 'TreeStratum':
+        s = TreeStratum.__new__(TreeStratum)
+        s.__dict__.update(self.__dict__)
+        return s
 
     def has_height(self):
         if self.mean_height is None:
@@ -234,6 +249,11 @@ class ReferenceTree:
     def __eq__(self, other: "ReferenceTree"):
         return self.identifier == other.identifier
 
+    def __deepcopy__(self, memo: dict) -> 'ReferenceTree':
+        t = ReferenceTree.__new__(ReferenceTree)
+        t.__dict__.update(self.__dict__)
+        return t
+
     def validate(self):
         pass
 
@@ -422,6 +442,17 @@ class ForestStand:
 
     def __eq__(self, other: "ForestStand"):
         return self.identifier == other.identifier
+
+    def __deepcopy__(self, memo: dict) -> 'ForestStand':
+        stand = ForestStand.__new__(ForestStand)
+        stand.__dict__.update(self.__dict__)
+        stand.reference_trees = [t.__deepcopy__(memo) for t in stand.reference_trees]
+        stand.tree_strata = [s.__deepcopy__(memo) for s in stand.tree_strata]
+        if stand.monthly_temperatures is not None:
+            stand.monthly_temperatures = list(stand.monthly_temperatures)
+        if stand.monthly_rainfall is not None:
+            stand.monthly_rainfall = list(stand.monthly_rainfall)
+        return stand
 
     def set_identifiers(self, stand_id: int, management_unit_id: Optional[int] = None):
         self.stand_id = stand_id
