@@ -7,6 +7,8 @@ from forestdatamodel.formats import util, vmi_util, smk_util
 from abc import ABC, abstractmethod
 from forestdatamodel.formats.vmi_const import VMI12StandIndices, VMI12TreeIndices, VMI12StratumIndices, \
     VMI13StandIndices, VMI13TreeIndices, VMI13StratumIndices
+from forestryfunctions.preprocessing.age_supplementing import supplement_age_for_reference_trees
+from forestryfunctions.preprocessing.naslund import naslund_height
 
 
 class ForestBuilder(ABC):
@@ -147,6 +149,10 @@ class VMIBuilder(ForestBuilder):
     def build(self) -> typing.List[ForestStand]:
         ...
 
+    @classmethod
+    @abstractmethod
+    def supplmenent_missing_values(cls, stands: list[ForestStand]):
+        ...
 
 class VMI12Builder(VMIBuilder):
     """VMI12 specific builder implementation"""
@@ -229,22 +235,31 @@ class VMI12Builder(VMIBuilder):
                 stand = result[stand_id]
                 tree.stand = stand
                 stand.reference_trees.append(tree)
-
-            # Post-processing tree variable that depend on stand variables
-            for stand in result.values():
-                for tree in stand.reference_trees:
-                    tree.stems_per_ha = vmi_util.determine_stems_per_ha(
-                        tree.breast_height_diameter,
-                        True)
-                for stratum in stand.tree_strata:
-                    if stratum.sapling_stratum:
-                        sapling = stratum.to_sapling_reference_tree()
-                        sapling.stand = stand
-                        tree_number = len(stand.reference_trees) + 1
-                        sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
-                        stand.reference_trees.append(sapling)
-
+        
         return list(result.values())
+
+    @classmethod
+    def supplmenent_missing_values(cls, stands: list[ForestStand]):
+        """Supplement missing values in VMI12 data set for :stands: produced by the build method."""
+        for stand in stands:
+            for tree in stand.reference_trees:
+                tree.stems_per_ha = vmi_util.determine_stems_per_ha(
+                    tree.breast_height_diameter,
+                    True)
+                if (tree.height or 0) <= 0:
+                    tree.height = naslund_height(tree.breast_height_diameter, tree.species)
+
+            for stratum in stand.tree_strata:
+                if stratum.sapling_stratum:
+                    sapling = stratum.to_sapling_reference_tree()
+                    sapling.stand = stand
+                    tree_number = len(stand.reference_trees) + 1
+                    sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
+                    stand.reference_trees.append(sapling)
+
+            supplement_age_for_reference_trees(stand.reference_trees, stand.tree_strata)
+
+        return stands
 
 
 class VMI13Builder(VMIBuilder):
@@ -330,20 +345,30 @@ class VMI13Builder(VMIBuilder):
                 tree.stand = stand
                 stand.reference_trees.append(tree)
 
-            # Post-processing tree variable that depend on stand variables
-            for stand in result.values():
-                for tree in stand.reference_trees:
-                    tree.stems_per_ha = vmi_util.determine_stems_per_ha(
-                        tree.breast_height_diameter,
-                        False)
-                for stratum in stand.tree_strata:
-                    if stratum.sapling_stratum:
-                        sapling = stratum.to_sapling_reference_tree()
-                        sapling.stand = stand
-                        tree_number = len(stand.reference_trees) + 1
-                        sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
-                        stand.reference_trees.append(sapling)
         return list(result.values())
+
+    @classmethod
+    def supplmenent_missing_values(cls, stands: typing.List[ForestStand]):
+        """Supplement missing values in VMI13 data set for :stands: produced by the build method."""
+        for stand in stands:
+            for tree in stand.reference_trees:
+                tree.stems_per_ha = vmi_util.determine_stems_per_ha(
+                    tree.breast_height_diameter,
+                    False)
+                if (tree.height or 0) <= 0:
+                    tree.height = naslund_height(tree.breast_height_diameter, tree.species)
+
+            for stratum in stand.tree_strata:
+                if stratum.sapling_stratum:
+                    sapling = stratum.to_sapling_reference_tree()
+                    sapling.stand = stand
+                    tree_number = len(stand.reference_trees) + 1
+                    sapling.identifier = vmi_util.convert_stratum_id_to_tree_id(stratum.identifier, tree_number)
+                    stand.reference_trees.append(sapling)
+
+            supplement_age_for_reference_trees(stand.reference_trees, stand.tree_strata)
+
+        return stands
 
 class XMLBuilder(ForestBuilder):
 
@@ -364,6 +389,11 @@ class XMLBuilder(ForestBuilder):
 
     @abstractmethod
     def convert_stratum_entry(self):
+        ...
+
+    @classmethod
+    @abstractmethod
+    def supplmenent_missing_values(cls, stands: list[ForestStand]):
         ...
 
 
@@ -485,4 +515,9 @@ class ForestCentreBuilder(XMLBuilder):
                 strata.append(stratum)
             stand.tree_strata = strata
             stands.append(stand)
+        return stands
+
+    @classmethod
+    def supplmenent_missing_values(cls, stands: list[ForestStand]):
+        """Currently just overrides the abstract base method, as no supplementing needs to be done currently for SMK data."""
         return stands

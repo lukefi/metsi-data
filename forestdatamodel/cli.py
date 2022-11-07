@@ -33,7 +33,8 @@ def conv_read(input: str, fmt: str, flags: dict) -> list[ForestStand]:
         Builder, read = ForestCentreBuilder, xml_file_reader
     else:
         assert False # can't go here -- fmt is checked at convert()
-    return Builder(flags, read(input)).build() # type: ignore
+    stands = Builder(flags, read(input)).build() # type: ignore
+    return Builder.supplmenent_missing_values(stands)
 
 def conv_write(output: str, fmt: str, stands: list[ForestStand]):
     if fmt == "pickle":

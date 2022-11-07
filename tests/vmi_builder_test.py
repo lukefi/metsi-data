@@ -26,8 +26,10 @@ class TestForestBuilder(unittest.TestCase):
     vmi_builder_flags = { 'reference_trees': True }
     vmi12_builder: VMIBuilder = VMI12Builder(vmi_builder_flags, vmi12_data)
     vmi12_stands = vmi12_builder.build()
+    vmi12_stands = vmi12_builder.supplmenent_missing_values(vmi12_stands)
     vmi13_builder: VMIBuilder = VMI13Builder(vmi_builder_flags, vmi13_data)
     vmi13_stands = vmi13_builder.build()
+    vmi13_stands = vmi13_builder.supplmenent_missing_values(vmi13_stands)
 
     def test_vmi12_init(self):
         self.assertEqual(4, len(self.vmi12_builder.forest_stands))
@@ -194,9 +196,9 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(1, tree.tree_number)
 
         # breast_height_age is '' -> 0.0
-        self.assertEqual(0.0, tree.breast_height_age)
+        self.assertEqual(46.0, tree.breast_height_age)
         # age_increase is '', total_age is '', breast_height_age is '' -> 0.0
-        self.assertEqual(0.0, tree.biological_age)
+        self.assertEqual(52.0, tree.biological_age)
         # living_branches_height is '' -> 0.0
         self.assertEqual(0.0, tree.lowest_living_branch_height)
         # latvuskerros is '2' -> 1
@@ -381,7 +383,7 @@ class TestForestBuilder(unittest.TestCase):
         # '250' -> 25.0
         self.assertEqual(25.0, tree.breast_height_diameter)
         # missing value normalized to None
-        self.assertEqual(None, tree.height)
+        self.assertEqual(21.82, tree.height)
         # diameter 25, area factors 1.0
         self.assertEqual(39.298, tree.stems_per_ha)
 
@@ -396,9 +398,9 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(10, tree.tree_number)
 
         # breast_height_age is '.' -> 0.0
-        self.assertEqual(0.0, tree.breast_height_age)
+        self.assertEqual(50.0, tree.breast_height_age)
         # age_increase is '.', total_age is '.', breast_height_age is '.' -> 0.0
-        self.assertEqual(0.0, tree.biological_age)
+        self.assertEqual(59.0, tree.biological_age)
         # living_branches_height is '.' -> 0.0
         self.assertEqual(0.0, tree.lowest_living_branch_height)
         # latvuskerros is '2' -> 1
