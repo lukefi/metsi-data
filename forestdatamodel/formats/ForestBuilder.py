@@ -7,9 +7,7 @@ from forestdatamodel.formats import util, vmi_util, smk_util
 from abc import ABC, abstractmethod
 from forestdatamodel.formats.vmi_const import VMI12StandIndices, VMI12TreeIndices, VMI12StratumIndices, \
     VMI13StandIndices, VMI13TreeIndices, VMI13StratumIndices
-from forestryfunctions.preprocessing.age_supplementing import supplement_age_for_reference_trees
-from forestryfunctions.preprocessing.naslund import naslund_height
-
+from forestdatamodel.formats.vmi_supplementing import naslund_height, supplement_age_for_reference_trees
 
 class ForestBuilder(ABC):
     """Abstract base class of forest builders"""
