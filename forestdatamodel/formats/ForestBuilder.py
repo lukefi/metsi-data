@@ -152,6 +152,11 @@ class VMIBuilder(ForestBuilder):
     def supplmenent_missing_values(cls, stands: list[ForestStand]):
         ...
 
+    @classmethod
+    def remove_strata(cls, stands: list[ForestStand]):
+        """Empties the strata lists so that they won't be unnecessarily carried along to simulator."""
+        return [stand.tree_strata.clear() for stand in stands]
+
 class VMI12Builder(VMIBuilder):
     """VMI12 specific builder implementation"""
 

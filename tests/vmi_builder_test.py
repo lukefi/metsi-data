@@ -1,3 +1,4 @@
+from copy import deepcopy
 import unittest
 
 from forestdatamodel.formats import vmi_const
@@ -24,9 +25,11 @@ class TestForestBuilder(unittest.TestCase):
         '1 U 1  99  99 98 2   . 0 20181102 2018 258 3 1 10 10  . 11  9 402 402 430    6   20 1 S 7012044.52 543491.23 7012044.52 543491.23  136.10 1084    . T  2 3   54 205  0   . 8 18 1 0  0  . . 0 1  0  . . 0 0 1 3 0  . . 0 0  . 0 . 1 0 1   5 3 2 3 1 3  2 .  . .  .  3 9  2 0  3 2  . .  . .  5 .  .  . 2150  4  35   6  8 . S 10600 E 2 7 0 1 6 0 . . . 2 A 1 A  2 0 . 1 2 . . 0 0 . 2 2 2   0 . . 0 . .   . 25 0 .   . 4 0 . . .         . 1 7012044.52 543491.23 .    .',
     ]
     vmi_builder_flags = { 'reference_trees': True }
+
     vmi12_builder: VMIBuilder = VMI12Builder(vmi_builder_flags, vmi12_data)
     vmi12_stands = vmi12_builder.build()
     vmi12_stands = vmi12_builder.supplmenent_missing_values(vmi12_stands)
+
     vmi13_builder: VMIBuilder = VMI13Builder(vmi_builder_flags, vmi13_data)
     vmi13_stands = vmi13_builder.build()
     vmi13_stands = vmi13_builder.supplmenent_missing_values(vmi13_stands)
@@ -432,3 +435,10 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(15.0, stratum.biological_age)
         # basal area is '2' -> 2.0
         self.assertEqual(2.0, stratum.basal_area)
+
+
+    def test_remove_strata(self):
+        stands = deepcopy(self.vmi13_stands)
+        self.vmi13_builder.remove_strata(stands)
+        self.assertEqual(0, len(stands[1].tree_strata))
+
