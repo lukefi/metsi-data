@@ -1,6 +1,6 @@
 import os
 import click
-from forestdatamodel.formats.ForestBuilder import ForestCentreBuilder, VMI12Builder, VMI13Builder
+from forestdatamodel.formats.ForestBuilder import ForestCentreBuilder, VMI12Builder, VMI13Builder, VMIBuilder
 from forestdatamodel.formats.file_io import pickle_reader, pickle_writer, vmi_file_reader, write_forest_csv, write_forest_json, write_forest_rsd, xml_file_reader
 from forestdatamodel.model import ForestStand
 
@@ -22,6 +22,14 @@ def conv_outputfmt(output: str) -> str:
         return ext[1:]
     raise click.ClickException("Can't infer output format from file name, use -o to set output format.")
 
+def conv_post_processing(flags, builder, stands):
+    stands = builder.supplmenent_missing_values(stands)
+
+    # if the "direct" reference trees from VMI data were used, strata are not needed and thus can be removed
+    if flags["reference_trees"] and isinstance(builder, VMIBuilder):
+        stands = builder.remove_strata(stands)
+    return stands
+
 def conv_read(input: str, fmt: str, flags: dict) -> list[ForestStand]:
     if fmt == "pickle":
         return pickle_reader(input)
@@ -34,7 +42,7 @@ def conv_read(input: str, fmt: str, flags: dict) -> list[ForestStand]:
     else:
         assert False # can't go here -- fmt is checked at convert()
     stands = Builder(flags, read(input)).build() # type: ignore
-    return Builder.supplmenent_missing_values(stands)
+    return conv_post_processing(flags, Builder, stands)
 
 def conv_write(output: str, fmt: str, stands: list[ForestStand]):
     if fmt == "pickle":
