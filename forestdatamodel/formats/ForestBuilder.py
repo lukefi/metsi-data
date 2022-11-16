@@ -148,13 +148,12 @@ class VMIBuilder(ForestBuilder):
         ...
 
     @classmethod
-    @abstractmethod
     def supplmenent_missing_values(cls, stands: list[ForestStand]):
-        ...
+        return stands
 
     @classmethod
     def remove_strata(cls, stands: list[ForestStand]):
-        """Empties the strata lists so that they won't be unnecessarily carried along to simulator."""
+        """Empties the stands' `tree_strata` lists."""
         return [stand.tree_strata.clear() for stand in stands]
 
 class VMI12Builder(VMIBuilder):
@@ -395,9 +394,8 @@ class XMLBuilder(ForestBuilder):
         ...
 
     @classmethod
-    @abstractmethod
     def supplmenent_missing_values(cls, stands: list[ForestStand]):
-        ...
+        return stands
 
 
 class ForestCentreBuilder(XMLBuilder):
@@ -519,8 +517,4 @@ class ForestCentreBuilder(XMLBuilder):
             stand.tree_strata = strata
             stands.append(stand)
         return stands
-
-    @classmethod
-    def supplmenent_missing_values(cls, stands: list[ForestStand]):
-        """Currently just overrides the abstract base method, as no supplementing needs to be done currently for SMK data."""
-        return stands
+        
