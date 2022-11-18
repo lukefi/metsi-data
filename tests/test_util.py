@@ -26,4 +26,3 @@ vmi13_data = [
 ]
 vmi13_builder: VMIBuilder = VMI13Builder({ 'reference_trees': True}, vmi13_data)
 vmi13_stands = vmi13_builder.build()
-vmi13_stands = vmi13_builder.supplmenent_missing_values(vmi13_stands)
