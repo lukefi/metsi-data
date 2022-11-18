@@ -72,6 +72,7 @@ class FileIoTest(ConverterTestSuite):
 
         stands_from_csv = fio.csv_to_stands(path, delimiter)
         self.assertEqual(2, len(stands_from_csv))
+        os.remove(path)
 
         # Test that the stands from csv and the original stands are equal.
         # It performs a sort of "deep diff" for the stands, relying on the fact that only reference_trees and tree_strata are nested objects in the stand.

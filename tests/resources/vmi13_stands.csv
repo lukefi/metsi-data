@@ -1,6 +1,0 @@
-stand;1-58-75-10-1;1;2020;436.0;436.0;7025056.83;589991.91;179.7;EPSG:3067;1019.0;2;1;2.0;3;0;3;4.0;True;1985;None;2020;False;None;0;None;None;None;None;10;1;None;12;1;0;False;1.0;1.0;1
-tree;1-58-75-10-1-10-tree;TreeSpecies.PINE;0;39.298;25.0;None;0;0;None;0;0;10;0.0;0.0;0.0;0.0;1;7;False
-tree;1-58-75-10-1-10-tree;TreeSpecies.PINE;0;39.298;25.0;None;0;0;None;0;0;10;0.0;0.0;0.0;0.0;1;7;False
-stand;1-59-68-2-1;2;2020;436.0;436.0;7030854.22;539812.22;136.1;EPSG:3067;1084.0;0;1;1.0;3;0;2;0.0;False;None;None;2017;False;None;0;2000;2013;None;None;9;1;None;11;1;0;False;1.0;1.0;2
-tree;1-59-68-2-1-001-tree;TreeSpecies.SPRUCE;2;1350.0;4.0;3.8;7.0;15.0;-1.0;0;0;None;0.0;0.0;0.0;None;1;None;True
-stratum;1-59-68-2-1-1-stratum;TreeSpecies.SPRUCE;2;1400.0;4.0;3.8;7.0;15.0;2.0;None;0;0;0;0.0;0.0;0.0;0.0;1;1350.0;True
