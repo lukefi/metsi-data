@@ -51,7 +51,7 @@ class FileIoTest(ConverterTestSuite):
     def test_stands_to_csv(self):
         delimiter = ";"
         result = fio.stands_to_csv(vmi13_stands, delimiter)
-        self.assertEqual(6, len(result))
+        self.assertEqual(5, len(result))
         
         #make sure that each type of a row has the same number of columns, since csv-->stand conversion relies on it
         stand_row_lengths = [len(row.split(delimiter)) for row in result if row[0:5] == "stand"]
@@ -102,7 +102,7 @@ class FileIoTest(ConverterTestSuite):
     def test_write_forest_csv(self):
         fio.write_forest_csv(vmi13_stands, TEST_FILE)
         result = open(TEST_FILE, 'r', newline='\n').readlines()
-        self.assertEqual(6, len(result))
+        self.assertEqual(5, len(result))
         os.remove(TEST_FILE)
 
     def test_generate_json_file(self):
