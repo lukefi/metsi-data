@@ -605,16 +605,16 @@ def determine_stems_per_ha(diameter: float, is_vmi12) -> float:
 
 def generate_stand_identifier(row: Sequence, indices: VMI12StandIndices or VMI13StandIndices) -> str:
     return row[indices.lohkomuoto] + "-" + \
-           row[indices.section_x] + "-" + \
            row[indices.section_y] + "-" + \
+           row[indices.section_x] + "-" + \
            row[indices.test_area_number] + "-" + \
            row[indices.stand_number]
 
 
 def generate_tree_identifier(row: Sequence, indices: VMI12StandIndices or VMI13StandIndices) -> str:
     return row[indices.lohkomuoto] + "-" + \
-           row[indices.section_x] + "-" + \
            row[indices.section_y] + "-" + \
+           row[indices.section_x] + "-" + \
            row[indices.test_area_number] + "-" + \
            row[indices.stand_number] + "-" + \
            row[indices.tree_number] + "-" + \
@@ -623,8 +623,8 @@ def generate_tree_identifier(row: Sequence, indices: VMI12StandIndices or VMI13S
 
 def generate_stratum_identifier(row: Sequence, indices: VMI12StandIndices or VMI13StandIndices) -> str:
     return row[indices.lohkomuoto] + "-" + \
-           row[indices.section_x] + "-" + \
            row[indices.section_y] + "-" + \
+           row[indices.section_x] + "-" + \
            row[indices.test_area_number] + "-" + \
            row[indices.stand_number] + "-" + \
            row[indices.stratum_number] + "-" + \

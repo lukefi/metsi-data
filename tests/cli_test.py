@@ -22,8 +22,8 @@ class TestCli(unittest.TestCase):
 
     def test_run_convert_vmidata(self):
         for input, fmt, hash in [
-            ("VMI12_source_mini.dat", "vmi12", "ea84cec6e7472f91121c60ea8e8c3083a79e179e874c197f103aeb94d5f59950"),
-            ("VMI13_source_mini.dat", "vmi13", "9b43456e1c6fc236cde8ec2d7754f2bb0de02b78fa7f1630965cc30312a04150")
+            ("VMI12_source_mini.dat", "vmi12", "9ade47f5ac444eafb3256cb8ca180ad8b691eb1910bb750dd3644de35adc0114"),
+            ("VMI13_source_mini.dat", "vmi13", "c40181c3b322db70c8c709d703d772457c1949f782387d887e7dea3c9e913bbf")
         ]:
             input = str(resources / input)
             runner = CliRunner()
