@@ -401,7 +401,7 @@ class ForestStand:
     degree_days: Optional[float] = None  # RSD record 9
     owner_category: Optional[int] = None  # RSD record 10, 0-4
     land_use_category: Optional[int] = None  # RSD record 11, 1-9
-    soil_peatland_category: Optional[float] = None  # RSD record 12, 1-5
+    soil_peatland_category: Optional[int] = None  # RSD record 12, 1-5
     site_type_category: Optional[int] = None  # RSD record 13, 1-8
     tax_class_reduction: Optional[int] = None  # RSD record 14, 0-4
     tax_class: Optional[int] = None  # RSD record 15, 1-7

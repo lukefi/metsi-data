@@ -125,14 +125,14 @@ class TestConversion(test_util.ConverterTestSuite):
 
     def test_determine_soil_type(self):
         assertions = [
-            (['1', 1], 1.0),
-            (['2', 1], 2.0),
-            (['3', 1], 3.0),
-            (['4', 1], 4.0),
-            (['4', 10], 4.0),
-            (['4.0', 10], 5.0),
-            (['4.0', 1], 0.0),
-            (['2.0', 1], 0.0),
+            (['1', 1], 1),
+            (['2', 1], 2),
+            (['3', 1], 3),
+            (['4', 1], 4),
+            (['4', 10], 4),
+            (['4.0', 10], 5),
+            (['4.0', 1], 0),
+            (['2.0', 1], 0),
         ]
         self.run_with_test_assertions(assertions, vmi_util.determine_soil_type)
 

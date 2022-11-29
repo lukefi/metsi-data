@@ -98,14 +98,14 @@ def determine_site_type(kasvupaikkatunnus: str) -> int or float:
             return 0.0
 
 
-def determine_soil_type(main_type: str, site_type: int or float) -> float:
+def determine_soil_type(main_type: str, site_type: int or float) -> int:
     # TODO: main_type is never float-like string in VMI data. setting first clause to '4' changes result RSD.
     if main_type == '4.0' and site_type >= 4:
-        return 5.0
+        return 5
     elif main_type in ('1', '2', '3', '4'):
-        return float(main_type)
+        return int(main_type)
     else:
-        return 0.0
+        return 0
 
 
 def determine_drainage_class(ojitus_tilanne: str, soil_type: float) -> float:
