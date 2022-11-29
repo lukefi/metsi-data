@@ -58,10 +58,10 @@ class VMIBuilder(ForestBuilder):
         result.fra_category = data_row[indices.fra_class]
         result.land_use_category = vmi_util.determine_land_category(data_row[indices.land_category])
         result.land_use_category_detail = data_row[indices.land_category_detail]
+        result.site_type_category = vmi_util.determine_site_type(data_row[indices.kasvupaikkatunnus])
         result.soil_peatland_category = vmi_util.determine_soil_type(
             data_row[indices.paatyyppi],
             result.site_type_category)
-        result.site_type_category = vmi_util.determine_site_type(data_row[indices.kasvupaikkatunnus])
         result.tax_class_reduction = vmi_util.determine_tax_class_reduction(data_row[indices.tax_class_reduction])
         result.tax_class = vmi_util.determine_tax_class(data_row[indices.tax_class])
         result.drainage_category = vmi_util.determine_drainage_class(
