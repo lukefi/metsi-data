@@ -117,9 +117,9 @@ class TestConversion(test_util.ConverterTestSuite):
             (['a'], 8),
             (['1'], 1),
             (['2323'], 2323),
-            ([' '], 0.0),
-            (['.'], 0.0),
-            (['kissa123'], 0.0)
+            ([' '], None),
+            (['.'], None),
+            (['kissa123'], None)
         ]
         self.run_with_test_assertions(assertions, vmi_util.determine_site_type)
 
@@ -129,10 +129,9 @@ class TestConversion(test_util.ConverterTestSuite):
             (['2', 1], 2),
             (['3', 1], 3),
             (['4', 1], 4),
-            (['4', 10], 4),
-            (['4.0', 10], 5),
-            (['4.0', 1], 0),
-            (['2.0', 1], 0),
+            (['4', 10], 5),
+            (['1.0', 3], None),
+            ([' ', 2], None)
         ]
         self.run_with_test_assertions(assertions, vmi_util.determine_soil_type)
 

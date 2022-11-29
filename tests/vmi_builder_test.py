@@ -105,11 +105,11 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual('0', self.vmi12_stands[0].land_use_category_detail)
         self.assertEqual('0', self.vmi12_stands[1].land_use_category_detail)
         # paatyyppi is ' '
-        self.assertEqual(0.0, self.vmi12_stands[0].soil_peatland_category)
+        self.assertEqual(None, self.vmi12_stands[0].soil_peatland_category)
         # paatyyppi is '1'
         self.assertEqual(1.0, self.vmi12_stands[1].soil_peatland_category)
         # kasvupaikkatunnus is ' '
-        self.assertEqual(0.0, self.vmi12_stands[0].site_type_category)
+        self.assertEqual(None, self.vmi12_stands[0].site_type_category)
         # kasvupaikkatunnus is '3'
         self.assertEqual(3, self.vmi12_stands[1].site_type_category)
         # '' -> 0

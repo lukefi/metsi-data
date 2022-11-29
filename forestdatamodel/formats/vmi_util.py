@@ -87,25 +87,21 @@ def determine_land_category(land_category: str) -> int or None:
             return None
 
 
-def determine_site_type(kasvupaikkatunnus: str) -> int or float:
-    # TODO: int-float type ambiguity here. Is likely a bug because RSD expects float in the end
+def determine_site_type(kasvupaikkatunnus: str) -> Optional[int]:
     if kasvupaikkatunnus in ('T', 'A', 't', 'a'):
         return 8
     else:
-        try:
-            return int(kasvupaikkatunnus)
-        except:
-            return 0.0
+        return parse_int(kasvupaikkatunnus)
 
 
-def determine_soil_type(main_type: str, site_type: int or float) -> int:
-    # TODO: main_type is never float-like string in VMI data. setting first clause to '4' changes result RSD.
-    if main_type == '4.0' and site_type >= 4:
+def determine_soil_type(main_type: str, site_type: int) -> Optional[int]:
+    _main_type = parse_int(main_type)
+    if _main_type == 4 and site_type >= 4:
         return 5
-    elif main_type in ('1', '2', '3', '4'):
-        return int(main_type)
+    elif _main_type in (1, 2, 3, 4):
+        return _main_type
     else:
-        return 0
+        return None
 
 
 def determine_drainage_class(ojitus_tilanne: str, soil_type: float) -> float:
