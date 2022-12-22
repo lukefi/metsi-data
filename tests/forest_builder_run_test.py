@@ -15,7 +15,7 @@ def xml_file_reader(file: Path) -> str:
 class TestForestBuilderRun(unittest.TestCase):
 
     def test_run_smk_forest_builder_build(self):
-        assertion = (('SMK_source.xml', 'forest_centre'), 3)
+        assertion = (('SMK_source.xml', 'forest_centre'), 2)
         reference_file = Path('tests', 'resources', assertion[0][0])
         list_of_stands = ForestCentreBuilder({"strata_origin": "1", "reference_trees": False},
                                              xml_file_reader(reference_file)).build()
@@ -24,7 +24,7 @@ class TestForestBuilderRun(unittest.TestCase):
 
 
     def test_run_vmi12_forest_builder_build(self):
-        assertion = (('VMI12_source_mini.dat', 'vmi12'), 7)
+        assertion = (('VMI12_source_mini.dat', 'vmi12'), 4)
         reference_file = Path('tests', 'resources', assertion[0][0])
         list_of_stands = VMI12Builder({"reference_trees": False}, vmi_file_reader(reference_file)).build()
         result = len(list_of_stands)

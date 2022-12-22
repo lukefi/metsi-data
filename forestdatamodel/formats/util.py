@@ -37,18 +37,17 @@ def convert_str_to_type(_class: type, value: str, property_name: str):
         return property_type.__args__[0][value.split('.')[1]]
 
     if type(value) == tuple:
-        if not any(v == "None" for v in value):
-            #stand.stems_per_ha_scaling_factors
-            if property_type == tuple[float, float]:
-                return tuple(float(v) for v in value)
-            #stand.geo_location
-            if property_type == Optional[tuple[float, float, float, str]]:
-                return tuple(float(v) for v in value[0:3]) + (str(value[3]),)
-            #stand.monthly rainfall and stand.monthly_temperatures
-            if property_type == Optional[list[float]]:
-                return [float(v) for v in value]
-            #stratum.stand_origin_relative_position
-            if property_type == tuple[float,float,float]:
-                return tuple(float(v) for v in value) 
+        #stand.stems_per_ha_scaling_factors
+        if property_type == tuple[float, float]:
+            return tuple(parse_float(v) for v in value)
+        #stand.geo_location
+        if property_type == Optional[tuple[float, float, float, str]]:
+            return tuple(parse_float(v) for v in value[0:3]) + (str(value[3]) if value[3] != "None" else None,)
+        #stand.monthly rainfall and stand.monthly_temperatures
+        if property_type == Optional[list[float]]:
+            return [parse_float(v) for v in value]
+        #stratum.stand_origin_relative_position
+        if property_type == tuple[float,float,float]:
+            return tuple(parse_float(v) for v in value) 
     else:
         raise Exception(f"could not convert {value} to {property_name}.")

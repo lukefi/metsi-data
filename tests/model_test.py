@@ -172,7 +172,7 @@ class TestForestDataModel(unittest.TestCase):
         row = row.split(';')
         stand = ForestStand.from_csv_row(row)
 
-        self.assertEqual(stand.geo_location, (6834156.23, 429291.91, None, 'EPSG:3067'))
+        self.assertEqual((6834156.23, 429291.91, None, 'EPSG:3067'), stand.geo_location)
 
 
 
