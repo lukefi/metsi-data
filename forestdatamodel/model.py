@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Optional
 from dataclasses import dataclass
 from forestdatamodel.conversion.internal2mela import mela_stand, mela_tree
-from forestdatamodel.enums.internal import TreeSpecies
+from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
 from forestdatamodel.formats.util import convert_str_to_type
 
 # NOTE:
@@ -399,10 +399,10 @@ class ForestStand:
     geo_location: Optional[tuple[float, float, float, str]] = None
 
     degree_days: Optional[float] = None  # RSD record 9
-    owner_category: Optional[Enum] = None  # RSD record 10, 0-4
-    land_use_category: Optional[Enum] = None  # RSD record 11, 1-9
-    soil_peatland_category: Optional[int] = None  # RSD record 12, 1-5
-    site_type_category: Optional[int] = None  # RSD record 13, 1-8
+    owner_category: Optional[OwnerCategory] = None  # RSD record 10, 0-4
+    land_use_category: Optional[LandUseCategory] = None  # RSD record 11, 1-9
+    soil_peatland_category: Optional[SoilPeatlandCategory] = None  # RSD record 12, 1-5
+    site_type_category: Optional[SiteType] = None  # RSD record 13, 1-8
     tax_class_reduction: Optional[int] = None  # RSD record 14, 0-4
     tax_class: Optional[int] = None  # RSD record 15, 1-7
     drainage_category: Optional[float] = None  # RSD record 16, 0-5
