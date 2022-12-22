@@ -1,7 +1,8 @@
+from types import SimpleNamespace
 import unittest
 from parameterized import parameterized
 from forestdatamodel.model import ReferenceTree, ForestStand, TreeStratum
-from forestdatamodel.conversion.internal2mela import soil_peatland_mapper, species_mapper, mela_stand
+from forestdatamodel.conversion.internal2mela import land_use_mapper, soil_peatland_mapper, species_mapper, owner_mapper, mela_stand
 from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
 from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaSoilAndPeatlandCategory, MelaTreeSpecies
 
@@ -32,17 +33,14 @@ class Internal2MelaTest(unittest.TestCase):
         self.assertEqual(0.0, result.area)
         self.assertEqual(100.0, result.area_weight)
 
-    def test_owner_category(self):
-        fixture = ForestStand()
-        fixture.owner_category = OwnerCategory.METSAHALLITUS
-        result = mela_stand(fixture)
-        self.assertEqual(MelaOwnerCategory.STATE, result.owner_category)
-
-        #ownerCategory UNKNOWN should convert to MelaOwnerCategory PRIVATE
-        fixture2 = ForestStand()
-        fixture2.owner_category = OwnerCategory.UNKNOWN
-        result = mela_stand(fixture2)
-        self.assertEqual(MelaOwnerCategory.PRIVATE, result.owner_category)
+    @parameterized.expand([
+        (OwnerCategory.METSAHALLITUS, MelaOwnerCategory.STATE),
+        (OwnerCategory.UNKNOWN, MelaOwnerCategory.PRIVATE)
+    ])
+    def test_owner_category(self, before, after):
+        fixture = SimpleNamespace(owner_category=before)
+        result = owner_mapper(fixture)
+        self.assertEqual(result.owner_category, after)
 
     @parameterized.expand([
         (LandUseCategory.FOREST, MelaLandUseCategory.FOREST_LAND),
@@ -52,8 +50,8 @@ class Internal2MelaTest(unittest.TestCase):
         (LandUseCategory.WATER_BODY, MelaLandUseCategory.LAKES_AND_RIVERS),
     ])
     def test_land_use_category(self, lu_category, expected):
-        fixture = ForestStand(land_use_category=lu_category)
-        result = mela_stand(fixture)
+        fixture = SimpleNamespace(land_use_category=lu_category)
+        result = land_use_mapper(fixture)
         self.assertEqual(result.land_use_category, expected)
 
 
@@ -67,9 +65,9 @@ class Internal2MelaTest(unittest.TestCase):
 
     ])
     def test_soil_peatland_category(self, sp_code, st_code, expected):
-        fixture = ForestStand(
+        fixture = SimpleNamespace(
             soil_peatland_category=sp_code,
             site_type_category=st_code
             )
-        result = mela_stand(fixture)
+        result = soil_peatland_mapper(fixture)
         self.assertEqual(result.soil_peatland_category, expected)
