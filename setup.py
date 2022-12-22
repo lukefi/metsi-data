@@ -7,7 +7,6 @@ setup(
     version="0.4.7",
     packages=setuptools.find_namespace_packages(include=['forestdatamodel*']),
     install_requires=[
-        "scipy==1.7.*",
         "geopandas==0.10.*",
         "jsonpickle==2.2.0",
         "click==8.1.*"
