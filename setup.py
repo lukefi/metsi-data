@@ -7,8 +7,8 @@ setup(
     version="0.4.7",
     packages=setuptools.find_namespace_packages(include=['forestdatamodel*']),
     install_requires=[
-        "geopandas==0.10.*",
-        "jsonpickle==2.2.0",
+        "geopandas==0.12.*",
+        "jsonpickle==3.0.*",
         "click==8.1.*"
     ],
     entry_points={"console_scripts": ["fdm=forestdatamodel.cli:main"]}
