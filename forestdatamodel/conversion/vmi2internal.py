@@ -1,8 +1,23 @@
-from forestdatamodel.enums.vmi import VmiSiteType, VmiOwnerCategory, VmiSoilPeatlandCategory, VmiSpecies, VmiLandUseCategory
-from forestdatamodel.enums.internal import SiteType, OwnerCategory, SoilPeatlandCategory, TreeSpecies, LandUseCategory
+from typing import Optional
 
+from forestdatamodel.enums.vmi import (
+    VmiSiteType,
+    VmiOwnerCategory,  
+    VmiSoilPeatlandCategory, 
+    VmiSpecies, 
+    VmiLandUseCategory,
+    VmiDrainageCategory,
+    )
+from forestdatamodel.enums.internal import (
+    SiteType, 
+    OwnerCategory, 
+    SoilPeatlandCategory, 
+    TreeSpecies, 
+    LandUseCategory,
+    DrainageCategory,
+    )
 
-__species_map = {
+_species_map = {
     VmiSpecies.PINE: TreeSpecies.PINE,
     VmiSpecies.SPRUCE: TreeSpecies.SPRUCE,
     VmiSpecies.SILVER_BIRCH: TreeSpecies.SILVER_BIRCH,
@@ -37,7 +52,7 @@ __species_map = {
 }
 
 
-__land_use_map = {
+_land_use_map = {
     VmiLandUseCategory.FOREST: LandUseCategory.FOREST,
     VmiLandUseCategory.SCRUB_LAND: LandUseCategory.SCRUB_LAND,
     VmiLandUseCategory.WASTE_LAND: LandUseCategory.WASTE_LAND,
@@ -47,11 +62,12 @@ __land_use_map = {
     VmiLandUseCategory.ROAD: LandUseCategory.ROAD,
     VmiLandUseCategory.ENERGY_TRANSMISSION_LINE: LandUseCategory.ENERGY_TRANSMISSION_LINE,
     VmiLandUseCategory.FRESHWATER: LandUseCategory.FRESHWATER,
-    VmiLandUseCategory.SEA: LandUseCategory.SEA
+    VmiLandUseCategory.SEA: LandUseCategory.SEA,
+    VmiLandUseCategory.OBSOLETE: LandUseCategory.OTHER_FOREST
 }
 
 
-__owner_map = {
+_owner_map = {
     VmiOwnerCategory.UNKNOWN: OwnerCategory.UNKNOWN,
     VmiOwnerCategory.PRIVATE: OwnerCategory.PRIVATE,
     VmiOwnerCategory.FOREST_INDUSTRY_ENTERPRISE: OwnerCategory.FOREST_INDUSTRY,
@@ -66,7 +82,7 @@ __owner_map = {
 }
 
 
-__soil_peatland_map = {
+_soil_peatland_map = {
     VmiSoilPeatlandCategory.MINERAL_SOIL: SoilPeatlandCategory.MINERAL_SOIL,
     VmiSoilPeatlandCategory.SPRUCE_MIRE: SoilPeatlandCategory.SPRUCE_MIRE,
     VmiSoilPeatlandCategory.PINE_MIRE: SoilPeatlandCategory.PINE_MIRE,
@@ -74,7 +90,7 @@ __soil_peatland_map = {
 }
 
 
-__site_type_map = {
+_site_type_map = {
     VmiSiteType.LEHTO: SiteType.VERY_RICH_SITE,
     VmiSiteType.LEHTOMAINEN_KANGAS: SiteType.RICH_SITE,
     VmiSiteType.TUOREKANGAS: SiteType.DAMP_SITE,
@@ -88,30 +104,54 @@ __site_type_map = {
 }
 
 
-def convert_site_type_category(code: str) -> SiteType:
+_drainage_category_map = {
+    VmiDrainageCategory.OJITTAMATON_KANGAS_TAI_SUO: DrainageCategory.UNDRAINED_MINERAL_SOIL_OR_MIRE,
+    VmiDrainageCategory.OJITETTU_KANGAS: DrainageCategory.DITCHED_MINERAL_SOIL,
+    VmiDrainageCategory.OJIKKO: DrainageCategory.DITCHED_MIRE,
+    VmiDrainageCategory.MUUTTUMA: DrainageCategory.TRANSFORMING_MIRE,
+    VmiDrainageCategory.TURVEKANGAS: DrainageCategory.TRANSFORMED_MIRE
+}
+
+
+def is_empty_vmi_str(candidate: str) -> bool:
+    return candidate in ('', ' ', '.')
+
+
+def convert_drainage_category(code):
+    if is_empty_vmi_str(code):
+        return None
+    value = VmiDrainageCategory(code)
+    return _drainage_category_map.get(value)
+
+
+def convert_site_type_category(code: str) -> Optional[SiteType]:
+    if is_empty_vmi_str(code):
+        return None
     value = VmiSiteType(code)
-    return __site_type_map.get(value)
+    return _site_type_map.get(value)
 
 
-def convert_soil_peatland_category(sp_code: str) -> LandUseCategory:
-    vmi_category = VmiSoilPeatlandCategory(sp_code)
-    return __soil_peatland_map.get(vmi_category)
+def convert_soil_peatland_category(code: str) -> Optional[SoilPeatlandCategory]:
+    if is_empty_vmi_str(code):
+        return None
+    vmi_category = VmiSoilPeatlandCategory(code)
+    return _soil_peatland_map.get(vmi_category)
 
 
 def convert_land_use_category(lu_code: str) -> LandUseCategory:
     """sanitization of lu_code is the responsibility of the caller, 
     meaning that this conversion will fail e.g. if the parameter is a lower-case letter."""
     vmi_category = VmiLandUseCategory(lu_code)
-    return __land_use_map.get(vmi_category)
+    return _land_use_map.get(vmi_category)
 
 
 def convert_species(species_code: str) -> TreeSpecies:
     """Converts VMI species code to internal TreeSpecies code"""
     value = species_code.strip()
     vmi_species = VmiSpecies(value)
-    return __species_map.get(vmi_species)
+    return _species_map.get(vmi_species)
 
 
 def convert_owner(owner_code: str) -> OwnerCategory:
     vmi_owner = VmiOwnerCategory(owner_code)
-    return __owner_map.get(vmi_owner)
+    return _owner_map.get(vmi_owner)

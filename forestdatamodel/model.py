@@ -3,7 +3,8 @@ from enum import Enum
 from typing import Optional
 from dataclasses import dataclass
 from forestdatamodel.conversion.internal2mela import mela_stand, mela_tree
-from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
+from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies, DrainageCategory
+from forestdatamodel.enums.mela import MelaLandUseCategory
 from forestdatamodel.formats.util import convert_str_to_type
 
 # NOTE:
@@ -405,7 +406,7 @@ class ForestStand:
     site_type_category: Optional[SiteType] = None  # RSD record 13, 1-8
     tax_class_reduction: Optional[int] = None  # RSD record 14, 0-4
     tax_class: Optional[int] = None  # RSD record 15, 1-7
-    drainage_category: Optional[float] = None  # RSD record 16, 0-5
+    drainage_category: Optional[DrainageCategory] = None  # RSD record 16, 0-5
     drainage_feasibility: Optional[bool] = None  # RSD record 17, (0 yes, 1 no)
     # RSD record 18 is unspecified and defaults to '0'
     drainage_year: Optional[int] = None  # RSD record 19
@@ -481,11 +482,11 @@ class ForestStand:
         return self.auxiliary_stand
 
     def is_forest_land(self):
-        return self.land_use_category in (1, 2, 3, 4)
+        return self.land_use_category.value < 5
 
     def is_other_excluded_forest(self):
         return (
-            self.land_use_category == 4
+            self.land_use_category == MelaLandUseCategory.OTHER
             and self.fra_category == "3"
             and self.land_use_category_detail in ("1", "2", "6", "7")
         )
@@ -615,11 +616,11 @@ class ForestStand:
             melaed.degree_days,
             melaed.owner_category.value,
             melaed.land_use_category.value,
-            melaed.soil_peatland_category,
-            melaed.site_type_category,
+            0 if melaed.soil_peatland_category is None else melaed.soil_peatland_category.value,
+            0 if melaed.site_type_category is None else melaed.site_type_category.value,
             melaed.tax_class_reduction,
             melaed.tax_class,
-            melaed.drainage_category,
+            0 if melaed.drainage_category is None else melaed.drainage_category.value,
             melaed.drainage_feasibility,
             None,
             melaed.drainage_year,

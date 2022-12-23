@@ -51,6 +51,7 @@ class VmiLandUseCategory(Enum):
     ENERGY_TRANSMISSION_LINE = '8'
     FRESHWATER = 'A'
     SEA = 'B'
+    OBSOLETE = 'C'
 
 
 class VmiOwnerCategory(Enum):

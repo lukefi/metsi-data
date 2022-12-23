@@ -163,3 +163,18 @@ class TestForestDataModel(unittest.TestCase):
             self.assertEqual(i[1], fixture.geo_location)
         for i in failures:
             self.assertRaises(Exception, lambda: fixture.set_geo_location(*i))
+
+    def test_convert_csv_stand_row_with_missing_altitude(self):
+        row = "stand;12345;1;2018;436.0;436.0;6834156.23;429291.91;None;EPSG:3067;1019.0;" \
+              "OwnerCategory.METSAHALLITUS;LandUseCategory.FOREST;SoilPeatlandCategory.SPRUCE_MIRE;" \
+              "SiteType.DAMP_SITE;0;3;DrainageCategory.TRANSFORMING_MIRE;True;1984;None;2018;False;None;0;None;None;" \
+              "None;None;10;1;None;12;1;0;False;1.0;1.0;1"
+        row = row.split(';')
+        stand = ForestStand.from_csv_row(row)
+
+        self.assertEqual(stand.geo_location, (6834156.23, 429291.91, None, 'EPSG:3067'))
+
+
+
+
+

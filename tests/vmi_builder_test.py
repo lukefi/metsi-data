@@ -3,7 +3,7 @@ import unittest
 
 from forestdatamodel.formats import vmi_const
 from forestdatamodel.formats.ForestBuilder import *
-from forestdatamodel.enums.internal import TreeSpecies
+from forestdatamodel.enums.internal import *
 
 class TestForestBuilder(unittest.TestCase):
 
@@ -95,13 +95,13 @@ class TestForestBuilder(unittest.TestCase):
         # '1271' -> 1271.0
         self.assertEqual(1271.0, self.vmi12_stands[1].degree_days)
         # owner group is '0', which translated to 0
-        self.assertEqual(0, self.vmi12_stands[0].owner_category)
+        self.assertEqual(OwnerCategory.UNKNOWN, self.vmi12_stands[0].owner_category)
         # owner group is '1', which translated to 0
-        self.assertEqual(0, self.vmi12_stands[1].owner_category)
+        self.assertEqual(OwnerCategory.PRIVATE, self.vmi12_stands[1].owner_category)
         self.assertEqual(' ', self.vmi12_stands[0].fra_category)
         self.assertEqual('1', self.vmi12_stands[1].fra_category)
-        self.assertEqual(9, self.vmi12_stands[0].land_use_category)
-        self.assertEqual(1, self.vmi12_stands[1].land_use_category)
+        self.assertEqual(LandUseCategory.SEA, self.vmi12_stands[0].land_use_category)
+        self.assertEqual(LandUseCategory.FOREST, self.vmi12_stands[1].land_use_category)
         self.assertEqual('0', self.vmi12_stands[0].land_use_category_detail)
         self.assertEqual('0', self.vmi12_stands[1].land_use_category_detail)
         # paatyyppi is ' '
@@ -117,9 +117,9 @@ class TestForestBuilder(unittest.TestCase):
         # '1' -> 2
         self.assertEqual(2, self.vmi12_stands[1].tax_class)
         # ojitus_tilanne is ' '
-        self.assertEqual(0.0, self.vmi12_stands[0].drainage_category)
+        self.assertEqual(None, self.vmi12_stands[0].drainage_category)
         # ojitus_tilanne is '0' and paatyyppi is '1'
-        self.assertEqual(0.0, self.vmi12_stands[1].drainage_category)
+        self.assertEqual(DrainageCategory.UNDRAINED_MINERAL_SOIL_OR_MIRE, self.vmi12_stands[1].drainage_category)
         # ojitus_aika is ''
         self.assertEqual(None, self.vmi12_stands[0].drainage_year)
         # ojitus_aika is ''
@@ -295,9 +295,9 @@ class TestForestBuilder(unittest.TestCase):
         # '1084' -> 1084.0
         self.assertEqual(1084.0, self.vmi13_stands[1].degree_days)
         # owner group is '4' which translates to 2
-        self.assertEqual(2, self.vmi13_stands[0].owner_category)
+        self.assertEqual(OwnerCategory.METSAHALLITUS, self.vmi13_stands[0].owner_category)
         # owner group is '1' which translated to 0
-        self.assertEqual(0, self.vmi13_stands[1].owner_category)
+        self.assertEqual(OwnerCategory.PRIVATE, self.vmi13_stands[1].owner_category)
         self.assertEqual('1', self.vmi13_stands[0].fra_category)
         self.assertEqual('1', self.vmi13_stands[1].fra_category)
         self.assertEqual(1, self.vmi13_stands[0].land_use_category)
@@ -321,9 +321,9 @@ class TestForestBuilder(unittest.TestCase):
         # '1' -> 2
         self.assertEqual(2, self.vmi13_stands[1].tax_class)
         # ojitus_tilanne is '3'
-        self.assertEqual(4.0, self.vmi13_stands[0].drainage_category)
+        self.assertEqual(DrainageCategory.TRANSFORMING_MIRE, self.vmi13_stands[0].drainage_category)
         # ojitus_tilanne is '0' and paatyyppi is '1'
-        self.assertEqual(0.0, self.vmi13_stands[1].drainage_category)
+        self.assertEqual(DrainageCategory.UNDRAINED_MINERAL_SOIL_OR_MIRE, self.vmi13_stands[1].drainage_category)
         # ojitus_aika is '35', year is '2020'
         self.assertEqual(1985, self.vmi13_stands[0].drainage_year)
         # ojitus_aika is '.'

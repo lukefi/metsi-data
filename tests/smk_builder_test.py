@@ -1,7 +1,7 @@
 import unittest
 import os
 from forestdatamodel.formats.ForestBuilder import ForestCentreBuilder
-from forestdatamodel.enums.internal import TreeSpecies
+from forestdatamodel.enums.internal import *
 
 builder_flags = {
     'strata_origin': '1'
@@ -63,8 +63,8 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(None, self.smk_stands[0].degree_days)
         self.assertEqual(None, self.smk_stands[1].degree_days)
         # TODO: verify the default value of owner category
-        self.assertEqual(None, self.smk_stands[0].owner_category)
-        self.assertEqual(None, self.smk_stands[1].owner_category)
+        self.assertEqual(OwnerCategory.PRIVATE, self.smk_stands[0].owner_category)
+        self.assertEqual(OwnerCategory.PRIVATE, self.smk_stands[1].owner_category)
         # st:MainGroup '1' -> 1
         self.assertEqual(1, self.smk_stands[0].land_use_category)
         # st:MainGroup '1' -> 1
@@ -84,9 +84,9 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(0, self.smk_stands[0].tax_class)
         self.assertEqual(0, self.smk_stands[1].tax_class)
         # st:DrainageState '1' -> 0
-        self.assertEqual(0, self.smk_stands[0].drainage_category)
+        self.assertEqual(DrainageCategory.UNDRAINED_MINERAL_SOIL, self.smk_stands[0].drainage_category)
         # st:DrainageState '9' -> 5
-        self.assertEqual(5, self.smk_stands[1].drainage_category)
+        self.assertEqual(DrainageCategory.TRANSFORMED_MIRE, self.smk_stands[1].drainage_category)
         # Drainage feasibility default value True
         self.assertEqual(True, self.smk_stands[0].drainage_feasibility)
         self.assertEqual(True, self.smk_stands[1].drainage_feasibility)

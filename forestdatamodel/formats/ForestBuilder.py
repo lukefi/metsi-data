@@ -1,6 +1,7 @@
 import typing
 import xml.etree.ElementTree as ET
 
+from forestdatamodel.enums.internal import OwnerCategory
 from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
 from forestdatamodel.conversion import fc2internal, vmi2internal
 from forestdatamodel.formats import util, vmi_util, smk_util
@@ -54,19 +55,15 @@ class VMIBuilder(ForestBuilder):
         result.identifier = vmi_util.generate_stand_identifier(data_row, indices)
         result.set_identifiers(stand_id)
         result.degree_days = vmi_util.transform_vmi_degree_days(data_row[indices.degree_days])
-        result.owner_category = vmi_util.determine_owner_group(data_row[indices.owner_group])
+        result.owner_category = vmi2internal.convert_owner(data_row[indices.owner_group])
         result.fra_category = data_row[indices.fra_class]
-        result.land_use_category = vmi_util.determine_land_category(data_row[indices.land_category])
+        result.land_use_category = vmi2internal.convert_land_use_category(data_row[indices.land_category])
         result.land_use_category_detail = data_row[indices.land_category_detail]
-        result.site_type_category = vmi_util.determine_site_type(data_row[indices.kasvupaikkatunnus])
-        result.soil_peatland_category = vmi_util.determine_soil_type(
-            data_row[indices.paatyyppi],
-            result.site_type_category)
+        result.site_type_category = vmi2internal.convert_site_type_category(data_row[indices.kasvupaikkatunnus])
+        result.soil_peatland_category = vmi2internal.convert_soil_peatland_category(data_row[indices.paatyyppi])
         result.tax_class_reduction = vmi_util.determine_tax_class_reduction(data_row[indices.tax_class_reduction])
         result.tax_class = vmi_util.determine_tax_class(data_row[indices.tax_class])
-        result.drainage_category = vmi_util.determine_drainage_class(
-            data_row[indices.ojitus_tilanne],
-            result.soil_peatland_category)
+        result.drainage_category = vmi2internal.convert_drainage_category(data_row[indices.ojitus_tilanne])
         result.development_class = vmi_util.determine_development_class(data_row[indices.kehitysluokka])
         result.drainage_feasibility = vmi_util.determine_drainage_feasibility(data_row[indices.ojitus_tarve])
         result.forestry_centre_id = vmi_util.parse_forestry_centre(data_row[indices.forestry_centre])
@@ -467,13 +464,14 @@ class ForestCentreBuilder(XMLBuilder):
         stand.geo_location = (latitude, longitude, None, crs) # RSD record 5,6,8
         stand.identifier = stand_basic_data.id # RSD record 7
         stand.degree_days = None # RSD record 9
-        stand.owner_category = None # RSD record 10
-        stand.land_use_category = smk_util.parse_land_use_category(stand_basic_data.MainGroup) # RSD record 11
-        stand.soil_peatland_category = util.parse_int(stand_basic_data.SubGroup) # RSD record 12
-        stand.site_type_category = util.parse_int(stand_basic_data.FertilityClass) # RSD record 13
+        # TODO: need to figure out the source for this in the XML
+        stand.owner_category = OwnerCategory.PRIVATE # RSD record 10
+        stand.land_use_category = fc2internal.convert_land_use_category(stand_basic_data.MainGroup) # RSD record 11
+        stand.soil_peatland_category = fc2internal.convert_soil_peatland_category(stand_basic_data.SubGroup) # RSD record 12
+        stand.site_type_category = fc2internal.convert_site_type_category(stand_basic_data.FertilityClass) # RSD record 13
         stand.tax_class_reduction = 0 # RSD record 14
         stand.tax_class = 0 # RSD record 15
-        stand.drainage_category = smk_util.parse_drainage_category(stand_basic_data.DrainageState) # RSD record 16
+        stand.drainage_category = fc2internal.convert_drainage_category(stand_basic_data.DrainageState) # RSD record 16
         stand.drainage_feasibility = True # RSD record 17
         # RSD record 18 is '0' by default
         operations = smk_util.parse_stand_operations(estand, target_operations='past')

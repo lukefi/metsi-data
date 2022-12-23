@@ -4,7 +4,8 @@ from forestdatamodel.enums.mela import (
     MelaSiteTypeCategory, 
     MelaSoilAndPeatlandCategory, 
     MelaTreeSpecies, 
-    MelaLandUseCategory
+    MelaLandUseCategory,
+    MelaDrainageCategory
     )
 from forestdatamodel.enums.internal import (
     SiteType, 
@@ -12,6 +13,7 @@ from forestdatamodel.enums.internal import (
     TreeSpecies, 
     OwnerCategory, 
     LandUseCategory,
+    DrainageCategory
     )
 from forestdatamodel.conversion.util import apply_mappers
 # TODO: can we find a way to resolve the circular import introduced by trying to use these classes just for typing?
@@ -92,6 +94,7 @@ owner_map = {
     OwnerCategory.UNDIVIDED: MelaOwnerCategory.COMMUNITY
 }
 
+
 _site_type_map = {
     SiteType.VERY_RICH_SITE: MelaSiteTypeCategory.VERY_RICH_SITE,
     SiteType.RICH_SITE: MelaSiteTypeCategory.RICH_SITE,
@@ -104,6 +107,7 @@ _site_type_map = {
     SiteType.TUNTURIKOIVIKKO: MelaSiteTypeCategory.OPEN_MOUNTAINS,
     SiteType.LAKIMETSA_TAI_TUNTURIHAVUMETSA: MelaSiteTypeCategory.OPEN_MOUNTAINS
 }
+
 
 #this doesn't have a mapping for TREELESS_MIRE, as its mapping to MELA values is determined by the SiteType category. 
 _soil_peatland_map = {
@@ -122,6 +126,25 @@ _rich_mire_types = [
 
 def site_type_mapper(target):
     target.site_type_category = _site_type_map.get(target.site_type_category)
+    return target
+
+
+def drainage_category_mapper(target):
+    if target.drainage_category == DrainageCategory.UNDRAINED_MINERAL_SOIL_OR_MIRE:
+        if target.soil_peatland_category == SoilPeatlandCategory.MINERAL_SOIL:
+            target.drainage_category = MelaDrainageCategory.UNDRAINED_MINERAL_SOIL
+        else:
+            target.drainage_category = MelaDrainageCategory.UNDRAINED_MIRE
+    elif target.drainage_category == DrainageCategory.DITCHED_MINERAL_SOIL:
+        target.drainage_category = MelaDrainageCategory.DITCHED_MINERAL_SOIL
+    elif target.drainage_category == DrainageCategory.DITCHED_MIRE:
+        target.drainage_category = MelaDrainageCategory.DITCHED_MIRE
+    elif target.drainage_category == DrainageCategory.TRANSFORMING_MIRE:
+        target.drainage_category = MelaDrainageCategory.TRANSFORMING_MIRE
+    elif target.drainage_category == DrainageCategory.TRANSFORMED_MIRE:
+        target.drainage_category = MelaDrainageCategory.TRANSFORMED_MIRE
+    else:
+        target.drainage_category = MelaDrainageCategory.UNDRAINED_MINERAL_SOIL
     return target
 
 
@@ -223,7 +246,8 @@ default_mela_tree_mappers = [species_mapper]
 default_mela_stratum_mappers = [species_mapper]
 default_mela_stand_mappers = [stand_location_converter,
                               stand_area_converter,
-                              owner_mapper,
-                              land_use_mapper,
-                              site_type_mapper,
-                              soil_peatland_mapper]
+                              owner_mapper, 
+                              land_use_mapper, 
+                              site_type_mapper, 
+                              soil_peatland_mapper,
+                              drainage_category_mapper]
