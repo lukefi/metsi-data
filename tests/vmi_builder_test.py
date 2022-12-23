@@ -70,8 +70,8 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(4, len(self.vmi12_stands))
 
     def test_vmi12_stand_identifiers(self):
-        self.assertEqual('0-001-012-01-1', self.vmi12_stands[0].identifier)
-        self.assertEqual('0-002-023-02-1', self.vmi12_stands[1].identifier)
+        self.assertEqual('0-999-999-99-1', self.vmi12_stands[0].identifier)
+        self.assertEqual('0-999-999-98-1', self.vmi12_stands[1].identifier)
 
     def test_vmi12_stand_variables(self):
         # test data coincides with county 21
@@ -87,9 +87,9 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(230.8291, self.vmi12_stands[3].area_weight)
 
         # lat 6656996, lon 3102608, height
-        self.assertEqual((6656996.0, 3102608.0, None, 'EPSG:2393'), self.vmi12_stands[0].geo_location)
+        self.assertEqual((6652133.0, 3246174.0, None, 'EPSG:2393'), self.vmi12_stands[0].geo_location)
         # lat 6675011, lon 3118967, height 124
-        self.assertEqual((6675011.0, 3118967.0, 12.4, 'EPSG:2393'), self.vmi12_stands[1].geo_location)
+        self.assertEqual((6652133.0, 3246174.0, 12.4, 'EPSG:2393'), self.vmi12_stands[1].geo_location)
         # '' -> None
         self.assertEqual(None, self.vmi12_stands[0].degree_days)
         # '1271' -> 1271.0
@@ -199,8 +199,8 @@ class TestForestBuilder(unittest.TestCase):
         # Trees with back reference to stand
         self.assertEqual(self.vmi12_stands[1], self.vmi12_stands[1].reference_trees[0].stand)
         self.assertEqual(self.vmi12_stands[2], self.vmi12_stands[2].reference_trees[0].stand)
-        self.assertEqual('0-002-023-02-1-001-tree', self.vmi12_stands[1].reference_trees[0].identifier)
-        self.assertEqual('0-021-032-05-1-001-tree', self.vmi12_stands[2].reference_trees[0].identifier)
+        self.assertEqual('0-999-999-98-1-001-tree', self.vmi12_stands[1].reference_trees[0].identifier)
+        self.assertEqual('0-999-999-97-1-001-tree', self.vmi12_stands[2].reference_trees[0].identifier)
 
     def test_vmi12_tree_variables(self):
         tree = self.vmi12_stands[1].reference_trees[0]
@@ -240,7 +240,7 @@ class TestForestBuilder(unittest.TestCase):
 
         # Strata with back reference to stand
         self.assertEqual(self.vmi12_stands_ref_trees_false[1], self.vmi12_stands_ref_trees_false[1].tree_strata[0].stand)
-        self.assertEqual('0-002-023-02-1-01-stratum', self.vmi12_stands_ref_trees_false[1].tree_strata[0].identifier)
+        self.assertEqual('0-999-999-98-1-01-stratum', self.vmi12_stands_ref_trees_false[1].tree_strata[0].identifier)
 
     def test_vmi12_stratum(self):
         stratum = self.vmi12_stands_ref_trees_false[1].tree_strata[0]
@@ -263,33 +263,33 @@ class TestForestBuilder(unittest.TestCase):
 
     def test_vmi13_init(self):
         vmi13_builder = self.vmi13_builder()
-        self.assertEqual(4, len(vmi13_builder.forest_stands))
-        self.assertEqual(1, len(vmi13_builder.reference_trees))
-        self.assertEqual(2, len(vmi13_builder.tree_strata))
+        self.assertEqual(3, len(vmi13_builder.forest_stands))
+        self.assertEqual(2, len(vmi13_builder.reference_trees))
+        self.assertEqual(1, len(vmi13_builder.tree_strata))
 
     def test_vmi13_stands(self):
-        self.assertEqual(4, len(self.vmi13_stands))
+        self.assertEqual(3, len(self.vmi13_stands))
 
     def test_vmi13_stand_identifiers(self):
-        self.assertEqual('1-58-75-10-1', self.vmi13_stands[0].identifier)
-        self.assertEqual('1-59-68-2-1', self.vmi13_stands[1].identifier)
+        self.assertEqual('1-99-99-99-1', self.vmi13_stands[0].identifier)
+        self.assertEqual('1-99-99-98-1', self.vmi13_stands[1].identifier)
 
     def test_vmi13_stand_variables(self):
         # test data coincides with lohkomuoto 1
         reference_area = vmi_const.vmi13_county_areas[1]
         self.assertEqual(False, self.vmi13_stands[0].auxiliary_stand)
-        self.assertEqual(True, self.vmi13_stands[3].auxiliary_stand)
+        self.assertEqual(True, self.vmi13_stands[2].auxiliary_stand)
         self.assertEqual(reference_area, self.vmi13_stands[0].area)
         self.assertEqual(reference_area, self.vmi13_stands[1].area)
         #auxiliary stand area should be 0
-        self.assertEqual(436.0, self.vmi13_stands[3].area)
+        self.assertEqual(436.0, self.vmi13_stands[2].area)
         self.assertEqual(reference_area, self.vmi13_stands[0].area_weight)
         self.assertEqual(reference_area, self.vmi13_stands[1].area_weight)
-        self.assertEqual(436.0, self.vmi13_stands[3].area_weight)
+        self.assertEqual(436.0, self.vmi13_stands[2].area_weight)
         # lat 7025056.83, lon 589991.91, height 179.70
-        self.assertEqual((7025056.83, 589991.91, 179.70, 'EPSG:3067'), self.vmi13_stands[0].geo_location)
+        self.assertEqual((7013044.52, 543791.23, 179.7, 'EPSG:3067'), self.vmi13_stands[0].geo_location)
         # lat 7030854.22, lon 539812.22, height 136.10
-        self.assertEqual((7030854.22, 539812.22, 136.10, 'EPSG:3067'), self.vmi13_stands[1].geo_location)
+        self.assertEqual((7012044.52, 543491.23, 136.1, 'EPSG:3067'), self.vmi13_stands[1].geo_location)
         # '1019' -> 1019.0
         self.assertEqual(1019.0, self.vmi13_stands[0].degree_days)
         # '1084' -> 1084.0
@@ -325,7 +325,7 @@ class TestForestBuilder(unittest.TestCase):
         # ojitus_tilanne is '0' and paatyyppi is '1'
         self.assertEqual(DrainageCategory.UNDRAINED_MINERAL_SOIL_OR_MIRE, self.vmi13_stands[1].drainage_category)
         # ojitus_aika is '35', year is '2020'
-        self.assertEqual(1985, self.vmi13_stands[0].drainage_year)
+        self.assertEqual(1983, self.vmi13_stands[0].drainage_year)
         # ojitus_aika is '.'
         self.assertEqual(None, self.vmi13_stands[1].drainage_year)
         # value not available in VMI13 source
@@ -337,9 +337,9 @@ class TestForestBuilder(unittest.TestCase):
         # ojitus_tarve is '0'
         self.assertEqual(False, self.vmi13_stands[1].drainage_feasibility)
         # '0', 2020 -> 2020
-        self.assertEqual(2020, self.vmi13_stands[0].soil_surface_preparation_year)
+        self.assertEqual(2018, self.vmi13_stands[0].soil_surface_preparation_year)
         # '2', 2020 -> 2017
-        self.assertEqual(2017, self.vmi13_stands[1].soil_surface_preparation_year)
+        self.assertEqual(2015, self.vmi13_stands[1].soil_surface_preparation_year)
         # hakkuuehdotus is '.'
         self.assertEqual(False, self.vmi13_stands[0].natural_regeneration_feasibility)
         # hakkuuehdotus is '.'
@@ -363,11 +363,11 @@ class TestForestBuilder(unittest.TestCase):
         # viljely is '1'
         # viljely_aika is 'A'
         # date is 20200503
-        self.assertEqual(2000, self.vmi13_stands[1].artificial_regeneration_year)
+        self.assertEqual(1998, self.vmi13_stands[1].artificial_regeneration_year)
         # hakkuu_aika is 'A', hakkuu_tapa is '0' (no operation within 10 years, A is 20 years ago)
         self.assertEqual(None, self.vmi13_stands[0].young_stand_tending_year)
         # hakkuu_aika is '6', hakkuu_tapa is '1' (no cutting, young stand tending 7 years ago)
-        self.assertEqual(2013, self.vmi13_stands[1].young_stand_tending_year)
+        self.assertEqual(2011, self.vmi13_stands[1].young_stand_tending_year)
         # hakkuu_aika is 'A', hakkuu_tapa is '0' (no operation within 10 years, A is 20 years ago)
         self.assertEqual(None, self.vmi13_stands[0].cutting_year)
         # hakkuu_aika is '6', hakkuu_tapa is '1' (no cutting, young stand tending 7 years ago)
@@ -396,14 +396,14 @@ class TestForestBuilder(unittest.TestCase):
         self.assertEqual(False, self.vmi13_stands[1].auxiliary_stand)
 
     def test_vmi13_trees(self):
-        self.assertEqual(1, len(self.vmi13_stands[0].reference_trees))
+        self.assertEqual(2, len(self.vmi13_stands[0].reference_trees))
         self.assertEqual(1, len(self.vmi13_stands[1].reference_trees))
 
         # Trees with back reference to stand
         self.assertEqual(self.vmi13_stands[0], self.vmi13_stands[0].reference_trees[0].stand)
         self.assertEqual(self.vmi13_stands[1], self.vmi13_stands[1].reference_trees[0].stand)
-        self.assertEqual('1-58-75-10-1-10-tree', self.vmi13_stands[0].reference_trees[0].identifier)
-        self.assertEqual('1-59-68-2-1-001-tree', self.vmi13_stands[1].reference_trees[0].identifier)
+        self.assertEqual('1-99-99-99-1-10-tree', self.vmi13_stands[0].reference_trees[0].identifier)
+        self.assertEqual('1-99-99-98-1-001-tree', self.vmi13_stands[1].reference_trees[0].identifier)
 
     def test_vmi13_tree_variables(self):
         tree = self.vmi13_stands[0].reference_trees[0]
@@ -443,7 +443,7 @@ class TestForestBuilder(unittest.TestCase):
 
         # Strata with back reference to stand
         self.assertEqual(self.vmi13_stands_ref_trees_false[1], self.vmi13_stands_ref_trees_false[1].tree_strata[0].stand)
-        self.assertEqual('1-59-68-2-1-1-stratum', self.vmi13_stands_ref_trees_false[1].tree_strata[0].identifier)
+        self.assertEqual('1-99-99-98-1-1-stratum', self.vmi13_stands_ref_trees_false[1].tree_strata[0].identifier)
 
     def test_vmi13_stratum(self):
         stratum = self.vmi13_stands_ref_trees_false[1].tree_strata[0]

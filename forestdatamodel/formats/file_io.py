@@ -1,27 +1,7 @@
-import csv
 from itertools import chain
-import pickle
 from typing import Any, List, Tuple, Callable
 from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
-import jsonpickle
 from forestdatamodel.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
-
-
-def vmi_file_reader(file: str) -> List[str]:
-    with open(file, 'r', encoding='utf-8') as input_file:
-        return input_file.readlines()
-
-
-def xml_file_reader(file: str) -> str:
-    with open(file, 'r', encoding='utf-8') as input_file:
-        return input_file.read()
-
-
-def select_file_reader(file_type: str) -> Callable:
-    if file_type == 'vmi':
-        return vmi_file_reader
-    elif file_type == 'xml':
-        return xml_file_reader
 
 
 def recreate_stand_indices(stands: List[ForestStand]) -> List[ForestStand]:
@@ -137,31 +117,29 @@ def stand_to_csv_rows(stand: ForestStand, delimeter: str) -> List[str]:
     return result
 
 
-def stands_to_csv(stands: List[ForestStand], delimeter: str) -> List[str]:
+def stands_to_csv_content(stands: list[ForestStand], delimeter: str) -> list[str]:
     result = []
     for stand in stands:
         result.extend(stand_to_csv_rows(stand, delimeter))
     return result
 
 
-def csv_to_stands(file_path: str, delimeter: str) -> List[ForestStand]:
+def csv_content_to_stands(csv_content: list[list[str]]) -> list[ForestStand]:
     stands = []
-    with open(file_path, 'r') as file:
-        reader = csv.reader(file, delimiter=delimeter)
-        for row in reader:
-            if row[0] == "stand":
-                stands.append(ForestStand.from_csv_row(row))
-            elif row[0] == "tree":
-                stands[-1].reference_trees.append(ReferenceTree.from_csv_row(row))
-            elif row[0] == "stratum":
-                stands[-1].tree_strata.append(TreeStratum.from_csv_row(row))
+    for row in csv_content:
+        if row[0] == "stand":
+            stands.append(ForestStand.from_csv_row(row))
+        elif row[0] == "tree":
+            stands[-1].reference_trees.append(ReferenceTree.from_csv_row(row))
+        elif row[0] == "stratum":
+            stands[-1].tree_strata.append(TreeStratum.from_csv_row(row))
 
-        # once all stands are recreated, add the stand reference to trees and strata 
-        for stand in stands:
-            for tree in stand.reference_trees:
-                tree.stand = stand
-            for stratum in stand.tree_strata:
-                stratum.stand = stand
+    # once all stands are recreated, add the stand reference to trees and strata
+    for stand in stands:
+        for tree in stand.reference_trees:
+            tree.stand = stand
+        for stratum in stand.tree_strata:
+            stratum.stand = stand
     return stands
 
 
@@ -172,30 +150,6 @@ def outputtable_rows(stands: List[ForestStand], formatter: Callable[[List[Forest
     return result
 
 
-def rsd_rows(stands: List[ForestStand]) -> List[str]:
+def stands_to_rsd_content(stands: List[ForestStand]) -> list[str]:
     """Generate RSD file contents for the given list of ForestStand"""
     return outputtable_rows(stands, lambda stand: rsd_forest_stand_rows(stand))
-
-
-def write_forest_csv(stands: List[ForestStand], filename: str):
-    with open(filename, 'w', newline='\n') as file:
-        file.writelines('\n'.join(stands_to_csv(stands, ';')))
-
-
-def write_forest_rsd(stands: List[ForestStand], filename: str):
-    with open(filename, 'w', newline='\n') as file:
-        file.writelines('\n'.join(rsd_rows(stands)))
-
-
-def write_forest_json(stands: List[ForestStand], output_file: str):
-    jsonpickle.set_encoder_options("json", indent=2)
-    with open(output_file, 'w', newline='\n') as f:
-        f.write(jsonpickle.encode(stands))
-
-def pickle_writer(file_path: str, data: Any):
-    with open(file_path, 'wb') as f:
-        pickle.dump(data, f, protocol=5)
-
-def pickle_reader(file_path: str) -> Any:
-    with open(file_path, 'rb') as f:
-        return pickle.load(f)
