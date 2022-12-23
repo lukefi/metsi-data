@@ -1,11 +1,10 @@
 import csv
 from io import StringIO
-
-import forestdatamodel.formats.file_io as fio
+from forestdatamodel.formats.io_utils import *
 from tests.test_util import ConverterTestSuite, vmi13_stands
 
 
-class FileIoTest(ConverterTestSuite):
+class IoUtilsTest(ConverterTestSuite):
     def test_rsd_float(self):
         assertions = [
             ([123], "123.000000"),
@@ -15,19 +14,19 @@ class FileIoTest(ConverterTestSuite):
             (["1.23"], "1.230000"),
             (["abc"], "0.000000")
         ]
-        self.run_with_test_assertions(assertions, fio.rsd_float)
+        self.run_with_test_assertions(assertions, rsd_float)
 
     def test_rsd_forest_stand_rows(self):
-        result = fio.rsd_forest_stand_rows(vmi13_stands[0])
+        result = rsd_forest_stand_rows(vmi13_stands[0])
         self.assertEqual(3, len(result))
 
     def test_rsd_rows(self):
-        result = fio.stands_to_rsd_content(vmi13_stands)
+        result = stands_to_rsd_content(vmi13_stands)
         self.assertEqual(5, len(result))
 
     def test_stands_to_csv(self):
         delimiter = ";"
-        result = fio.stands_to_csv_content(vmi13_stands, delimiter)
+        result = stands_to_csv_content(vmi13_stands, delimiter)
         self.assertEqual(5, len(result))
         
         #make sure that each type of a row has the same number of columns, since csv-->stand conversion relies on it
@@ -42,9 +41,9 @@ class FileIoTest(ConverterTestSuite):
     def test_csv_to_stands(self):
         """tests that the roundtrip conversion stands-->csv-->stands maintains the stand structure"""
         delimiter = ";"
-        serialized = '\n'.join(fio.stands_to_csv_content(vmi13_stands, delimiter))
+        serialized = '\n'.join(stands_to_csv_content(vmi13_stands, delimiter))
         deserialized = list(csv.reader(StringIO(serialized), delimiter=delimiter))
-        stands_from_csv = fio.csv_content_to_stands(deserialized)
+        stands_from_csv = csv_content_to_stands(deserialized)
         self.assertEqual(2, len(stands_from_csv))
 
         # Test that the stands from csv and the original stands are equal.
