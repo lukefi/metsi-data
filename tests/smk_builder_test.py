@@ -16,14 +16,11 @@ class TestForestCentreBuilder(unittest.TestCase):
     smk_builder = ForestCentreBuilder(builder_flags, xml_string)
     smk_stands = smk_builder.build()
 
-
     def test_individual_smk_build_with_different_strata_origins(self):
         assertions = [
             ('1', 3),
-            ('2', 3),
-            ('3', 0),
-            ('4', 0),
-            (None, 0),
+            ('2', 2),
+            (None, 0)
         ]
         for i in assertions:
             smk_builder = ForestCentreBuilder(
@@ -35,30 +32,27 @@ class TestForestCentreBuilder(unittest.TestCase):
             number_of_stratums = len(stands[0].tree_strata)
             self.assertEqual(i[1], number_of_stratums)
 
-
     def test_smk_builder_stands(self):
-        self.assertEqual(3, len(self.smk_stands))
-
+        self.assertEqual(2, len(self.smk_stands))
 
     def test_smk_builder_stand_identifiers(self):
-        self.assertEqual('1', self.smk_stands[0].identifier)
-        self.assertEqual('2', self.smk_stands[1].identifier)
-
+        self.assertEqual('100', self.smk_stands[0].identifier)
+        self.assertEqual('101', self.smk_stands[1].identifier)
 
     def test_smk_builder_stand_variables(self):
         # TODO: implement parse logic for management unit id
         self.assertEqual(None, self.smk_stands[0].management_unit_id)
         self.assertEqual(None, self.smk_stands[1].management_unit_id)
-        self.assertEqual(2010, self.smk_stands[0].year)
-        self.assertEqual(2010, self.smk_stands[1].year)
-        self.assertEqual(1.93, self.smk_stands[0].area)
-        self.assertEqual(0.28, self.smk_stands[1].area)
-        self.assertEqual(1.93, self.smk_stands[0].area_weight)
-        self.assertEqual(0.28, self.smk_stands[1].area_weight)
-        self.assertEqual((6775744.2412, 506093.8555, None, 'EPSG:3067'), self.smk_stands[0].geo_location)
-        self.assertEqual((6775742.8022, 505984.0828, None, 'EPSG:3067'), self.smk_stands[1].geo_location)
-        self.assertEqual('1', self.smk_stands[0].identifier)
-        self.assertEqual('2', self.smk_stands[1].identifier)
+        self.assertEqual(2020, self.smk_stands[0].year)
+        self.assertEqual(2020, self.smk_stands[1].year)
+        self.assertEqual(0.28, self.smk_stands[0].area)
+        self.assertEqual(0.45, self.smk_stands[1].area)
+        self.assertEqual(0.28, self.smk_stands[0].area_weight)
+        self.assertEqual(0.45, self.smk_stands[1].area_weight)
+        self.assertEqual((6542843.0, 532437.0, None, 'EPSG:3067'), self.smk_stands[0].geo_location)
+        self.assertEqual((6532843.0, 536437.0, None, 'EPSG:3067'), self.smk_stands[1].geo_location)
+        self.assertEqual('100', self.smk_stands[0].identifier)
+        self.assertEqual('101', self.smk_stands[1].identifier)
         # TODO: verify the default value of degree days
         self.assertEqual(None, self.smk_stands[0].degree_days)
         self.assertEqual(None, self.smk_stands[1].degree_days)
@@ -70,13 +64,13 @@ class TestForestCentreBuilder(unittest.TestCase):
         # st:MainGroup '1' -> 1
         self.assertEqual(1, self.smk_stands[1].land_use_category)
         # st:SubGroup '1' -> 1
-        self.assertEqual(1, self.smk_stands[0].soil_peatland_category)
+        self.assertEqual(SoilPeatlandCategory.PINE_MIRE, self.smk_stands[0].soil_peatland_category)
         # st:SubGroup '3' -> 3
         self.assertEqual(3, self.smk_stands[1].soil_peatland_category)
         # st:FertilityClass '3' -> 3
-        self.assertEqual(3, self.smk_stands[0].site_type_category)
+        self.assertEqual(SiteType.DAMP_SITE, self.smk_stands[0].site_type_category)
         # st:FertilityClass '3' -> 3
-        self.assertEqual(3, self.smk_stands[1].site_type_category)
+        self.assertEqual(SiteType.SUB_DRY_SITE, self.smk_stands[1].site_type_category)
         # TODO: verify the default value of tax class reduction
         self.assertEqual(0, self.smk_stands[0].tax_class_reduction)
         self.assertEqual(0, self.smk_stands[1].tax_class_reduction)
@@ -84,7 +78,7 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(0, self.smk_stands[0].tax_class)
         self.assertEqual(0, self.smk_stands[1].tax_class)
         # st:DrainageState '1' -> 0
-        self.assertEqual(DrainageCategory.UNDRAINED_MINERAL_SOIL, self.smk_stands[0].drainage_category)
+        self.assertEqual(DrainageCategory.TRANSFORMED_MIRE, self.smk_stands[0].drainage_category)
         # st:DrainageState '9' -> 5
         self.assertEqual(DrainageCategory.TRANSFORMED_MIRE, self.smk_stands[1].drainage_category)
         # Drainage feasibility default value True
@@ -118,7 +112,7 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(None, self.smk_stands[0].pruning_year)
         self.assertEqual(None, self.smk_stands[1].pruning_year)
         # TODO implement parse logic for cutting year
-        self.assertEqual(2021, self.smk_stands[0].cutting_year)
+        self.assertEqual(None, self.smk_stands[0].cutting_year)
         self.assertEqual(None, self.smk_stands[1].cutting_year)
         # TODO implement parse logic for forest centre id
         self.assertEqual(None, self.smk_stands[0].forestry_centre_id)
@@ -128,7 +122,7 @@ class TestForestCentreBuilder(unittest.TestCase):
         # st:CuttingRestriction '0' -> 1
         self.assertEqual(1, self.smk_stands[1].forest_management_category)
         # TODO implement parse logic for last cutting method
-        self.assertEqual(1, self.smk_stands[0].method_of_last_cutting)
+        self.assertEqual(None, self.smk_stands[0].method_of_last_cutting)
         self.assertEqual(None, self.smk_stands[1].method_of_last_cutting)
         # TODO implement parse logic for municipality id
         self.assertEqual(None, self.smk_stands[0].municipality_id)
@@ -137,20 +131,16 @@ class TestForestCentreBuilder(unittest.TestCase):
 
     def test_smk_builder_strata(self):
         self.assertEqual(3, len(self.smk_stands[0].tree_strata))
-        self.assertEqual(3, len(self.smk_stands[1].tree_strata))
-        self.assertEqual(0, len(self.smk_stands[2].tree_strata))
-
+        self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_identifiers(self):
-        self.assertEqual('1-24822963-stratum', self.smk_stands[0].tree_strata[0].identifier)
-        self.assertEqual('1-24822964-stratum', self.smk_stands[0].tree_strata[1].identifier)
-        self.assertEqual('2-24822966-stratum', self.smk_stands[1].tree_strata[0].identifier)
-        self.assertEqual('2-24822967-stratum', self.smk_stands[1].tree_strata[1].identifier)
-
+        self.assertEqual('100-331-stratum', self.smk_stands[0].tree_strata[0].identifier)
+        self.assertEqual('100-332-stratum', self.smk_stands[0].tree_strata[1].identifier)
+        self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_variables(self):
         # tst:TreeSpecies '1' -> 1
-        self.assertEqual(TreeSpecies.PINE, self.smk_stands[0].tree_strata[0].species)
+        self.assertEqual(TreeSpecies.SPRUCE, self.smk_stands[0].tree_strata[0].species)
         # tst:TreeSpecies '2' -> 2
         self.assertEqual(TreeSpecies.SPRUCE, self.smk_stands[0].tree_strata[1].species)
         self.assertEqual(None, self.smk_stands[0].tree_strata[0].origin)
@@ -158,23 +148,23 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(None, self.smk_stands[0].tree_strata[0].stems_per_ha)
         self.assertEqual(None, self.smk_stands[0].tree_strata[1].stems_per_ha)
         # tst:MeanDiameter '24.1' -> 24.1
-        self.assertEqual(24.1, self.smk_stands[0].tree_strata[0].mean_diameter)
+        self.assertEqual(2.0, self.smk_stands[0].tree_strata[0].mean_diameter)
         # tst:MeanDiameter '22.0' -> 22.0
-        self.assertEqual(22.0, self.smk_stands[0].tree_strata[1].mean_diameter)
+        self.assertEqual(13.1, self.smk_stands[0].tree_strata[1].mean_diameter)
         # tst:MeanHeight '20.5' -> 20.5
-        self.assertEqual(20.5, self.smk_stands[0].tree_strata[0].mean_height)
+        self.assertEqual(2.3, self.smk_stands[0].tree_strata[0].mean_height)
         # tst:MeanHeight '19.0' -> 19.0
-        self.assertEqual(19.0, self.smk_stands[0].tree_strata[1].mean_height)
+        self.assertEqual(12.2, self.smk_stands[0].tree_strata[1].mean_height)
         self.assertEqual(None, self.smk_stands[0].tree_strata[0].breast_height_age)
         self.assertEqual(None, self.smk_stands[0].tree_strata[1].breast_height_age)
         # tst:MeanHeight '62' -> 62
-        self.assertEqual(62, self.smk_stands[0].tree_strata[0].biological_age)
+        self.assertEqual(10.0, self.smk_stands[0].tree_strata[0].biological_age)
         # tst:MeanHeight '62' -> 62
-        self.assertEqual(62, self.smk_stands[0].tree_strata[1].biological_age)
+        self.assertEqual(48.0, self.smk_stands[0].tree_strata[1].biological_age)
         # tst:BasalArea '10.1' -> 10.1
-        self.assertEqual(10.1, self.smk_stands[0].tree_strata[0].basal_area)
+        self.assertEqual(None, self.smk_stands[0].tree_strata[0].basal_area)
         # tst:BasalArea '10.5' -> 10.5
-        self.assertEqual(10.5, self.smk_stands[0].tree_strata[1].basal_area)
+        self.assertEqual(5.2, self.smk_stands[0].tree_strata[1].basal_area)
         self.assertEqual(None, self.smk_stands[0].tree_strata[0].saw_log_volume_reduction_factor)
         self.assertEqual(None, self.smk_stands[0].tree_strata[1].saw_log_volume_reduction_factor)
         self.assertEqual(None, self.smk_stands[0].tree_strata[0].cutting_year)

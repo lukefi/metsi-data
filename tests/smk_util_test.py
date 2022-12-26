@@ -345,7 +345,7 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
         reference_stand = generate_test_data(operations_element=operations_element)
         result = smk_util.parse_stand_operations(reference_stand)
         self.assertEqual(2, len(result))
-        oper1 = result.get(554)
+        oper1 = result.get(544)
         self.assertEqual(oper1[0], 3)
         self.assertEqual(oper1[1], 2020)
         oper2 = result.get(555)

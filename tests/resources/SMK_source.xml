@@ -64,6 +64,29 @@
                         </tst:TreeStratum>
                     </tst:TreeStrata>
                 </ts:TreeStandDataDate>
+                <ts:TreeStandDataDate type="2" date="2020-05-20">
+                    <tst:TreeStrata>
+                        <tst:TreeStratum id="331">
+                            <tst:StratumNumber>1</tst:StratumNumber>
+                            <tst:TreeSpecies>2</tst:TreeSpecies>
+                            <tst:Storey>5</tst:Storey>
+                            <tst:Age>10</tst:Age>
+                            <tst:MeanDiameter>2</tst:MeanDiameter>
+                            <tst:MeanHeight>2.3</tst:MeanHeight>
+                            <co:DataSource>2</co:DataSource>
+                        </tst:TreeStratum>
+                        <tst:TreeStratum id="332">
+                            <tst:StratumNumber>2</tst:StratumNumber>
+                            <tst:TreeSpecies>2</tst:TreeSpecies>
+                            <tst:Storey>5</tst:Storey>
+                            <tst:Age>48</tst:Age>
+                            <tst:BasalArea>5.2</tst:BasalArea>
+                            <tst:MeanDiameter>13.1</tst:MeanDiameter>
+                            <tst:MeanHeight>12.2</tst:MeanHeight>
+                            <co:DataSource>2</co:DataSource>
+                        </tst:TreeStratum>
+                    </tst:TreeStrata>
+                </ts:TreeStandDataDate>
             </ts:TreeStandData>
         </st:Stand>
         <st:Stand id="101">
