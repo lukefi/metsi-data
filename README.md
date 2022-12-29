@@ -21,53 +21,20 @@ In addition to VMI data, we wish to support Forest Centre (Metsäkeskus) XML dat
 
 Original implementation by Arto Haara
 
-### Application structure
+## Library structure
 
-| path                          | comment                                                                                                                |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| forestdatamodel/cli.py                            | application entry point                                                                            |
-| forestdatamodel/formats                           | application source code                                                                            |
-| forestdatamodel/formats/file_io.py                | File IO                                                                                            |
-| forestdatamodel/formats/ForestBuilder.py          | Builder pattern style classes for populating a collection of Forest Stands with Tree data          |
-| forestdatamodel/formats/rsd_const.py              | support structures for RSD data indices                                                            |
-| forestdatamodel/formats/smk_util.py               | SMK related parse logic                                                     |
-| forestdatamodel/formats/util.py                   | general utility functions                                                                          |
-| forestdatamodel/formats/vmi_const.py              | support structures for VMI data indices                                                            |
-| forestdatamodel/formats/vmi_util.py               | support functionality for VMI-RSD data conversion                                                  |
-| tests                                             | Test suites                                                                                        |
-| data                                              | example data                                                                                       |
-| data/VMI_12_formaatti.dat                         | VMI12 example source data                                                                          |
-| data/VMI_13_formaatti.dat                         | VMI13 example source data                                                                          |
-| data/SMK_formaatti.xml                            | SMK example source data                                                                          |
-
-Program entry point is `forestdatamodel/cli.py`.
-
-### Instructions
-
-Application can be run from the project root. Usage instructions:
-
-```
-Usage: python -m forestdatamodel.cli convert [OPTIONS] INPUT OUTPUT
-
-Options:
-  -i, --input-format [auto|pickle|vmi12|vmi13|forest_centre]
-                                  Input file format
-  -o, --output-format [auto|pickle|json|rsd|csv]
-                                  Output file format
-  -t, --reference-trees           Copy reference trees from VMI data
-  -s, --strata-origin [1|2|3]     Type number of forest center xml strata
-                                  origin: '1' = Inventory, '2' = Present, '3'
-                                  = Predicted
-  --help                          Show this message and exit.
-```
-
-`python -m forestdatamodel.cli convert --help`
-
-
-For example the following will convert vmi12 source data to pickle format:
-
-`python -m forestdatamodel.cli convert -i vmi12 -o pickle data/VMI_12_formaatti.dat vmi12_fdm.pickle`
-
+| path                                     | comment                                                                                                               |
+|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| forestdatamodel/conversion               | Utilities for converting VMI12, VMI13 and Forest Centre data to Internal model, and further mapping to output formats |
+| forestdatamodel/enums                    | Package for category variable enumerations                                                                            |
+| forestdatamodel/formats/ForestBuilder.py | Builder pattern style classes for populating a collection of forest stands with reference tree and stratum data       |
+| forestdatamodel/formats/io_utils.py      | Utilities for formatting data for various output formats                                                              |
+| forestdatamodel/formats/rsd_const.py     | support structures for RSD data indices                                                                               |
+| forestdatamodel/formats/smk_util.py      | Forest Centre XML data related parsing logic                                                                          |
+| forestdatamodel/formats/util.py          | general utility functions                                                                                             |
+| forestdatamodel/formats/vmi_const.py     | support structures for VMI data indices                                                                               |
+| forestdatamodel/formats/vmi_util.py      | support functionality for VMI data parsing and conversion                                                             |
+| tests                                    | Test suites                                                                                                           |
 
 ### Troubleshooting
 
