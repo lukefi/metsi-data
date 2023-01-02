@@ -1,10 +1,10 @@
 from types import SimpleNamespace
 import unittest
 from parameterized import parameterized
-from forestdatamodel.model import ReferenceTree, ForestStand, TreeStratum
-from forestdatamodel.conversion.internal2mela import land_use_mapper, soil_peatland_mapper, species_mapper, owner_mapper, mela_stand
-from forestdatamodel.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
-from forestdatamodel.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaSoilAndPeatlandCategory, MelaTreeSpecies
+from lukefi.metsi.data.model import ReferenceTree, ForestStand, TreeStratum
+from lukefi.metsi.data.conversion.internal2mela import land_use_mapper, soil_peatland_mapper, species_mapper, owner_mapper, mela_stand
+from lukefi.metsi.data.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies
+from lukefi.metsi.data.enums.mela import MelaLandUseCategory, MelaOwnerCategory, MelaSoilAndPeatlandCategory, MelaTreeSpecies
 
 
 class Internal2MelaTest(unittest.TestCase):

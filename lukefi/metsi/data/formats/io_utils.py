@@ -1,7 +1,7 @@
 from itertools import chain
 from typing import Any, List, Tuple, Callable
-from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
-from forestdatamodel.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
+from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
+from lukefi.metsi.data.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
 
 
 def recreate_stand_indices(stands: List[ForestStand]) -> List[ForestStand]:

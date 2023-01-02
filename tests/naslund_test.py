@@ -1,9 +1,9 @@
 """
 NOTE: this test suite has been intentionally duplicated from `forestry-function-library` and the implementation here should follow the source. 
 """
-from forestdatamodel.enums.internal import TreeSpecies
+from lukefi.metsi.data.enums.internal import TreeSpecies
 
-from forestdatamodel.formats import vmi_supplementing
+from lukefi.metsi.data.formats import vmi_supplementing
 from tests import test_util
 
 

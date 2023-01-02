@@ -1,6 +1,5 @@
-from forestdatamodel.formats import vmi_util
-from forestdatamodel.enums.internal import TreeSpecies
-from forestdatamodel.formats.vmi_const import *
+from lukefi.metsi.data.formats import vmi_util
+from lukefi.metsi.data.formats.vmi_const import *
 from tests import test_util
 
 

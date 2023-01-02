@@ -1,7 +1,7 @@
 import unittest
 import os
-from forestdatamodel.formats.ForestBuilder import ForestCentreBuilder
-from forestdatamodel.enums.internal import *
+from lukefi.metsi.data.formats.ForestBuilder import ForestCentreBuilder
+from lukefi.metsi.data.enums.internal import *
 
 builder_flags = {
     'strata_origin': '1'

@@ -1,4 +1,4 @@
-from forestdatamodel.enums.forest_centre import (
+from lukefi.metsi.data.enums.forest_centre import (
     ForestCentreSiteType,
     ForestCentreOwnerCategory,
     ForestCentreSoilPeatlandCategory,
@@ -6,7 +6,7 @@ from forestdatamodel.enums.forest_centre import (
     ForestCentreLandUseCategory,
     ForestCentreDrainageCategory
     )
-from forestdatamodel.enums.internal import (
+from lukefi.metsi.data.enums.internal import (
     SiteType,
     OwnerCategory,
     SoilPeatlandCategory,

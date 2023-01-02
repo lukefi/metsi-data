@@ -1,7 +1,7 @@
 import unittest
 
-from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
-from forestdatamodel.enums import internal
+from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
+from lukefi.metsi.data.enums import internal
 
 
 class TestForestDataModel(unittest.TestCase):

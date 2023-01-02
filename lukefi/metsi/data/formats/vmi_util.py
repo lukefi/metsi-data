@@ -1,9 +1,8 @@
-from typing import Optional, Tuple, Sequence, List
+from typing import Optional, Tuple, Sequence
 from datetime import datetime as dt
 
-from forestdatamodel.enums.internal import TreeSpecies
-from forestdatamodel.formats.util import get_or_default, parse_float, parse_int
-from forestdatamodel.formats.vmi_const import vmi12_county_areas, vmi13_county_areas, VMI12StandIndices, VMI13StandIndices
+from lukefi.metsi.data.formats.util import get_or_default, parse_float, parse_int
+from lukefi.metsi.data.formats.vmi_const import vmi12_county_areas, vmi13_county_areas, VMI12StandIndices, VMI13StandIndices
 from shapely.geometry import Point
 from geopandas import GeoSeries
 

@@ -1,14 +1,14 @@
 import typing
 import xml.etree.ElementTree as ET
 
-from forestdatamodel.enums.internal import OwnerCategory
-from forestdatamodel.model import ForestStand, ReferenceTree, TreeStratum
-from forestdatamodel.conversion import fc2internal, vmi2internal
-from forestdatamodel.formats import util, vmi_util, smk_util
+from lukefi.metsi.data.enums.internal import OwnerCategory
+from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
+from lukefi.metsi.data.conversion import vmi2internal, fc2internal
+from lukefi.metsi.data.formats import smk_util, util, vmi_util
 from abc import ABC, abstractmethod
-from forestdatamodel.formats.vmi_const import VMI12StandIndices, VMI12TreeIndices, VMI12StratumIndices, \
+from lukefi.metsi.data.formats.vmi_const import VMI12StandIndices, VMI12TreeIndices, VMI12StratumIndices, \
     VMI13StandIndices, VMI13TreeIndices, VMI13StratumIndices
-from forestdatamodel.formats.vmi_supplementing import naslund_height, supplement_age_for_reference_trees
+from lukefi.metsi.data.formats.vmi_supplementing import naslund_height, supplement_age_for_reference_trees
 
 class ForestBuilder(ABC):
     """Abstract base class of forest builders"""

@@ -2,8 +2,8 @@
 NOTE: this module's functionality has been intentionally duplicated from `forestry-function-library` to avoid depending on the forestryfunctions library here. Implementation here needs to follow the source.
 """
 import typing
-from forestdatamodel.enums.internal import TreeSpecies
-from forestdatamodel.model import ReferenceTree, TreeStratum
+from lukefi.metsi.data.enums.internal import TreeSpecies
+from lukefi.metsi.data.model import ReferenceTree, TreeStratum
 
 
 def naslund_height(diameter: float, species: TreeSpecies) -> typing.Optional[float]:

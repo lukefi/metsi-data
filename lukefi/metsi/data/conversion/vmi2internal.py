@@ -1,6 +1,6 @@
 from typing import Optional
 
-from forestdatamodel.enums.vmi import (
+from lukefi.metsi.data.enums.vmi import (
     VmiSiteType,
     VmiOwnerCategory,  
     VmiSoilPeatlandCategory, 
@@ -8,7 +8,7 @@ from forestdatamodel.enums.vmi import (
     VmiLandUseCategory,
     VmiDrainageCategory,
     )
-from forestdatamodel.enums.internal import (
+from lukefi.metsi.data.enums.internal import (
     SiteType, 
     OwnerCategory, 
     SoilPeatlandCategory, 

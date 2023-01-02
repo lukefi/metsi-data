@@ -1,5 +1,5 @@
 import unittest
-from forestdatamodel.formats.ForestBuilder import VMI12Builder, VMI13Builder, ForestCentreBuilder
+from lukefi.metsi.data.formats.ForestBuilder import VMI12Builder, VMI13Builder, ForestCentreBuilder
 from pathlib import Path
 
 

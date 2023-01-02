@@ -1,12 +1,11 @@
 import geopandas
 import datetime
 
-from geopandas import GeoSeries
 from shapely.geometry import Polygon, Point
-from typing import Tuple, List, Optional, Dict
+from typing import Tuple, List, Dict
 from xml.etree.ElementTree import Element
 from types import SimpleNamespace
-from forestdatamodel.formats import util
+from lukefi.metsi.data.formats import util
 
 NS = {
         "schema_location": "http://standardit.tapio.fi/schemas/forestData ForestData.xsd",

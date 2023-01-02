@@ -1,5 +1,5 @@
 from copy import copy
-from forestdatamodel.enums.mela import (
+from lukefi.metsi.data.enums.mela import (
     MelaOwnerCategory, 
     MelaSiteTypeCategory, 
     MelaSoilAndPeatlandCategory, 
@@ -7,7 +7,7 @@ from forestdatamodel.enums.mela import (
     MelaLandUseCategory,
     MelaDrainageCategory
     )
-from forestdatamodel.enums.internal import (
+from lukefi.metsi.data.enums.internal import (
     SiteType, 
     SoilPeatlandCategory, 
     TreeSpecies, 
@@ -15,7 +15,7 @@ from forestdatamodel.enums.internal import (
     LandUseCategory,
     DrainageCategory
     )
-from forestdatamodel.conversion.util import apply_mappers
+from lukefi.metsi.data.conversion.util import apply_mappers
 # TODO: can we find a way to resolve the circular import introduced by trying to use these classes just for typing?
 # Even using the iffing below, pytest fails during top_level_collect
 # if typing.TYPE_CHECKING:

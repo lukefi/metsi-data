@@ -1,6 +1,6 @@
 import csv
 from io import StringIO
-from forestdatamodel.formats.io_utils import *
+from lukefi.metsi.data.formats.io_utils import *
 from tests.test_util import ConverterTestSuite, vmi13_stands
 
 

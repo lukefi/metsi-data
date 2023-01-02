@@ -1,6 +1,7 @@
-from forestdatamodel.enums.internal import LandUseCategory
+from lukefi.metsi.data.enums.internal import LandUseCategory
 from tests import test_util
-from forestdatamodel.conversion import fc2internal, vmi2internal
+from lukefi.metsi.data.conversion import vmi2internal, fc2internal
+
 
 class TestConversion(test_util.ConverterTestSuite):
     def test_convert_VMI_lu_category_to_internal(self):

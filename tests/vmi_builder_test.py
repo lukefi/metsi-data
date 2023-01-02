@@ -1,9 +1,9 @@
 from copy import deepcopy
 import unittest
 
-from forestdatamodel.formats import vmi_const
-from forestdatamodel.formats.ForestBuilder import *
-from forestdatamodel.enums.internal import *
+from lukefi.metsi.data.formats import vmi_const
+from lukefi.metsi.data.formats.ForestBuilder import *
+from lukefi.metsi.data.enums.internal import *
 
 class TestForestBuilder(unittest.TestCase):
 

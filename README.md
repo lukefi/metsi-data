@@ -14,8 +14,10 @@ Backwards compatibility with semantic versioning is guaranteed for users of this
 This is a Python library developed under Python 3.10. We offer support for this library via GitHub issues and welcome
 pull requests for improvement.
 
+
 This project uses the pyproject.toml for configuration and build. For setting up development environment, run
-`pip install .[tests]`. Development can be readily done utilizing the unit test suites in `tests`.
+`pip install .[tests]`. Development can be readily done utilizing the unit test suites in `tests`. The project is
+deployed under the namespace `lukefi.metsi.data`.
 
 We expect
 
@@ -38,21 +40,21 @@ separate code project.
 
 ## Library structure
 
-The code for this project is structured as follows.
+The code for this project is structured into namespace packages as follows.
 
-| path                                | comment                                                                                                         |
-|-------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| metsi_data/model.py                 | Main data structures module                                                                                     |
-| metsi_data/conversion               | Utility package for converting enumerations between data formats                                                |
-| metsi_data/enums                    | Package for category variable enumerations                                                                      |
-| metsi_data/formats/ForestBuilder.py | Builder pattern style classes for populating a collection of forest stands with reference tree and stratum data |
-| metsi_data/formats/io_utils.py      | Utilities for formatting data for various output formats                                                        |
-| metsi_data/formats/rsd_const.py     | support structures for RSD data indices                                                                         |
-| metsi_data/formats/smk_util.py      | Forest Centre XML data related parsing logic                                                                    |
-| metsi_data/formats/util.py          | general utility functions                                                                                       |
-| metsi_data/formats/vmi_const.py     | support structures for VMI data indices                                                                         |
-| metsi_data/formats/vmi_util.py      | support functionality for VMI data parsing and conversion                                                       |
-| tests                               | Test suites                                                                                                     |
+| path                        | comment                                                                                                         |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------|
+| l.m.d.model                 | Main data structures module                                                                                     |
+| l.m.d.conversion            | Utility package for converting enumerations between data formats                                                |
+| l.m.d.enums                 | Package for category variable enumerations                                                                      |
+| l.m.d.formats.ForestBuilder | Builder pattern style classes for populating a collection of forest stands with reference tree and stratum data |
+| l.m.d.formats.io_utils      | Utilities for formatting data for various output formats                                                        |
+| l.m.d.formats.rsd_const     | support structures for RSD data indices                                                                         |
+| l.m.d.formats.smk_util      | Forest Centre XML data related parsing logic                                                                    |
+| l.m.d.formats.util          | general utility functions                                                                                       |
+| l.m.d.formats.vmi_const     | support structures for VMI data indices                                                                         |
+| l.m.d.formats.vmi_util      | support functionality for VMI data parsing and conversion                                                       |
+| tests                       | Test suites                                                                                                     |
 
 ## Data structures
 

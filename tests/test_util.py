@@ -1,8 +1,7 @@
 import typing
 import unittest
 
-from forestdatamodel.formats.ForestBuilder import VMIBuilder, VMI13Builder
-from forestdatamodel.model import ForestStand
+from lukefi.metsi.data.formats.ForestBuilder import VMIBuilder, VMI13Builder
 
 
 class ConverterTestSuite(unittest.TestCase):

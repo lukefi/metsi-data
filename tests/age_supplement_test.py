@@ -2,8 +2,8 @@
 NOTE: this test suite has been intentionally duplicated from `forestry-function-library` and the implementation here should follow the source. 
 """
 import unittest
-from forestdatamodel.formats import vmi_supplementing as age_sup
-from forestdatamodel.model import TreeStratum, ReferenceTree
+from lukefi.metsi.data.formats import vmi_supplementing as age_sup
+from lukefi.metsi.data.model import TreeStratum, ReferenceTree
 from collections import namedtuple
 
 

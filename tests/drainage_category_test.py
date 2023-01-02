@@ -1,7 +1,7 @@
 import unittest
 from parameterized import parameterized
-from forestdatamodel.enums.internal import DrainageCategory
-from forestdatamodel.conversion import vmi2internal, fc2internal
+from lukefi.metsi.data.enums.internal import DrainageCategory
+from lukefi.metsi.data.conversion import vmi2internal, fc2internal
 
 
 class TestConversion(unittest.TestCase):

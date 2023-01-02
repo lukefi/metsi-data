@@ -1,6 +1,7 @@
-from forestdatamodel.enums.internal import TreeSpecies
+from lukefi.metsi.data.enums.internal import TreeSpecies
 from tests import test_util
-from forestdatamodel.conversion import fc2internal, vmi2internal
+from lukefi.metsi.data.conversion import vmi2internal, fc2internal
+
 
 class TestConversion(test_util.ConverterTestSuite):
     def test_convert_VMI_species_to_internal_species(self):

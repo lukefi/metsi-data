@@ -2,7 +2,7 @@ import datetime
 import xml.etree.ElementTree as ET
 
 from types import SimpleNamespace
-from forestdatamodel.formats import smk_util
+from lukefi.metsi.data.formats import smk_util
 from tests import test_util
 
 

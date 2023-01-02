@@ -1,7 +1,9 @@
 from parameterized import parameterized
 import unittest
-from forestdatamodel.enums.internal import SoilPeatlandCategory
-from forestdatamodel.conversion import vmi2internal, fc2internal
+from lukefi.metsi.data.enums.internal import SoilPeatlandCategory
+from lukefi.metsi.data.conversion import vmi2internal, fc2internal
+
+
 class TestConversion(unittest.TestCase):
     
     @parameterized.expand(

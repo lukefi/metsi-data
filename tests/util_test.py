@@ -1,5 +1,5 @@
 from tests import test_util
-from forestdatamodel.formats.util import parse_int, parse_float, get_or_default
+from lukefi.metsi.data.formats.util import parse_int, parse_float, get_or_default
 
 
 class TestOptionUtil(test_util.ConverterTestSuite):

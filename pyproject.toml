@@ -1,5 +1,5 @@
 [project]
-name = "metsi_data"
+name = "lukefi.metsi.data"
 description = "Data structures and transformation functionality for forest data formats."
 version = "1.0.0-rc2"
 readme = "README.md"
@@ -18,6 +18,3 @@ tests = [
     "pytest",
     "parameterized == 0.8.1"
 ]
-
-[tool.setuptools.packages.find]
-where = ["forestdatamodel"]
