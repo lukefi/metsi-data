@@ -1,2 +1,0 @@
-geopandas==0.12.*
-jsonpickle==3.0.*

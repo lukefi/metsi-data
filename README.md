@@ -2,6 +2,8 @@
 
 This project is a collection of Python classes for a structured object model of forest stands with contained tree strata
 and reference trees. We also serve a library implementation for converting forest inventory data into these classes.
+This project's primary purpose is to serve as the data model and data conversion library for the Metsi forest
+development simulator.
 
 Original implementation of the data model and data conversion by Arto Haara, Natural Resources Institute Finland.
 
@@ -11,6 +13,15 @@ Backwards compatibility with semantic versioning is guaranteed for users of this
 
 This is a Python library developed under Python 3.10. We offer support for this library via GitHub issues and welcome
 pull requests for improvement.
+
+This project uses the pyproject.toml for configuration and build. For setting up development environment, run
+`pip install .[tests]`. Development can be readily done utilizing the unit test suites in `tests`.
+
+We expect
+
+* semantic commits constraining changes into categories in the spirit of
+  https://sparkbox.com/foundry/semantic_commit_messages
+* all functionality to be sufficiently unit tested to prove operation and address regressions
 
 ## Library description
 

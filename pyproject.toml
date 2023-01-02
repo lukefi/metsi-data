@@ -1,0 +1,23 @@
+[project]
+name = "metsi_data"
+description = "Data structures and transformation functionality for forest data formats."
+version = "1.0.0-rc2"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Juho-Petteri Yliuntinen", email = "juho-petteri.yliuntinen@luke.fi"},
+    { name = "Daniel Melander", email = "daniel.melander@luke.fi"},
+    { name = "Arto Haara", email = "arto.haara@luke.fi"}
+]
+dependencies = [
+    "geopandas == 0.12.2"
+]
+
+[project.optional-dependencies]
+tests = [
+    "pytest",
+    "parameterized == 0.8.1"
+]
+
+[tool.setuptools.packages.find]
+where = ["forestdatamodel"]
