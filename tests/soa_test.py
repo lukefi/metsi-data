@@ -161,6 +161,17 @@ class SoaTest(unittest.TestCase):
         self.assertEqual(2.0, soa.get_object_property('f', fixture[0]))
         self.assertEqual(1.0, soa.get_object_property('f', fixture[1]))
 
+    def test_set_single_value_for_new_object(self):
+        fixture = create_fixture()
+        soa = Soa(object_list=fixture, initial_property_names=['i'])
+        new_obj = ExampleType(identifier=4)
+        soa.upsert_property_value(new_obj, 'f', 2.0)
+
+        self.assertTrue(soa.has_property('f'))
+        self.assertEqual(4, len(soa.frame.columns))
+        self.assertEqual(2.0, soa.get_object_property('f', new_obj))
+        self.assertEqual(1.0, soa.get_object_property('f', fixture[1]))
+
     def test_soa_as_overlay(self):
         fixture = create_fixture(OverlaidExampleType)
         OverlaidExampleType.make_soa(object_list=fixture)

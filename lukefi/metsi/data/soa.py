@@ -52,6 +52,12 @@ class Soa(Generic[T]):
         return self.frame[object_reference][prop_name] if self.has_property(prop_name) and self.has_object(object_reference) else None
 
     def upsert_property_value(self, object_reference: T, prop_name: str, value):
+        """
+        Set a single property value for the given object. Adds the column for the object and adds the index row if they
+        are not yet represented in the dataframe.
+        """
+        if not self.has_object(object_reference):
+            self.upsert_objects([object_reference])
         if not self.has_property(prop_name):
             values = [value if obj == object_reference else obj.__dict__.get(prop_name) for obj in self.frame.columns]
             self.upsert_property_values(prop_name, values)
