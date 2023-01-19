@@ -124,3 +124,7 @@ class Soable:
     @classmethod
     def set_soa(cls, soa: Soa):
         cls._ol = soa
+
+    @classmethod
+    def forget_soa(cls):
+        cls._ol = None

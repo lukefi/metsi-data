@@ -170,6 +170,7 @@ class SoaTest(unittest.TestCase):
         self.assertEqual(1, fixture[0].__dict__.get('i'))
         self.assertEqual(10, fixture[0].i)
         self.assertEqual(1.0, fixture[0].f)
+        OverlaidExampleType.forget_soa()
 
     def test_soa_overlay_property_setting(self):
         fixture = create_fixture(OverlaidExampleType)
@@ -179,6 +180,7 @@ class SoaTest(unittest.TestCase):
         fixture[0].f = 5.0
         self.assertTrue(soa.has_property('f'))
         self.assertListEqual([5.0, 1.0, 1.0], list(soa.get_property_values('f')))
+        OverlaidExampleType.forget_soa()
 
     def test_soa_fixate(self):
         fixture = create_fixture(OverlaidExampleType)
@@ -191,4 +193,16 @@ class SoaTest(unittest.TestCase):
         self.assertEqual(10, fixture[0].__dict__.get('i'))
         self.assertTrue(len(soa.frame.index) == 0)
         self.assertIsNone(soa.get_object_property('i', fixture[0]))
+        OverlaidExampleType.forget_soa()
+
+    def test_soa_forget(self):
+        fixture = create_fixture(OverlaidExampleType)
+        soa = Soa(fixture)
+        OverlaidExampleType.set_soa(soa)
+
+        soa.upsert_property_values('i', [10, 10, 10])
+        self.assertEqual(10, fixture[0].i)
+
+        OverlaidExampleType.forget_soa()
+        self.assertEqual(1, fixture[0].i)
 
