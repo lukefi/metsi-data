@@ -6,6 +6,7 @@ from lukefi.metsi.data.conversion.internal2mela import mela_stand, mela_tree
 from lukefi.metsi.data.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies, DrainageCategory
 from lukefi.metsi.data.enums.mela import MelaLandUseCategory
 from lukefi.metsi.data.formats.util import convert_str_to_type
+from lukefi.metsi.data.soa import Soable
 
 # NOTE:
 # * the deepcopy methods here are roughly equivalent to
@@ -19,7 +20,7 @@ from lukefi.metsi.data.formats.util import convert_str_to_type
 #   in the __deepcopy__ method. see ForestStand.__deepcopy__ for an example.
 
 @dataclass
-class TreeStratum:
+class TreeStratum(Soable):
     # VMI data type 2
     # SMK data type TreeStratum
     # No RSD equivalent.
@@ -208,7 +209,7 @@ class TreeStratum:
         return result
 
 @dataclass
-class ReferenceTree:
+class ReferenceTree(Soable):
     # VMI data type 3
     # No SMK equivalent
     # Mela RSD logical record for "tree variables"
@@ -375,7 +376,7 @@ class ReferenceTree:
 
 
 @dataclass
-class ForestStand:
+class ForestStand(Soable):
     # VMI data type 1
     # SMK data type Stand
     # Mela RSD logical record for "sample plot variables"
