@@ -2,6 +2,7 @@ import unittest
 
 from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
 from lukefi.metsi.data.enums import internal
+from tests.test_util import vmi13_stands
 
 
 class TestForestDataModel(unittest.TestCase):
@@ -174,7 +175,20 @@ class TestForestDataModel(unittest.TestCase):
 
         self.assertEqual((6834156.23, 429291.91, None, 'EPSG:3067'), stand.geo_location)
 
+    def test_model_soability(self):
+        fixture = vmi13_stands[0]
+        ForestStand.make_soa(object_list=[fixture], initial_property_names=['year'])
+        ReferenceTree.make_soa(object_list=fixture.reference_trees, initial_property_names=['breast_height_diameter', 'height'])
 
+        self.assertEqual(fixture.__dict__.get('year'), ForestStand._overlay.get_object_property('year', fixture))
+        fixture.year = 2080
+        self.assertNotEqual(fixture.__dict__.get('year'), ForestStand._overlay.get_object_property('year', fixture))
+        self.assertEqual(2080, ForestStand._overlay.get_object_property('year', fixture))
 
+        self.assertEqual(2, len(list(ReferenceTree._overlay.get_property_values('height'))))
 
+        ForestStand._overlay.fixate()
+        self.assertEqual(2080, fixture.year)
 
+        ForestStand.forget_soa()
+        ReferenceTree.forget_soa()
