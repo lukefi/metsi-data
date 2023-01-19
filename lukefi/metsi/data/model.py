@@ -51,6 +51,9 @@ class TreeStratum(Soable):
     sapling_stems_per_ha: Optional[float] = None
     sapling_stratum: bool = False  # this reference tree represents saplings
 
+    def __hash__(self):
+        return id(self)
+
     def __eq__(self, other: "TreeStratum"):
         return self.identifier == other.identifier
 
@@ -256,6 +259,9 @@ class ReferenceTree(Soable):
         t.__dict__.update(self.__dict__)
         return t
 
+    def __hash__(self):
+        return id(self)
+
     def validate(self):
         pass
 
@@ -455,6 +461,9 @@ class ForestStand(Soable):
         if stand.monthly_rainfall is not None:
             stand.monthly_rainfall = list(stand.monthly_rainfall)
         return stand
+
+    def __hash__(self):
+        return id(self)
 
     def set_identifiers(self, stand_id: int, management_unit_id: Optional[int] = None):
         self.stand_id = stand_id
