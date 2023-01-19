@@ -24,7 +24,7 @@ class OverlaidExampleType(Soable):
     s: str = "1"
 
     def __hash__(self):
-        return self.identifier
+        return object.__getattribute__(self, 'identifier')
 
 
 def create_fixture(cls: type = ExampleType) -> list[ExampleType]:
@@ -152,6 +152,15 @@ class SoaTest(unittest.TestCase):
         # should fail upon mismatch of row length
         self.assertRaises(ValueError, soa.upsert_property_values, *['i', [3, 4, 5, 6]])
 
+    def test_set_single_value_for_new_property(self):
+        fixture = create_fixture()
+        soa = Soa(fixture, ['i'])
+        soa.upsert_property_value(fixture[0], 'f', 2.0)
+
+        self.assertTrue(soa.has_property('f'))
+        self.assertEqual(2.0, soa.get_object_property('f', fixture[0]))
+        self.assertEqual(1.0, soa.get_object_property('f', fixture[1]))
+
     def test_soa_as_overlay(self):
         fixture = create_fixture(OverlaidExampleType)
         soa = Soa(fixture)
@@ -161,6 +170,15 @@ class SoaTest(unittest.TestCase):
         self.assertEqual(1, fixture[0].__dict__.get('i'))
         self.assertEqual(10, fixture[0].i)
         self.assertEqual(1.0, fixture[0].f)
+
+    def test_soa_overlay_property_setting(self):
+        fixture = create_fixture(OverlaidExampleType)
+        soa = Soa(fixture, ['i'])
+        OverlaidExampleType.set_soa(soa)
+        self.assertFalse(soa.has_property('f'))
+        fixture[0].f = 5.0
+        self.assertTrue(soa.has_property('f'))
+        self.assertListEqual([5.0, 1.0, 1.0], list(soa.get_property_values('f')))
 
     def test_soa_fixate(self):
         fixture = create_fixture(OverlaidExampleType)

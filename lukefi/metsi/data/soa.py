@@ -44,6 +44,13 @@ class Soa(Generic[T]):
         """Find existing property value or None for unknown object or property."""
         return self.frame[object_reference][prop_name] if self.has_property(prop_name) and self.has_object(object_reference) else None
 
+    def upsert_property_value(self, object_reference: T, prop_name: str, value):
+        if not self.has_property(prop_name):
+            values = [value if obj == object_reference else obj.__dict__.get(prop_name) for obj in self.frame.columns]
+            self.upsert_property_values(prop_name, values)
+        else:
+            self.frame[object_reference][prop_name] = value
+
     def upsert_property_values(self, prop_name: str, values: Sequence):
         """
         Insert or update the values for a given property. Raises ValueError if values length doesn't match dataframe
@@ -107,6 +114,12 @@ class Soable:
             return object.__getattribute__(self, '_ol').get_object_property(item, self) or object.__getattribute__(self, item)
         else:
             return object.__getattribute__(self, item)
+
+    def __setattr__(self, prop_name: str, value):
+        if object.__getattribute__(self, '_ol') and isinstance(object.__getattribute__(self, '_ol'), Soa):
+            object.__getattribute__(self, '_ol').upsert_property_value(self, prop_name, value)
+        else:
+            object.__setattr__(self, prop_name, value)
 
     @classmethod
     def set_soa(cls, soa: Soa):
