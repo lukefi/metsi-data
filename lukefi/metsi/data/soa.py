@@ -1,5 +1,5 @@
 from functools import reduce
-from typing import Optional, Sequence, TypeVar, Generic, Hashable
+from typing import Optional, Sequence, TypeVar, Generic, Hashable, ClassVar
 import numpy as np
 import pandas as pd
 
@@ -88,3 +88,26 @@ class Soa(Generic[T]):
         removables = set(object_references) & set(self.frame.columns)
         if removables:
             self.frame = self.frame.drop(removables, axis=1)
+
+    def fixate(self):
+        for object_reference in self.frame.columns:
+            for property in self.frame.index:
+                object_reference.__dict__[property] = self.get_object_property(property, object_reference)
+        self.frame = pd.DataFrame([], columns=self.frame.columns)
+
+
+class Soable:
+    """This class implements access-by-precedence to Soa values via object properties."""
+    _ol = ClassVar[Soa]
+
+    def __getattribute__(self, item):
+        """Return property from overlay if the overlay exists and the value is known for this object. Return default
+        dict-value otherwise."""
+        if object.__getattribute__(self, '_ol'):
+            return object.__getattribute__(self, '_ol').get_object_property(item, self) or object.__getattribute__(self, item)
+        else:
+            return object.__getattribute__(self, item)
+
+    @classmethod
+    def set_soa(cls, soa: Soa):
+        cls._ol = soa

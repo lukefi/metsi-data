@@ -1,7 +1,8 @@
 import unittest
 from dataclasses import dataclass
+from typing import ClassVar
 
-from lukefi.metsi.data.soa import Soa
+from lukefi.metsi.data.soa import Soa, Soable
 
 
 @dataclass
@@ -15,11 +16,22 @@ class ExampleType(object):
         return self.identifier
 
 
-def create_fixture() -> list[ExampleType]:
+@dataclass
+class OverlaidExampleType(Soable):
+    identifier: int = 1
+    i: int = 1
+    f: float = 1.0
+    s: str = "1"
+
+    def __hash__(self):
+        return self.identifier
+
+
+def create_fixture(cls: type = ExampleType) -> list[ExampleType]:
     return [
-        ExampleType(identifier=1),
-        ExampleType(identifier=2),
-        ExampleType(identifier=3)
+        cls(identifier=1),
+        cls(identifier=2),
+        cls(identifier=3)
     ]
 
 
@@ -139,4 +151,26 @@ class SoaTest(unittest.TestCase):
 
         # should fail upon mismatch of row length
         self.assertRaises(ValueError, soa.upsert_property_values, *['i', [3, 4, 5, 6]])
+
+    def test_soa_as_overlay(self):
+        fixture = create_fixture(OverlaidExampleType)
+        soa = Soa(fixture)
+        OverlaidExampleType.set_soa(soa)
+
+        soa.upsert_property_values('i', [10, 10, 10])
+        self.assertEqual(1, fixture[0].__dict__.get('i'))
+        self.assertEqual(10, fixture[0].i)
+        self.assertEqual(1.0, fixture[0].f)
+
+    def test_soa_fixate(self):
+        fixture = create_fixture(OverlaidExampleType)
+        soa = Soa(fixture)
+        OverlaidExampleType.set_soa(soa)
+
+        soa.upsert_property_values('i', [10, 10, 10])
+        self.assertEqual(1, fixture[0].__dict__.get('i'))
+        soa.fixate()
+        self.assertEqual(10, fixture[0].__dict__.get('i'))
+        self.assertTrue(len(soa.frame.index) == 0)
+        self.assertIsNone(soa.get_object_property('i', fixture[0]))
 
