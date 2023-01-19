@@ -8,6 +8,7 @@ T = TypeVar("T", bound=Hashable)
 
 
 class Soa(Generic[T]):
+    frame: pd.DataFrame
     """
     This class implements a Pandas DataFrame/Numpy backed Struct of Arrays data structure for a list of objects T.
     The rationale is to provide a memory-contiguous and thus better performing storage for maintaining state changes for
@@ -15,12 +16,18 @@ class Soa(Generic[T]):
     for their native dict based property maps or as partial overlays for subsets of properties.
     """
 
-    def __init__(self, object_list: list[T] = [], initial_property_names: list[str] = []):
-        """Constructs a Soa instance, optionally populating it with given object data and property names."""
-        values = []
-        if object_list and initial_property_names:
-            values = [[obj.__dict__[property_name] for obj in object_list] for property_name in initial_property_names]
-        self.frame = pd.DataFrame(values, columns=object_list, index=initial_property_names)
+    def __init__(self, old: 'Soa' = None, object_list: list[T] = None, initial_property_names: list[str] = None):
+        """
+        Constructs a Soa instance, optionally populating it as a copy of given old Soa instance, or with given
+        object data and property names.
+        """
+        if old:
+            self.frame = old.frame.copy(True)
+        else:
+            values = []
+            if object_list and initial_property_names:
+                values = [[obj.__dict__[property_name] for obj in object_list] for property_name in initial_property_names]
+            self.frame = pd.DataFrame(values, columns=object_list, index=initial_property_names)
 
     def has_property(self, prop_name: str) -> bool:
         """Truth value for a property name being represented in the dataframe."""
@@ -105,26 +112,30 @@ class Soa(Generic[T]):
 
 class Soable:
     """This class implements access-by-precedence to Soa values via object properties."""
-    _ol = ClassVar[Soa]
+    _overlay = ClassVar[Soa]
 
     def __getattribute__(self, item):
         """Return property from overlay if the overlay exists and the value is known for this object. Return default
         dict-value otherwise."""
-        if isinstance(object.__getattribute__(self, '_ol'), Soa):
-            return object.__getattribute__(self, '_ol').get_object_property(item, self) or object.__getattribute__(self, item)
+        if isinstance(object.__getattribute__(self, '_overlay'), Soa):
+            return object.__getattribute__(self, '_overlay').get_object_property(item, self) or object.__getattribute__(self, item)
         else:
             return object.__getattribute__(self, item)
 
     def __setattr__(self, prop_name: str, value):
-        if isinstance(object.__getattribute__(self, '_ol'), Soa):
-            object.__getattribute__(self, '_ol').upsert_property_value(self, prop_name, value)
+        if isinstance(object.__getattribute__(self, '_overlay'), Soa):
+            object.__getattribute__(self, '_overlay').upsert_property_value(self, prop_name, value)
         else:
             object.__setattr__(self, prop_name, value)
 
     @classmethod
-    def set_soa(cls, soa: Soa):
-        cls._ol = soa
+    def make_soa(cls, old: Soa = None, object_list: list[T] = None, initial_property_names: list[str] = None):
+        """
+        Initialize this class instance with a new Soa. Either make a copy from 'old', or initialize a new one with
+        optional preallocated data from 'object_list', based on 'initial_property_names'.
+        """
+        cls._overlay = Soa(old=old, object_list=object_list, initial_property_names=initial_property_names)
 
     @classmethod
     def forget_soa(cls):
-        cls._ol = None
+        cls._overlay = None
