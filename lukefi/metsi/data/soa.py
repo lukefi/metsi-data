@@ -110,13 +110,13 @@ class Soable:
     def __getattribute__(self, item):
         """Return property from overlay if the overlay exists and the value is known for this object. Return default
         dict-value otherwise."""
-        if object.__getattribute__(self, '_ol'):
+        if isinstance(object.__getattribute__(self, '_ol'), Soa):
             return object.__getattribute__(self, '_ol').get_object_property(item, self) or object.__getattribute__(self, item)
         else:
             return object.__getattribute__(self, item)
 
     def __setattr__(self, prop_name: str, value):
-        if object.__getattribute__(self, '_ol') and isinstance(object.__getattribute__(self, '_ol'), Soa):
+        if isinstance(object.__getattribute__(self, '_ol'), Soa):
             object.__getattribute__(self, '_ol').upsert_property_value(self, prop_name, value)
         else:
             object.__setattr__(self, prop_name, value)
