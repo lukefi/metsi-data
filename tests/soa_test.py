@@ -43,26 +43,26 @@ class SoaTest(unittest.TestCase):
     def test_soa_initialization_with_no_properties(self):
         fixture = create_fixture()
         soa = Soa(object_list=fixture)
-        self.assertEqual(3, len(soa.frame.columns))
-        self.assertEqual(0, len(soa.frame.index))
+        self.assertEqual(3, len(soa.objects))
+        self.assertEqual(0, len(soa.props))
         for f in fixture:
             self.assertTrue(soa.has_object(f))
             self.assertFalse(soa.has_object(ExampleType()))
-            self.assertEqual(0, len(soa.frame[f]))
+            self.assertEqual(0, len(soa.props))
 
     def test_soa_initialization_with_some_properties(self):
         fixture = create_fixture()
         property_names = ['f', 'i']
         soa = Soa(object_list=fixture, initial_property_names=property_names)
-        self.assertEqual(3, len(soa.frame.columns))
-        self.assertEqual(2, len(soa.frame.index))
+        self.assertEqual(3, len(soa.objects))
+        self.assertEqual(2, len(soa.props))
         for prop in property_names:
             self.assertTrue(soa.has_property(prop))
         for f in fixture:
             self.assertTrue(soa.has_object(f))
             self.assertFalse(soa.has_object(ExampleType()))
-            self.assertEqual(2, len(soa.frame[f]))
-            self.assertListEqual([f.f, f.i], list(soa.frame[f]))
+            self.assertEqual(2, len(soa.props))
+            self.assertListEqual([f.f, f.i], [x[1] for x in soa.get_object_properties(f)])
 
     def test_object_add_with_no_properties(self):
         fixture = create_fixture()
@@ -72,8 +72,8 @@ class SoaTest(unittest.TestCase):
         soa.upsert_objects([new_object_1, new_object_2])
         self.assertTrue(soa.has_object(new_object_1))
         self.assertTrue(soa.has_object(new_object_2))
-        self.assertEqual(0, len(soa.frame[new_object_1]))
-        self.assertEqual(0, len(soa.frame[new_object_2]))
+        self.assertEqual(0, len(soa.get_object_properties(new_object_1)))
+        self.assertEqual(0, len(soa.get_object_properties(new_object_2)))
 
     def test_new_object_upsert_with_some_properties(self):
         fixture = create_fixture()
@@ -85,12 +85,12 @@ class SoaTest(unittest.TestCase):
         soa.upsert_objects([new_object_1, new_object_2])
         self.assertTrue(soa.has_object(new_object_1))
         self.assertTrue(soa.has_object(new_object_2))
-        self.assertEqual(2, len(soa.frame[new_object_1]))
-        self.assertEqual(2, len(soa.frame[new_object_2]))
+        self.assertEqual(2, len(soa.get_object_properties(new_object_1)))
+        self.assertEqual(2, len(soa.get_object_properties(new_object_2)))
 
         # column values
-        self.assertListEqual([new_object_1.i, new_object_1.f], list(soa.frame[new_object_1]))
-        self.assertListEqual([new_object_2.i, new_object_2.f], list(soa.frame[new_object_2]))
+        self.assertListEqual([new_object_1.i, new_object_1.f], [x[1] for x in soa.get_object_properties(new_object_1)])
+        self.assertListEqual([new_object_2.i, new_object_2.f], [x[1] for x in soa.get_object_properties(new_object_2)])
 
         # row values
         self.assertListEqual([x.i for x in fixture], list(soa.get_property_values('i')))
@@ -101,15 +101,15 @@ class SoaTest(unittest.TestCase):
         soa = Soa(object_list=fixture, initial_property_names=['i', 'f'])
         new_value = 10
         fixture[0].i = new_value
-        self.assertEqual([1, 1.0], list(soa.frame[fixture[0]]))
+        self.assertEqual([1, 1.0], [x[1] for x in soa.get_object_properties(fixture[0])])
         soa.upsert_objects([fixture[0]])
-        self.assertEqual([new_value, 1.0], list(soa.frame[fixture[0]]))
+        self.assertEqual([new_value, 1.0], [x[1] for x in soa.get_object_properties(fixture[0])])
 
     def test_del_objects(self):
         fixture = create_fixture()
         soa = Soa(object_list=fixture)
         soa.del_objects([fixture[1]])
-        self.assertEqual(2, len(soa.frame.columns))
+        self.assertEqual(2, len(soa.objects))
         self.assertTrue(soa.has_object(fixture[0]))
         self.assertFalse(soa.has_object(fixture[1]))
         self.assertTrue(soa.has_object(fixture[2]))
@@ -172,7 +172,7 @@ class SoaTest(unittest.TestCase):
         soa.upsert_property_value(new_obj, 'f', 2.0)
 
         self.assertTrue(soa.has_property('f'))
-        self.assertEqual(4, len(soa.frame.columns))
+        self.assertEqual(4, len(soa.objects))
         self.assertEqual(2.0, soa.get_object_property('f', new_obj))
         self.assertEqual(1.0, soa.get_object_property('f', fixture[1]))
 
@@ -189,10 +189,16 @@ class SoaTest(unittest.TestCase):
         overlay = OverlaidExampleType._overlay
 
         overlay.upsert_property_values('i', [10, 10, 10])
-        self.assertEqual(1, fixture[0].__dict__.get('i'))
+        self.assertEqual(1, object.__getattribute__(fixture[0], 'i'))
         self.assertEqual(10, fixture[0].i)
         self.assertEqual(1.0, fixture[0].f)
         OverlaidExampleType.forget_soa()
+
+    def test_object_construction_with_overlay(self):
+        OverlaidExampleType.make_soa()
+        create_fixture(OverlaidExampleType)
+        overlay = OverlaidExampleType._overlay
+        self.assertListEqual([1, 1, 1], overlay.get_property_values('i'))
 
     def test_soa_overlay_property_setting(self):
         fixture = create_fixture(OverlaidExampleType)
@@ -211,10 +217,10 @@ class SoaTest(unittest.TestCase):
         overlay = OverlaidExampleType._overlay
 
         overlay.upsert_property_values('i', [10, 10, 10])
-        self.assertEqual(1, fixture[0].__dict__.get('i'))
+        self.assertEqual(1, object.__getattribute__(fixture[0], 'i'))
         overlay.fixate()
-        self.assertEqual(10, fixture[0].__dict__.get('i'))
-        self.assertTrue(len(overlay.frame.index) == 0)
+        self.assertEqual(10, object.__getattribute__(fixture[0], 'i'))
+        self.assertTrue(len(overlay.props) == 0)
         self.assertIsNone(overlay.get_object_property('i', fixture[0]))
         OverlaidExampleType.forget_soa()
 

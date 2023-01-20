@@ -190,5 +190,12 @@ class TestForestDataModel(unittest.TestCase):
         ForestStand._overlay.fixate()
         self.assertEqual(2080, fixture.year)
 
+        new_tree = ReferenceTree(identifier="kissa123", stems_per_ha=10.0)
+        self.assertEqual(10.0, new_tree.stems_per_ha)
+        self.assertEqual(None, object.__getattribute__(new_tree, 'stems_per_ha'))
+        ReferenceTree._overlay.fixate()
+        self.assertEqual(10.0, object.__getattribute__(new_tree, 'stems_per_ha'))
+
+
         ForestStand.forget_soa()
         ReferenceTree.forget_soa()
