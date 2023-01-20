@@ -1,3 +1,4 @@
+from enum import Enum
 from functools import reduce
 from typing import Optional, Sequence, TypeVar, Generic, Hashable, ClassVar
 import numpy as np
@@ -123,6 +124,8 @@ class Soable:
     def __getattribute__(self, item):
         """Return property from overlay if the overlay exists and the value is known for this object. Return default
         dict-value otherwise."""
+        if item not in object.__getattribute__(self, '__dict__'):
+            return object.__getattribute__(self, item)
         if isinstance(object.__getattribute__(self, '_overlay'), Soa):
             return object.__getattribute__(self, '_overlay').get_object_property(item, self) or object.__getattribute__(self, item)
         else:
