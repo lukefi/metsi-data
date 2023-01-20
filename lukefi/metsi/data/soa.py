@@ -50,7 +50,7 @@ class Soa(Generic[T]):
 
     def get_object_property(self, prop_name: str, object_reference: T) -> Optional:
         """Find existing property value or None for unknown object or property."""
-        return self.frame[object_reference][prop_name] if self.has_property(prop_name) and self.has_object(object_reference) else None
+        return self.frame.at[prop_name, object_reference] if self.has_property(prop_name) and self.has_object(object_reference) else None
 
     def upsert_property_value(self, object_reference: T, prop_name: str, value):
         """
@@ -63,7 +63,7 @@ class Soa(Generic[T]):
             values = [value if obj == object_reference else obj.__dict__.get(prop_name) for obj in self.frame.columns]
             self.upsert_property_values(prop_name, values)
         else:
-            self.frame[object_reference][prop_name] = value
+            self.frame.at[prop_name, object_reference] = value
 
     def upsert_property_values(self, prop_name: str, values: Sequence):
         """
