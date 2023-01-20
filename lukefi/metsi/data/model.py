@@ -55,7 +55,7 @@ class TreeStratum(Soable):
         return id(self)
 
     def __eq__(self, other: "TreeStratum"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'TreeStratum':
         s = TreeStratum.__new__(TreeStratum)
@@ -252,7 +252,7 @@ class ReferenceTree(Soable):
     sapling: bool = False
 
     def __eq__(self, other: "ReferenceTree"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'ReferenceTree':
         t = ReferenceTree.__new__(ReferenceTree)
@@ -449,7 +449,7 @@ class ForestStand(Soable):
     lake_effect: Optional[float] = None
 
     def __eq__(self, other: "ForestStand"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'ForestStand':
         stand = ForestStand.__new__(ForestStand)

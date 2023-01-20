@@ -25,4 +25,3 @@ vmi13_data = [
     ""
 ]
 vmi13_builder: VMIBuilder = VMI13Builder({ 'reference_trees': True}, vmi13_data)
-vmi13_stands = vmi13_builder.build()

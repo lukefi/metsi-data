@@ -7,31 +7,35 @@ from lukefi.metsi.data.soa import Soa, Soable
 
 @dataclass
 class ExampleType(object):
-    identifier: int = 1
     i: int = 1
     f: float = 1.0
     s: str = "1"
 
     def __hash__(self):
-        return self.identifier
+        return id(self)
+
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
 
 
 @dataclass
 class OverlaidExampleType(Soable):
-    identifier: int = 1
     i: int = 1
     f: float = 1.0
     s: str = "1"
 
     def __hash__(self):
-        return object.__getattribute__(self, 'identifier')
+        return id(self)
+
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
 
 
 def create_fixture(cls: type = ExampleType) -> list[ExampleType]:
     return [
-        cls(identifier=1),
-        cls(identifier=2),
-        cls(identifier=3)
+        cls(),
+        cls(),
+        cls()
     ]
 
 
@@ -43,7 +47,7 @@ class SoaTest(unittest.TestCase):
         self.assertEqual(0, len(soa.frame.index))
         for f in fixture:
             self.assertTrue(soa.has_object(f))
-            self.assertFalse(soa.has_object(ExampleType(identifier=4)))
+            self.assertFalse(soa.has_object(ExampleType()))
             self.assertEqual(0, len(soa.frame[f]))
 
     def test_soa_initialization_with_some_properties(self):
@@ -56,15 +60,15 @@ class SoaTest(unittest.TestCase):
             self.assertTrue(soa.has_property(prop))
         for f in fixture:
             self.assertTrue(soa.has_object(f))
-            self.assertFalse(soa.has_object(ExampleType(identifier=4)))
+            self.assertFalse(soa.has_object(ExampleType()))
             self.assertEqual(2, len(soa.frame[f]))
             self.assertListEqual([f.f, f.i], list(soa.frame[f]))
 
     def test_object_add_with_no_properties(self):
         fixture = create_fixture()
         soa = Soa(object_list=fixture)
-        new_object_1 = ExampleType(identifier=4)
-        new_object_2 = ExampleType(identifier=5)
+        new_object_1 = ExampleType()
+        new_object_2 = ExampleType()
         soa.upsert_objects([new_object_1, new_object_2])
         self.assertTrue(soa.has_object(new_object_1))
         self.assertTrue(soa.has_object(new_object_2))
@@ -74,9 +78,9 @@ class SoaTest(unittest.TestCase):
     def test_new_object_upsert_with_some_properties(self):
         fixture = create_fixture()
         soa = Soa(object_list=fixture, initial_property_names=['i', 'f'])
-        new_object_1 = ExampleType(identifier=4, i=4, f=4.0)
+        new_object_1 = ExampleType(i=4, f=4.0)
         fixture.append(new_object_1)
-        new_object_2 = ExampleType(identifier=5, i=5, f=5.0)
+        new_object_2 = ExampleType(i=5, f=5.0)
         fixture.append(new_object_2)
         soa.upsert_objects([new_object_1, new_object_2])
         self.assertTrue(soa.has_object(new_object_1))
@@ -127,7 +131,7 @@ class SoaTest(unittest.TestCase):
         fixture = create_fixture()
         soa = Soa(object_list=fixture, initial_property_names=['i', 'f'])
         no_result_prop = soa.get_object_property('h', fixture[0])
-        no_result_obj = soa.get_object_property('i', ExampleType(identifier=6))
+        no_result_obj = soa.get_object_property('i', ExampleType())
         self.assertIsNone(no_result_prop)
         self.assertIsNone(no_result_obj)
 
@@ -164,7 +168,7 @@ class SoaTest(unittest.TestCase):
     def test_set_single_value_for_new_object(self):
         fixture = create_fixture()
         soa = Soa(object_list=fixture, initial_property_names=['i'])
-        new_obj = ExampleType(identifier=4)
+        new_obj = ExampleType()
         soa.upsert_property_value(new_obj, 'f', 2.0)
 
         self.assertTrue(soa.has_property('f'))
