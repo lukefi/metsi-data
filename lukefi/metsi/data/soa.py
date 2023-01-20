@@ -28,7 +28,7 @@ class Soa(Generic[T]):
             values = []
             if object_list and initial_property_names:
                 values = [[obj.__dict__[property_name] for obj in object_list] for property_name in initial_property_names]
-            self.frame = pd.DataFrame(values, columns=object_list, index=initial_property_names)
+            self.frame = pd.DataFrame(values, columns=object_list or [], index=initial_property_names or [])
 
     def has_property(self, prop_name: str) -> bool:
         """Truth value for a property name being represented in the dataframe."""
