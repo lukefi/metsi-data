@@ -1,3 +1,4 @@
+from enum import Enum
 from functools import reduce
 from typing import Optional, Sequence, TypeVar, Generic, Hashable, ClassVar
 
@@ -149,7 +150,7 @@ class Soable:
             return object.__getattribute__(self, item)
 
     def __setattr__(self, prop_name: str, value):
-        if isinstance(object.__getattribute__(self, '_overlay'), Soa):
+        if isinstance(object.__getattribute__(self, '_overlay'), Soa) and type(value) in (int, float, str, tuple, Enum):
             object.__getattribute__(self, '_overlay').upsert_property_value(self, prop_name, value)
         else:
             object.__setattr__(self, prop_name, value)
