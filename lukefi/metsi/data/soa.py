@@ -24,7 +24,8 @@ class Soa(Generic[T]):
         self.objects = {}
 
         if old:
-            self.props = old.props.copy()
+            for k, v in old.props.items():
+                self.props[k] = v.copy()
             self.objects = old.objects.copy()
         else:
             if object_list:

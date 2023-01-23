@@ -1,3 +1,4 @@
+import copy
 import unittest
 from dataclasses import dataclass
 from typing import ClassVar
@@ -233,4 +234,35 @@ class SoaTest(unittest.TestCase):
 
         OverlaidExampleType.forget_soa()
         self.assertEqual(1, fixture[0].i)
+
+    def test_soa_copy_safety(self):
+        fixture = create_fixture(OverlaidExampleType)
+        OverlaidExampleType.make_soa(object_list=fixture, initial_property_names=['i'])
+        fixture[0].i = 100
+        soa = OverlaidExampleType._overlay
+
+        OverlaidExampleType.make_soa(soa)
+        copy_soa_1 = OverlaidExampleType._overlay
+        fixture[0].i = 200
+        self.assertEqual(100, soa.get_object_property('i', fixture[0]))
+        self.assertEqual(200, copy_soa_1.get_object_property('i', fixture[0]))
+        self.assertEqual(200, fixture[0].i)
+
+        OverlaidExampleType.make_soa(soa)
+        copy_soa_2 = OverlaidExampleType._overlay
+        fixture[0].i = 300
+        self.assertEqual(100, soa.get_object_property('i', fixture[0]))
+        self.assertEqual(300, copy_soa_2.get_object_property('i', fixture[0]))
+        self.assertEqual(300, fixture[0].i)
+        OverlaidExampleType.forget_soa()
+        self.assertEqual(1, fixture[0].i)
+        soa.fixate()
+        self.assertEqual(100, fixture[0].i)
+        copy_soa_1.fixate()
+        self.assertEqual(200, fixture[0].i)
+        copy_soa_2.fixate()
+        self.assertEqual(300, fixture[0].i)
+
+
+
 
