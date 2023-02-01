@@ -1,5 +1,7 @@
 from itertools import chain
 from typing import Any, List, Tuple, Callable
+
+from lukefi.metsi.data.formats.util import parse_float
 from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
 from lukefi.metsi.data.formats.rsd_const import MSBInitialDataRecordConst as msb_meta
 
@@ -48,6 +50,12 @@ def msb_metadata(stand: ForestStand) -> Tuple[List[str], List[str], List[str]]:
         Initial data record stand metadata
         Initial data record tree set metadata
     """
+    # TODO: this is not a desireable change but introduced as a user helper. First column should be stand id number
+    # for which we don't have a strict value, as long as it's internally unique in the RSD file. User needs
+    # back referencing possibility from RSD to actual forest stands in Forest Centre source. This is a hack to provide
+    # it. VMI stands should remain unaffected since their identifiers are not parseable as float values.
+    outputtable_id = parse_float(stand.identifier) or stand.stand_id
+
     logical_record_length = sum([
         msb_meta.logical_record_metadata_length,
         msb_meta.stand_record_length,
@@ -55,7 +63,7 @@ def msb_metadata(stand: ForestStand) -> Tuple[List[str], List[str], List[str]]:
         len(stand.reference_trees) * msb_meta.tree_record_length
     ])
     physical_record_metadata = [
-        rsd_float(stand.stand_id),  # UID
+        rsd_float(outputtable_id),  # UID
         str(sum([
             logical_record_length,
             msb_meta.logical_record_header_length
