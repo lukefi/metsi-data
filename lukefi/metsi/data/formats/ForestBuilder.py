@@ -508,7 +508,7 @@ class ForestCentreBuilder(XMLBuilder):
             estrata = estand.findall(self.xpath_strata, smk_util.NS)
             for estratum in estrata:
                 stratum = self.convert_stratum_entry(estratum)
-                stratum.identifier = "{}-{}-stratum".format(stand.identifier, stratum.identifier)
+                stratum.identifier = f"{stand.identifier}.{stratum.tree_number or stratum.identifier}-stratum"
                 strata.append(stratum)
             stand.tree_strata = strata
             stands.append(stand)

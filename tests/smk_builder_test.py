@@ -134,8 +134,8 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_identifiers(self):
-        self.assertEqual('10-331-stratum', self.smk_stands[0].tree_strata[0].identifier)
-        self.assertEqual('10-332-stratum', self.smk_stands[0].tree_strata[1].identifier)
+        self.assertEqual('10.1-stratum', self.smk_stands[0].tree_strata[0].identifier)
+        self.assertEqual('10.2-stratum', self.smk_stands[0].tree_strata[1].identifier)
         self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_variables(self):
