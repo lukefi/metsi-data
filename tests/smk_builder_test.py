@@ -36,8 +36,8 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(2, len(self.smk_stands))
 
     def test_smk_builder_stand_identifiers(self):
-        self.assertEqual('100', self.smk_stands[0].identifier)
-        self.assertEqual('101', self.smk_stands[1].identifier)
+        self.assertEqual('10', self.smk_stands[0].identifier)
+        self.assertEqual('15', self.smk_stands[1].identifier)
 
     def test_smk_builder_stand_variables(self):
         # TODO: implement parse logic for management unit id
@@ -51,8 +51,8 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(0.45, self.smk_stands[1].area_weight)
         self.assertEqual((6542843.0, 532437.0, None, 'EPSG:3067'), self.smk_stands[0].geo_location)
         self.assertEqual((6532843.0, 536437.0, None, 'EPSG:3067'), self.smk_stands[1].geo_location)
-        self.assertEqual('100', self.smk_stands[0].identifier)
-        self.assertEqual('101', self.smk_stands[1].identifier)
+        self.assertEqual('10', self.smk_stands[0].identifier)
+        self.assertEqual('15', self.smk_stands[1].identifier)
         # TODO: verify the default value of degree days
         self.assertEqual(None, self.smk_stands[0].degree_days)
         self.assertEqual(None, self.smk_stands[1].degree_days)
@@ -134,8 +134,8 @@ class TestForestCentreBuilder(unittest.TestCase):
         self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_identifiers(self):
-        self.assertEqual('100-331-stratum', self.smk_stands[0].tree_strata[0].identifier)
-        self.assertEqual('100-332-stratum', self.smk_stands[0].tree_strata[1].identifier)
+        self.assertEqual('10.1-stratum', self.smk_stands[0].tree_strata[0].identifier)
+        self.assertEqual('10.2-stratum', self.smk_stands[0].tree_strata[1].identifier)
         self.assertEqual(0, len(self.smk_stands[1].tree_strata))
 
     def test_smk_builder_stratum_variables(self):

@@ -65,6 +65,28 @@ class TestSmkXMLConversion(test_util.ConverterTestSuite):
         sns = smk_util.parse_stand_basic_data(reference_stand)
         self.assertEqual(assertion, sns)
 
+    def test_parse_stand_identifier_via_stand_number_extension(self):
+        test_element = """
+            <st:StandNumber>123</st:StandNumber>
+            <st:StandNumberExtension>124</st:StandNumberExtension>
+        """
+        reference_stand = generate_test_data(stand_data_element=test_element)
+        sns = smk_util.parse_stand_basic_data(reference_stand)
+        self.assertEqual("123.124", sns.id)
+
+    def test_parse_stand_identifier_via_stand_number(self):
+        test_element = """
+            <st:StandNumber>123</st:StandNumber>
+        """
+        reference_stand = generate_test_data(stand_data_element=test_element)
+        sns = smk_util.parse_stand_basic_data(reference_stand)
+        self.assertEqual("123", sns.id)
+
+    def test_parse_stand_identifier_with_fallback_id(self):
+        test_element = ''
+        reference_stand = generate_test_data(stand_data_element=test_element)
+        sns = smk_util.parse_stand_basic_data(reference_stand)
+        self.assertEqual("111", sns.id)
 
     def test_parse_stand_operation_data(self):
         ...
