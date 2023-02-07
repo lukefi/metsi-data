@@ -104,7 +104,7 @@ class TestAgeSupplementing(unittest.TestCase):
             ts.mean_diameter = spe_dia[1]
             stratums.append(ts)
         result = age_sup.solve_stratum_supplement(reference_tree, stratums)
-        self.assertEqual(stratums[5], result)
+        self.assertEqual(stratums[5].identifier, result.identifier)
 
     def test_final_tree_strategy(self):
         local_no_age_tree_inputs = [

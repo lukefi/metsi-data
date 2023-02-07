@@ -6,6 +6,8 @@ from lukefi.metsi.data.conversion.internal2mela import mela_stand, mela_tree
 from lukefi.metsi.data.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies, DrainageCategory
 from lukefi.metsi.data.enums.mela import MelaLandUseCategory
 from lukefi.metsi.data.formats.util import convert_str_to_type
+from lukefi.metsi.data.layered_model import LayeredObject
+from lukefi.metsi.data.soa import Soable
 
 # NOTE:
 # * the deepcopy methods here are roughly equivalent to
@@ -19,7 +21,7 @@ from lukefi.metsi.data.formats.util import convert_str_to_type
 #   in the __deepcopy__ method. see ForestStand.__deepcopy__ for an example.
 
 @dataclass
-class TreeStratum:
+class TreeStratum():
     # VMI data type 2
     # SMK data type TreeStratum
     # No RSD equivalent.
@@ -50,8 +52,11 @@ class TreeStratum:
     sapling_stems_per_ha: Optional[float] = None
     sapling_stratum: bool = False  # this reference tree represents saplings
 
+    def __hash__(self):
+        return id(self)
+
     def __eq__(self, other: "TreeStratum"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'TreeStratum':
         s = TreeStratum.__new__(TreeStratum)
@@ -208,7 +213,7 @@ class TreeStratum:
         return result
 
 @dataclass
-class ReferenceTree:
+class ReferenceTree():
     # VMI data type 3
     # No SMK equivalent
     # Mela RSD logical record for "tree variables"
@@ -248,12 +253,15 @@ class ReferenceTree:
     sapling: bool = False
 
     def __eq__(self, other: "ReferenceTree"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'ReferenceTree':
         t = ReferenceTree.__new__(ReferenceTree)
         t.__dict__.update(self.__dict__)
         return t
+
+    def __hash__(self):
+        return id(self)
 
     def validate(self):
         pass
@@ -375,7 +383,7 @@ class ReferenceTree:
 
 
 @dataclass
-class ForestStand:
+class ForestStand():
     # VMI data type 1
     # SMK data type Stand
     # Mela RSD logical record for "sample plot variables"
@@ -442,7 +450,7 @@ class ForestStand:
     lake_effect: Optional[float] = None
 
     def __eq__(self, other: "ForestStand"):
-        return self.identifier == other.identifier
+        return id(self) == id(other)
 
     def __deepcopy__(self, memo: dict) -> 'ForestStand':
         stand = ForestStand.__new__(ForestStand)
@@ -454,6 +462,9 @@ class ForestStand:
         if stand.monthly_rainfall is not None:
             stand.monthly_rainfall = list(stand.monthly_rainfall)
         return stand
+
+    def __hash__(self):
+        return id(self)
 
     def set_identifiers(self, stand_id: int, management_unit_id: Optional[int] = None):
         self.stand_id = stand_id
@@ -640,3 +651,27 @@ class ForestStand:
             None,
             None,
         ]
+
+
+def create_layered_tree(**kwargs) -> LayeredObject[ReferenceTree]:
+    prototype = ReferenceTree()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered
+
+
+def create_layered_stand(**kwargs) -> LayeredObject[ForestStand]:
+    prototype = ForestStand()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered
+
+
+def create_layered_stratum(**kwargs) -> LayeredObject[TreeStratum]:
+    prototype = TreeStratum()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered

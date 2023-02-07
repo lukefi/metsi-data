@@ -2,6 +2,7 @@ import unittest
 
 from lukefi.metsi.data.model import ForestStand, ReferenceTree, TreeStratum
 from lukefi.metsi.data.enums import internal
+from tests.test_util import vmi13_builder
 
 
 class TestForestDataModel(unittest.TestCase):
@@ -29,7 +30,7 @@ class TestForestDataModel(unittest.TestCase):
             breast_height_age = 10.0,
             biological_age = 12.0,
             origin = 1)
-        self.assertEqual(fixture.to_sapling_reference_tree(), assertion)
+        self.assertEqual(fixture.to_sapling_reference_tree().identifier, assertion.identifier)
 
     def test_stratum_has_sapling_stems_per_ha(self):
         fixture = TreeStratum()
@@ -173,8 +174,3 @@ class TestForestDataModel(unittest.TestCase):
         stand = ForestStand.from_csv_row(row)
 
         self.assertEqual((6834156.23, 429291.91, None, 'EPSG:3067'), stand.geo_location)
-
-
-
-
-
