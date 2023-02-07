@@ -174,28 +174,3 @@ class TestForestDataModel(unittest.TestCase):
         stand = ForestStand.from_csv_row(row)
 
         self.assertEqual((6834156.23, 429291.91, None, 'EPSG:3067'), stand.geo_location)
-
-    def test_model_soability(self):
-        fixture = vmi13_builder.build()[0]
-        ForestStand.make_soa(object_list=[fixture], initial_property_names=['year'])
-        ReferenceTree.make_soa(object_list=fixture.reference_trees, initial_property_names=['breast_height_diameter', 'height'])
-
-        self.assertEqual(fixture.__dict__.get('year'), ForestStand._overlay.get_object_property('year', fixture))
-        fixture.year = 2080
-        self.assertNotEqual(fixture.__dict__.get('year'), ForestStand._overlay.get_object_property('year', fixture))
-        self.assertEqual(2080, ForestStand._overlay.get_object_property('year', fixture))
-
-        self.assertEqual(2, len(list(ReferenceTree._overlay.get_property_values('height'))))
-
-        ForestStand._overlay.fixate()
-        self.assertEqual(2080, fixture.year)
-
-        new_tree = ReferenceTree(identifier="kissa123", stems_per_ha=10.0)
-        self.assertEqual(10.0, new_tree.stems_per_ha)
-        self.assertEqual(None, object.__getattribute__(new_tree, 'stems_per_ha'))
-        ReferenceTree._overlay.fixate()
-        self.assertEqual(10.0, object.__getattribute__(new_tree, 'stems_per_ha'))
-
-
-        ForestStand.forget_soa()
-        ReferenceTree.forget_soa()

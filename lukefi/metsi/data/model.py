@@ -6,6 +6,7 @@ from lukefi.metsi.data.conversion.internal2mela import mela_stand, mela_tree
 from lukefi.metsi.data.enums.internal import LandUseCategory, OwnerCategory, SiteType, SoilPeatlandCategory, TreeSpecies, DrainageCategory
 from lukefi.metsi.data.enums.mela import MelaLandUseCategory
 from lukefi.metsi.data.formats.util import convert_str_to_type
+from lukefi.metsi.data.layered_model import LayeredObject
 from lukefi.metsi.data.soa import Soable
 
 # NOTE:
@@ -20,7 +21,7 @@ from lukefi.metsi.data.soa import Soable
 #   in the __deepcopy__ method. see ForestStand.__deepcopy__ for an example.
 
 @dataclass
-class TreeStratum(Soable):
+class TreeStratum():
     # VMI data type 2
     # SMK data type TreeStratum
     # No RSD equivalent.
@@ -212,7 +213,7 @@ class TreeStratum(Soable):
         return result
 
 @dataclass
-class ReferenceTree(Soable):
+class ReferenceTree():
     # VMI data type 3
     # No SMK equivalent
     # Mela RSD logical record for "tree variables"
@@ -382,7 +383,7 @@ class ReferenceTree(Soable):
 
 
 @dataclass
-class ForestStand(Soable):
+class ForestStand():
     # VMI data type 1
     # SMK data type Stand
     # Mela RSD logical record for "sample plot variables"
@@ -650,3 +651,27 @@ class ForestStand(Soable):
             None,
             None,
         ]
+
+
+def create_layered_tree(**kwargs) -> LayeredObject[ReferenceTree]:
+    prototype = ReferenceTree()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered
+
+
+def create_layered_stand(**kwargs) -> LayeredObject[ForestStand]:
+    prototype = ForestStand()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered
+
+
+def create_layered_stratum(**kwargs) -> LayeredObject[TreeStratum]:
+    prototype = TreeStratum()
+    layered = LayeredObject(prototype)
+    for k, v in kwargs.items():
+        layered.__setattr__(k, v)
+    return layered
