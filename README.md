@@ -1,3 +1,8 @@
+# DISCONTINUED
+
+Library hsa been internalized into [Metsi](https://github.com/lukefi/metsi). Librarized development will continue later
+with better defined library responsibilities and interface boundaries between components.
+
 # MetSi forest data model
 
 This project is a collection of Python classes for a structured object model of forest stands with contained tree strata
